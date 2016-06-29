@@ -20,6 +20,7 @@ export class AppProducer implements OnInit{
     noColorError = "";
     noBookError = "";
     noBookInLanguageAlert = "";
+    AllBookSelectedAlert = "";
     result = [];
     data = {};
     detailsClass = "active";
@@ -61,23 +62,37 @@ export class AppProducer implements OnInit{
     //BooksPage
     getBooks(language: string) {
         this.appProducerService.getBooks().then( (bloomBooks) => {
-            // this.doTable();
-            // var searchResult = this.result.slice();
-            // if (searchResult.length != 0 ) {
-            //     for (var i = 0; i < searchResult.length; i++) {
-            //         var findBook = $.grep(bloomBooks, function(a) { return a.id == searchResult[i]});
-            //         this.bloomBooks.push(findBook[0]);
-            //     }
-            // }
+            this.doTable();
             this.bloomBooks = [];
-            for (var i=0;i<bloomBooks.length;i++) {
-                if (bloomBooks[i].language.indexOf(language.toLowerCase()) > -1) {
-                    this.bloomBooks.push(bloomBooks[i]);
+            var noLanguageAlert = true;
+            var noOtherBookAlert = true;
+            var searchResult = this.result.slice();
+            if (searchResult.length != 0 ) {
+                for (var i = 0; i < searchResult.length; i++) {
+                    var findBook = $.grep(bloomBooks, function(a) { return a.id == searchResult[i]});
+                    this.bloomBooks.push(findBook[0]);
                 }
             }
+
+            for (var i=0;i<bloomBooks.length;i++) {
+                if (language == "") {
+                    language = "english";
+                }
+                if (bloomBooks[i].language.indexOf(language.toLowerCase()) > -1 ) {
+                    if (this.bloomBooks.indexOf(bloomBooks[i]) < 0) {
+                        this.bloomBooks.push(bloomBooks[i]);
+                        noOtherBookAlert = false;
+                    }
+                    noLanguageAlert = false;
+                }
+            }
+
+            this.AllBookSelectedAlert = "";
             this.noBookInLanguageAlert = "";
-            if (this.bloomBooks.length == 0) {
-                this.noBookInLanguageAlert = "There is no book available in <" + language.toLowerCase() + ">. <br>Check your spelling may help";
+            if (noLanguageAlert) {
+                this.noBookInLanguageAlert = "There is no book available in '" + language.toLowerCase() + "'. <br>Check your spelling may help";
+            } else if (noOtherBookAlert) {
+                this.AllBookSelectedAlert = "You already selected all books in this language";
             }
         });
     }
