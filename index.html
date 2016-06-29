@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<!--[if lte IE 9 ]>
+    <meta http-equiv="refresh" content="0;url=assets/unsupportedBrowser.html">
+<![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html ng-app="BloomLibraryApp">
+  <head>
+      <base href="/">
+    <title ng-bind="pageTitle">Bloom Book Making Software from SIL International</title>
+
+    <meta name="viewport" content="initial-scale=1">
+
+
+    <!-- social media tags -->
+    <meta property="og:title" content="BloomLibrary" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://bloom.palaso.org/" />
+    <meta property="og:description" content="Let's grow a library: Bloom keeps things simple and efficient by offering a library of shell books. You just translate from a source language, and print.">
+
+	  <!--script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.js"></script-->
+      <script src="node_modules/core-js/client/shim.min.js"></script>
+      <script src="node_modules/zone.js/dist/zone.js"></script>
+      <script src="node_modules/reflect-metadata/Reflect.js"></script>
+      <script src="node_modules/systemjs/dist/system.src.js"></script>
+      <script src="systemjs.config.js"></script>
+      <script>
+          System.import('app').catch(function(err){  });
+      </script>
+    <!-- font awesome from BootstrapCDN -->
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+
+      <link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+
+      <!-- compiled CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/BloomLibrary-0.1.0.css" />
+
+    <!-- compiled JavaScript -->
+    <script type="text/javascript" src="vendor/angular/angular.js"></script>
+    <script type="text/javascript" src="vendor/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="vendor/angular-ui-router/release/angular-ui-router.js"></script>
+    <script type="text/javascript" src="vendor/angular-ui-utils/ui-utils.js"></script>
+    <script type="text/javascript" src="vendor/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="vendor/jquery-ui/ui/jquery-ui.js"></script>
+    <script type="text/javascript" src="vendor/restangular/dist/restangular.js"></script>
+    <script type="text/javascript" src="vendor/underscore/underscore.js"></script>
+    <script type="text/javascript" src="vendor/fancybox/source/jquery.fancybox.js"></script>
+    <script type="text/javascript" src="vendor/angular-ui-grid/ui-grid.js"></script>
+    <script type="text/javascript" src="vendor/angular-cookies/angular-cookies.js"></script>
+    <script type="text/javascript" src="vendor/bootstrap/js/carousel.js"></script>
+    <script type="text/javascript" src="vendor/bootstrap/js/transition.js"></script>
+    <script type="text/javascript" src="vendor/bootstrap/js/collapse.js"></script>
+    <script type="text/javascript" src="vendor/angular-local-storage/angular-local-storage.min.js"></script>
+    <script type="text/javascript" src="vendor/jquery-xml2json/src/xml2json.js"></script>
+    <script type="text/javascript" src="vendor/angulartics/dist/angulartics.min.js"></script>
+    <script type="text/javascript" src="vendor/angulartics/dist/angulartics-segmentio.min.js"></script>
+    <script type="text/javascript" src="vendor/ng-tags-input/ng-tags-input.min.js"></script>
+    <script type="text/javascript" src="src/app/modules/app/app.js"></script>
+    <script type="text/javascript" src="src/app/modules/browse/browse-controller.js"></script>
+    <script type="text/javascript" src="src/app/modules/common/errorMessage-controller.js"></script>
+    <script type="text/javascript" src="src/app/modules/common/listview.js"></script>
+    <script type="text/javascript" src="src/app/modules/common/notice.js"></script>
+    <script type="text/javascript" src="src/app/modules/common/services.js"></script>
+    <script type="text/javascript" src="src/app/modules/common/staticPages.js"></script>
+    <script type="text/javascript" src="src/app/modules/datagrid/confirmRelateDialog-controller.js"></script>
+    <script type="text/javascript" src="src/app/modules/datagrid/datagrid-controller.js"></script>
+    <script type="text/javascript" src="src/app/modules/detail/ccdialog-controller.js"></script>
+    <script type="text/javascript" src="src/app/modules/detail/deleteDialog-controller.js"></script>
+    <script type="text/javascript" src="src/app/modules/detail/detail-controller.js"></script>
+    <script type="text/javascript" src="src/app/modules/download/download-controller.js"></script>
+    <script type="text/javascript" src="src/app/modules/inProgress/inProgress.js"></script>
+    <script type="text/javascript" src="src/app/modules/installers/installers-controller.js"></script>
+    <script type="text/javascript" src="src/app/modules/login/login-controller.js"></script>
+    <script type="text/javascript" src="src/app/modules/login/mustAgree.js"></script>
+    <script type="text/javascript" src="src/app/modules/login/pleaseLogIn-controller.js"></script>
+    <script type="text/javascript" src="src/app/modules/prefs/prefs-controller.js"></script>
+    <script type="text/javascript" src="src/app/modules/signup/signup-controller.js"></script>
+    <script type="text/javascript" src="src/app/modules/suggestions/suggestions.js"></script>
+    <script type="text/javascript" src="templates-common.js"></script>
+    <script type="text/javascript" src="templates-app.js"></script>
+
+    <!-- for parse.com queries. Please use ONLY in services.js. -->
+    <script src="http://www.parsecdn.com/js/parse-1.2.13.min.js"></script>
+
+    <!-- for transifex.com, localization -->
+    <script type="text/javascript">
+      window.liveSettings = {
+        api_key: "1927b5ee5ee0401baa960991364c4c15",
+        picker: "bottom-right",
+        detectlang: true,
+        dynamic: true,
+        autocollect: true,
+        staging: true
+      };
+    </script>
+    <script type="text/javascript" src="//cdn.transifex.com/live.js"></script>
+    <script type="text/javascript">
+      //create an alias for translation of dynamic strings
+      window._localize = Transifex.live.translateText;
+    </script>
+
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+      <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">-->
+
+  </head>
+  <body>
+    <noscript>
+        <!-- A message displayed when javascript is disabled or not supported.  It covers the whole page. -->
+        <div style="position: fixed; top: 0px; left: 0px; z-index: 3000; height: 100%; width: 100%; background-color: #FFFFFF; padding: 50px">
+        To use the Bloom Web site it is necessary to enable JavaScript.
+        Here are the <a href="http://www.enable-javascript.com/">
+        instructions how to enable JavaScript in your web browser</a>.
+        </div>
+    </noscript>
+    <div class="page-wrap">
+        <div class="site-header" ng-controller="HeaderCtrl">
+            <nav ng-show="!isBookLibrary()" id="editor-navbar" class="navbar navbar-inverse" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#editor-navbar-elements">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/landing">
+                            <img ng-show="isActive('/landing')" class="bigLogoOnLanding" src="assets/bloomNavbarLogo.svg"/>
+                            <img ng-hide="isActive('/landing')" src="assets/bloomNavbarLogo.svg"/>
+                        </a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="editor-navbar-elements">
+                        <ul class="nav navbar-nav">
+                            <li ng-class="{active: isActive('/landing')}" class="home"><a href="/landing">Home</a></li>
+                            <!--<li ng-class="{active: isActive('/features')}"><a href="/features">Features</a></li>-->
+                            <li ng-class="{active: isActive('/installers')}"><a href="/installers">Download</a></li>
+                            <li ng-class="{active: isActive('/support')}"><a href="/support">Support</a></li>
+                            <li ng-class="{active: isActive('/about')||isActive('/opensource')||isActive('/suggestions')}" class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">More <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/about">About</a></li>
+                                    <li><a href="/opensource">Open Source</a></li>
+                                    <li><a href="/suggestions">Suggestions</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <ul ng-hide="isActive('/landing')" ng-cloak class="nav navbar-nav navbar-right">
+                            <!-- Only one of the following will be shown (based on css) -->
+                            <li><a href="/browse" id="book-library-link-lg">Check out the Book Library</a></li>
+                            <li><a href="/browse" id="book-library-link-sm">Book Library</a></li>
+                        </ul>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </nav>
+            <nav ng-show="isBookLibrary()" id="book-library-navbar" class="navbar navbar-inverse" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#book-library-navbar-elements">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/landing">
+                            <img src="assets/bloomNavbarLogo.svg"/>
+                        </a>
+                        <!-- CSS ensures either this (editor-link-lg) or the li below (editor-link-sm) will be displayed -->
+                        <div id="editor-link-lg">
+                            <a href="/landing"><span class="pull-right">Make these books in <span class="highlight">your language</span><br/>with the <span class="hover-highlight">Bloom Editor</span></span></a>
+                        </div>
+                    </div>
+                    <div class="collapse navbar-collapse" id="book-library-navbar-elements">
+                        <ul id="book-library-menu" ng-cloak class="nav navbar-nav">
+                            <li ng-class="{active: isActive('/browse')}" class="navbar-lg"><a href="/browse">Book Library</a></li>
+                        </ul>
+                        <ul id="credentials-menu" ng-cloak class="nav navbar-nav navbar-right">
+                            <li ng-class="{active: isActive('/signup')}" ng-if="!isLoggedIn()"><a href="/signup">Sign Up</a></li>
+                            <li ng-class="{active: isActive('/login')}" ng-if="!isLoggedIn()"><a href="/login">Log In</a></li>
+                            <li id="user-name" ng-if="isLoggedIn()">{{userName()}}</li>
+                            <li ng-if="isLoggedIn()"><a class="logout" ng-click="logout()">Log Out</a></li>
+                            <!-- CSS ensures either this (editor-link-sm) or the div above (editor-link-lg) will be displayed -->
+                            <li><a id="editor-link-sm" href="/landing">Bloom Editor</a></li>
+                        </ul>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </nav>
+        </div>
+
+        <home>This content should be replaced</home>
+        <sil-notices></sil-notices>
+        <!--<div ui-view></div>-->
+
+    </div>
+    <div class="site-footer" ng-controller="FooterCtrl">
+        <div class="footerLinks">
+            &copy; {{year}} SIL International <span class="separator">|</span><a ng-class="{active: isActive('/terms')}" href="/terms">Terms of Use</a><span class="separator">|</span><a ng-class="{active: isActive('/privacy')}" href="/privacy">Privacy</a>
+          <a href='https://mixpanel.com/f/partner' class="mixpanel"><img src='https://cdn.mxpnl.com/site_media/images/partner/badge_light.png' alt='Mobile Analytics'/></a>
+        </div>
+    </div>
+  </body>
+</html>
+<!--<![endif]-->

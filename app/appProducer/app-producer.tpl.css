@@ -1,0 +1,24 @@
+.alert {
+    color: red;
+}
+.success {
+    color: green;
+}
+.notes {
+    color: slategrey;
+}
+.link {
+    color: blue;
+}
+.blackText {
+    color: black;;
+}
+.colorSelection {
+    width: 15px;
+    height: 15px;
+    float: left;
+}
+table, th, td {
+    border: 1px solid black;
+    padding: 5px;
+}
