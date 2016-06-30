@@ -14,9 +14,9 @@ declare var $:JQueryStatic;
 export class AppProducer implements OnInit{
     hasValue = false;
     hasError = false;
-    noTitleError = "";
-    noShortDError = "";
-    noFullDError = "";
+    titleError = "";
+    shortDError = "";
+    fullDError = "";
     noColorError = "";
     noBookError = "";
     noBookInLanguageAlert = "";
@@ -60,6 +60,13 @@ export class AppProducer implements OnInit{
         if (content) {
             this.colorSelection = content;
             this.colorStyle = style;
+        }
+    }
+    selectFromDefault (src: string, name: string) {
+        if (name == 'icon') {
+            $("#iconDisplay").attr('src', src);
+        } else if (name == 'feature') {
+            $("#featureDisplay").attr('src', src);
         }
     }
     onFileSelect (file, name: string) {
@@ -143,22 +150,31 @@ export class AppProducer implements OnInit{
     checkField(title: string, shortD: string, fullD: string, color: string) {
         this.hasError = false;
         this.hasValue = false;
-        this.noTitleError = "";
-        this.noShortDError = "";
-        this.noFullDError = "";
+        this.titleError = "";
+        this.shortDError = "";
+        this.fullDError = "";
         this.noColorError = "";
         this.noBookError = "";
 
         if (!title) {
-            this.noTitleError = "missing title field";
+            this.titleError = "missing title field";
+            this.hasError = true;
+        } else if (title.length > 30) {
+            this.titleError = "title field cannot exceed 30 characters";
             this.hasError = true;
         }
         if (!shortD) {
-            this.noShortDError = "missing short description field";
+            this.shortDError = "missing short description field";
+            this.hasError = true;
+        } else if (shortD.length > 80) {
+            this.shortDError = "short description field cannot exceed 80 characters";
             this.hasError = true;
         }
         if (!fullD) {
-            this.noFullDError = "missing full description field";
+            this.fullDError = "missing full description field";
+            this.hasError = true;
+        } else if (fullD.length > 4000) {
+            this.fullDError = "full description field cannot exceed 4000 characters";
             this.hasError = true;
         }
         if (color == "select a color") {

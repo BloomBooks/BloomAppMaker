@@ -36,17 +36,17 @@
                 </li>
                 <li>
                     <p>Title</p>
-                    <p *ngIf="noTitleError" class="alert">{{noTitleError}}</p>
+                    <p *ngIf="titleError" class="alert">{{titleError}}</p>
                     <input #title>
                 </li>
                 <li>
                     <p>Short Description</p>
-                    <p *ngIf="noShortDError" class="alert">{{noShortDError}}</p>
+                    <p *ngIf="shortDError" class="alert">{{shortDError}}</p>
                     <input #shortD>
                 </li>
                 <li>
                     <p>Full Description</p>
-                    <p *ngIf="noFullDError" class="alert">{{noFullDError}}</p>
+                    <p *ngIf="fullDError" class="alert">{{fullDError}}</p>
                     <textarea #fullD></textarea>
                     <p class="notes">The following will be appended to the description</p>
                     <p class="notes">"These books and this app were created with <a class="link"><u>Bloom</u></a> from SIL International"</p>
@@ -83,18 +83,38 @@
                 </li>
                 <li>
                     <p>Icon</p>
-                    <div>
+                    <div style="width: 450px;">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="iconMenu"><img src="../../assets/ab-001-black.png" id="iconDisplay" height="60" width="60"><span class="caret"></span></button>
+                            <ul class="dropdown-menu scrollable-menu" role="menu" style="height: auto;max-height: 300px;overflow-x: hidden;background: #E5E5E5">
+                                <li><img #icon1 (click)="selectFromDefault(icon1.src,'icon')" src="../../assets/ab-001-black.png" width="60" height="60"></li>
+                                <li><img #icon2 (click)="selectFromDefault(icon2.src,'icon')" src="../../assets/ab-002-blue.png" width="60" height="60"></li>
+                                <li><img #icon3 (click)="selectFromDefault(icon3.src,'icon')" src="../../assets/ab-003-green.png" width="60" height="60"></li>
+                                <li><img #icon4 (click)="selectFromDefault(icon4.src,'icon')" src="../../assets/ab-004-green-ornament.png" width="60" height="60"></li>
+                                <li><img #icon5 (click)="selectFromDefault(icon5.src,'icon')" src="../../assets/ab-005-red.png" width="60" height="60"></li>
+                                <li><img #icon6 (click)="selectFromDefault(icon6.src,'icon')" src="../../assets/ab-006-audio-black.png" width="60" height="60"></li>
+                                <li><img #icon7 (click)="selectFromDefault(icon7.src,'icon')" src="../../assets/ab-007-audio-blue.png" width="60" height="60"></li>
+                                <li><img #icon8 (click)="selectFromDefault(icon8.src,'icon')" src="../../assets/ab-008-audio-green.png" width="60" height="60"></li>
+                                <li><img #icon9 (click)="selectFromDefault(icon9.src,'icon')" src="../../assets/ab-009-audio-green-ornament.png" width="60" height="60"></li>
+                                <li><img #icon10 (click)="selectFromDefault(icon10.src,'icon')" src="../../assets/ab-010-audio-red.png" width="60" height="60"></li>
+                            </ul>
+                        </div>
+                        <section align="right" class="notes" style="float: right;margin-top: 30px;">The icon shown in the store and on the device.</section>
                         <input #iconFile (change)="onFileSelect(iconFile, 'icon')" type="file">
-                        <img src="../../assets/icon-not-available.png" id="iconDisplay" height="80" width="80">
-                        <span class="notes">The icon shown in the store and on the device.</span>
                     </div>
                 </li>
                 <li>
                     <p>Feature Graphic</p>
                     <div style="width: 450px;">
+                        <div class="btn-group" style="display: inline;">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="featureMenu"><img src="../../assets/bloom-feature-graphic.png" id="featureDisplay" height="120" width="240"><span class="caret"></span></button>
+                            <ul class="dropdown-menu scrollable-menu blackText" role="menu" style="height: auto;max-height: 260px;overflow-x: hidden;background: #E5E5E5">
+                                <li><img #feature1 (click)="selectFromDefault(feature1.src,'feature')" src="../../assets/bloom-feature-graphic.png" width="240" height="120"></li>
+                                <li><img #feature2 (click)="selectFromDefault(feature2.src,'feature')" src="../../assets/featureGraphic.png" width="240" height="120"></li>
+                            </ul>
+                        </div>
+                        <section align="right">The Feature Graphic is displayed at the top of the store entry. You can use a site like <a style="color: blue"><u>www.Norio.be/android-feature-graphic-generator/</u></a> or make your own using a some other software</section>
                         <input #featureFile (change)="onFileSelect(featureFile, 'feature')" type="file">
-                        <img src="../../assets/artofreading.png" id="featureDisplay" align="left" height="120" width="240" style="margin-right: 20px">
-                        <p align="right">The Feature Graphic is displayed at the top of the store entry. You can use a site like <a style="color: blue"><u>www.Norio.be/android-feature-graphic-generator/</u></a> or make your own using a some other software</p>
                     </div>
                 </li>
             </ul>
@@ -161,6 +181,8 @@
                     <li>shortD is: {{data["shortDescription"]}}</li>
                     <li>fullD is: {{data["fullDescription"]}}</li>
                     <li>color is: {{data["color"]}}</li>
+                    <li>icon is: {{data["icon"]}}</li>
+                    <li>feature is: {{data["featureGraphic"]}}</li>
                     <li>books are: {{data["books"]}}</li>
                 </ul>
             </div>
