@@ -84,15 +84,16 @@
                 <li>
                     <p>Icon</p>
                     <div>
-                        <input type="file" id="fileiput" height="40" width="40">
-                        <!--<img src="../../assets/ie.png" height="40" width="40">-->
+                        <input #iconFile (change)="onFileSelect(iconFile, 'icon')" type="file">
+                        <img src="../../assets/icon-not-available.png" id="iconDisplay" height="80" width="80">
                         <span class="notes">The icon shown in the store and on the device.</span>
                     </div>
                 </li>
                 <li>
                     <p>Feature Graphic</p>
                     <div style="width: 450px;">
-                        <img src="../../assets/artofreading.png" align="left" height="120" width="240" style="margin-right: 20px">
+                        <input #featureFile (change)="onFileSelect(featureFile, 'feature')" type="file">
+                        <img src="../../assets/artofreading.png" id="featureDisplay" align="left" height="120" width="240" style="margin-right: 20px">
                         <p align="right">The Feature Graphic is displayed at the top of the store entry. You can use a site like <a style="color: blue"><u>www.Norio.be/android-feature-graphic-generator/</u></a> or make your own using a some other software</p>
                     </div>
                 </li>
