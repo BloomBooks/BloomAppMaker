@@ -185,7 +185,12 @@
                     <li>color is: {{data["color"]}}</li>
                     <li>icon is: <img [src]="data['icon']" width="60" height="60"></li>
                     <li>feature is: <img [src]="data['feature']" width="200" height="100"></li>
-                    <li>books are: {{data["books"]}}</li>
+                    <li>
+                        <p>books are:</p>
+                        <ol>
+                            <li *ngFor="let book of data['books']">{{book}}</li>
+                        </ol>
+                    </li>
                 </ul>
             </div>
             <div>

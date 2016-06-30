@@ -35,6 +35,7 @@ export class AppProducer implements OnInit{
     featureSrc = "";
 
     result = [];
+    resultBookTitle = [];
     data = {};
     bloomBooks: BloomBook[];
     serverResponse = [{}];
@@ -165,9 +166,11 @@ export class AppProducer implements OnInit{
     doTable() {
         var row = <HTMLElement[]><any>document.getElementsByClassName("tableContent");
         this.result = [];
+        this.resultBookTitle = [];
         for(var i=0;i<row.length;i++) {
             if (row[i].getElementsByClassName("checkbox")[0]["checked"]) {
                 this.result.push(row[i].id);
+                this.resultBookTitle.push(row[i].getElementsByTagName("td")[1].innerHTML);
             }
         }
     }
@@ -215,7 +218,8 @@ export class AppProducer implements OnInit{
         if (!this.hasError) {
             var icon = this.iconSrc;
             var feature = this.featureSrc;
-            this.onBuild(title, shortD, fullD, color, icon, feature, this.result);
+            // this.onBuild(title, shortD, fullD, color, icon, feature, this.result);
+            this.onBuild(title, shortD, fullD, color, icon, feature, this.resultBookTitle);
         }
     }
     onBuild(title: string, shortD: string, fullD: string, color: string, icon: string, feature: string, result) {
