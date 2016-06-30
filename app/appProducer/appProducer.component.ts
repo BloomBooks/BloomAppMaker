@@ -21,15 +21,19 @@ export class AppProducer implements OnInit{
     noBookError = "";
     noBookInLanguageAlert = "";
     AllBookSelectedAlert = "";
-    result = [];
-    data = {};
+    requestFailedError = "";
+
     detailsClass = "active";
     booksClass = "";
     processClass = "";
+    
     colorSelection = "select a color";
     colorStyle = "#FFFFFF";
 
+    result = [];
+    data = {};
     bloomBooks: BloomBook[];
+    serverResponse = [{}];
 
     constructor(private appProducerService: AppProducerService) {}
 
@@ -160,7 +164,14 @@ export class AppProducer implements OnInit{
         this.data["books"]=result;
         this.hasValue = true;
     }
-
+    setServerResponse(id: number, response: string) {
+        this.serverResponse[0]["requestId"] = id;
+        this.serverResponse[0]["response"] = response;
+        this.requestFailedError = "";
+        if (response == "fail") {
+            this.requestFailedError = "For some mysterious reasons, this process failed. Please try again. Good luck!";
+        }
+    }
     //on start
     ngOnInit() {
         this.getBooks("English");
