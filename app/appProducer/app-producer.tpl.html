@@ -142,12 +142,12 @@
             </section>
             <aside class="notes">
                 <p>To Get a new book into this list, upload it from the <a><u class="link">Bloom Editor</u></a> program</p>
-                <p>One or more books in this app have been updated since the last time the app was published. Consider making a new version. <a><u class="link">Go to Process</u></a></p>
+                <p>One or more books in this app have been updated since the last time the app was published.
+                    Consider making a new version. <a><u class="link">Go to Process</u></a></p>
             </aside>
         </div>
         <div #process [class]="'tab-pane ' + processClass" id="process">
             <h1>process</h1>
-            <button (click)="checkField(title.value, shortD.value, fullD.value, selectedColor.textContent)">build</button>
             <div *ngIf="hasError">
                 <h3 class="alert">build failed due to errors</h3>
             </div>
@@ -162,6 +162,58 @@
                     <li>color is: {{data["color"]}}</li>
                     <li>books are: {{data["books"]}}</li>
                 </ul>
+            </div>
+            <div>
+                <ol>
+                    <li [class]="serverResponse[0]['requestId']==undefined||(serverResponse[0]['requestId']==1&&serverResponse[0]['response']=='fail') ? 'blackText' : 'content-disabled'">
+                        <b>Setting Up</b>
+                        <p *ngIf="serverResponse[0]['requestId']==1&&serverResponse[0]['response']=='fail'" class="alert" [innerHTML]="requestFailedError"></p>
+                        <p>Fill out all the App Details and select books. When you're ready, click this button</p>
+                        <button (click)="checkField(title.value, shortD.value, fullD.value, selectedColor.textContent)" [disabled]="!(serverResponse[0]['requestId']==undefined||(serverResponse[0]['requestId']==1&&serverResponse[0]['response']=='fail'))" [class]="serverResponse[0]['requestId']==undefined||(serverResponse[0]['requestId']==1&&serverResponse[0]['response']=='fail') ? 'blackText' : 'content-disabled'">Make my App</button>
+                    </li>
+                    <li [class]="(serverResponse[0]['requestId']==1&&serverResponse[0]['response']=='success')||(serverResponse[0]['requestId']==2&&serverResponse[0]['response']=='fail') ? 'blackText' : 'content-disabled'">
+                        <b>Making App</b>
+                        <p *ngIf="serverResponse[0]['requestId']==2&&serverResponse[0]['response']=='fail'" class="alert" [innerHTML]="requestFailedError"></p>
+                        <p>Our server is making your Android app! This usually takes about 10 minutes.</p>
+                    </li>
+                    <li [class]="(serverResponse[0]['requestId']==2&&serverResponse[0]['response']=='success')||(serverResponse[0]['requestId']==3&&serverResponse[0]['response']=='fail') ? 'blackText' : 'content-disabled'">
+                        <b>Submitting to Play Store</b>
+                        <p *ngIf="serverResponse[0]['requestId']==3&&serverResponse[0]['response']=='fail'" class="alert" [innerHTML]="requestFailedError"></p>
+                        <p>We are submitting your app to the Google Play Store. If this is the first edition, one of
+                            our staff will get things ready for Google, and this can take anywhere from an hour to several days.
+                            If you are publishing an update, this is automated and takes just a few hours.</p>
+                        <p>In the mean time, if your phone has been <a><u [class]="(serverResponse[0]['requestId']==2&&serverResponse[0]['response']=='success')||(serverResponse[0]['requestId']==3&&serverResponse[0]['response']=='fail') ? 'link' : 'link-disabled'">set up to allow side loading</u></a>, here is a
+                            <a><u [class]="(serverResponse[0]['requestId']==2&&serverResponse[0]['response']=='success')||(serverResponse[0]['requestId']==3&&serverResponse[0]['response']=='fail') ? 'link' : 'link-disabled'">link to the APK</u></a>, and here is a QR code to download it to your phone:</p>
+                    </li>
+                    <li [class]="(serverResponse[0]['requestId']==3&&serverResponse[0]['response']=='success')||(serverResponse[0]['requestId']==4&&serverResponse[0]['response']=='fail') ? 'blackText' : 'content-disabled'">
+                        <b>Private on Play Store</b>
+                        <p *ngIf="serverResponse[0]['requestId']==4&&serverResponse[0]['response']=='fail'" class="alert" [innerHTML]="requestFailedError"></p>
+                        <p>Your app can now be installed <a><u [class]="(serverResponse[0]['requestId']==3&&serverResponse[0]['response']=='success')||(serverResponse[0]['requestId']==4&&serverResponse[0]['response']=='fail') ? 'link' : 'link-disabled'">from the Play Store</u></a>, but the public won't see it until you're ready</p>
+                        <button [disabled]="!((serverResponse[0]['requestId']==3&&serverResponse[0]['response']=='success')||(serverResponse[0]['requestId']==4&&serverResponse[0]['response']=='fail'))" [class]="(serverResponse[0]['requestId']==3&&serverResponse[0]['response']=='success')||(serverResponse[0]['requestId']==4&&serverResponse[0]['response']=='fail') ? 'blackText' : 'content-disabled'">Go Public</button>
+                    </li>
+                    <li [class]="(serverResponse[0]['requestId']==4&&serverResponse[0]['response']=='success')||(serverResponse[0]['requestId']==5&&serverResponse[0]['response']=='fail') ? 'blackText' : 'content-disabled'">
+                        <b>Public on Play Store</b>
+                        <p *ngIf="serverResponse[0]['requestId']==5&&serverResponse[0]['response']=='fail'" class="alert" [innerHTML]="requestFailedError"></p>
+                        <p>Your book is now <a><u [class]="(serverResponse[0]['requestId']==4&&serverResponse[0]['response']=='success')||(serverResponse[0]['requestId']==5&&serverResponse[0]['response']=='fail') ? 'link' : 'link-disabled'">on the store</u></a> andfreely available for anyone with a compatible device.
+                            You can always publish new editions using new or updated books, and people with the app will get the new version automatically.</p>
+                        <p>If you change your mind, you can <a><u [class]="(serverResponse[0]['requestId']==4&&serverResponse[0]['response']=='success')||(serverResponse[0]['requestId']==5&&serverResponse[0]['response']=='fail') ? 'link' : 'link-disabled'">Go Private</u></a> again.</p>
+                        <p>If you want to make changes to the app, click this button:</p>
+                        <button [disabled]="!((serverResponse[0]['requestId']==4&&serverResponse[0]['response']=='success')||(serverResponse[0]['requestId']==5&&serverResponse[0]['response']=='fail'))" [class]="(serverResponse[0]['requestId']==4&&serverResponse[0]['response']=='success')||(serverResponse[0]['requestId']==5&&serverResponse[0]['response']=='fail') ? 'blackText' : 'content-disabled'">Make a new version of this App</button>
+                    </li>
+                </ol>
+            </div>
+            <div>
+                <input type="button" value="setting up success" (click)="setServerResponse(1,'success')">
+                <input type="button" value="setting up failed" (click)="setServerResponse(1,'fail')">
+                <br>
+                <input type="button" value="app build success" (click)="setServerResponse(2,'success')">
+                <input type="button" value="app build failed" (click)="setServerResponse(2,'fail')">
+                <br>
+                <input type="button" value="submitting success" (click)="setServerResponse(3,'success')">
+                <input type="button" value="submitting failed" (click)="setServerResponse(3,'fail')">
+                <br>
+                <input type="button" value="go public success" (click)="setServerResponse(4,'success')">
+                <input type="button" value="go public failed" (click)="setServerResponse(4,'fail')">
             </div>
         </div>
     </div>
