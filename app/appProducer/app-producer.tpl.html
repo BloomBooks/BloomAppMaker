@@ -83,6 +83,7 @@
                 </li>
                 <li>
                     <p>Icon</p>
+                    <p *ngIf="iconError" class="alert">{{iconError}}</p>
                     <div style="width: 450px;">
                         <div class="btn-group">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="iconMenu"><img src="../../assets/ab-001-black.png" id="iconDisplay" height="60" width="60"><span class="caret"></span></button>
@@ -105,10 +106,11 @@
                 </li>
                 <li>
                     <p>Feature Graphic</p>
+                    <p *ngIf="featureError" class="alert">{{featureError}}</p>
                     <div style="width: 450px;">
                         <div class="btn-group" style="display: inline;">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="featureMenu"><img src="../../assets/bloom-feature-graphic.png" id="featureDisplay" height="120" width="240"><span class="caret"></span></button>
-                            <ul class="dropdown-menu scrollable-menu blackText" role="menu" style="height: auto;max-height: 260px;overflow-x: hidden;background: #E5E5E5">
+                            <ul class="dropdown-menu scrollable-menu" role="menu" style="height: auto;max-height: 300px;overflow-x: hidden;background: #E5E5E5">
                                 <li><img #feature1 (click)="selectFromDefault(feature1.src,'feature')" src="../../assets/bloom-feature-graphic.png" width="240" height="120"></li>
                                 <li><img #feature2 (click)="selectFromDefault(feature2.src,'feature')" src="../../assets/featureGraphic.png" width="240" height="120"></li>
                             </ul>
@@ -181,8 +183,8 @@
                     <li>shortD is: {{data["shortDescription"]}}</li>
                     <li>fullD is: {{data["fullDescription"]}}</li>
                     <li>color is: {{data["color"]}}</li>
-                    <li>icon is: {{data["icon"]}}</li>
-                    <li>feature is: {{data["featureGraphic"]}}</li>
+                    <li>icon is: <img [src]="data['icon']" width="60" height="60"></li>
+                    <li>feature is: <img [src]="data['feature']" width="200" height="100"></li>
                     <li>books are: {{data["books"]}}</li>
                 </ul>
             </div>
