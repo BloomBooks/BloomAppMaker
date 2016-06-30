@@ -184,6 +184,7 @@
                             If you are publishing an update, this is automated and takes just a few hours.</p>
                         <p>In the mean time, if your phone has been <a><u [class]="(serverResponse[0]['requestId']==2&&serverResponse[0]['response']=='success')||(serverResponse[0]['requestId']==3&&serverResponse[0]['response']=='fail') ? 'link' : 'link-disabled'">set up to allow side loading</u></a>, here is a
                             <a><u [class]="(serverResponse[0]['requestId']==2&&serverResponse[0]['response']=='success')||(serverResponse[0]['requestId']==3&&serverResponse[0]['response']=='fail') ? 'link' : 'link-disabled'">link to the APK</u></a>, and here is a QR code to download it to your phone:</p>
+                        <img *ngIf="(serverResponse[0]['requestId']==2&&serverResponse[0]['response']=='success')||serverResponse[0]['requestId']>=3" src="../../assets/ch.png" width="50" height="50">
                     </li>
                     <li [class]="(serverResponse[0]['requestId']==3&&serverResponse[0]['response']=='success')||(serverResponse[0]['requestId']==4&&serverResponse[0]['response']=='fail') ? 'blackText' : 'content-disabled'">
                         <b>Private on Play Store</b>
