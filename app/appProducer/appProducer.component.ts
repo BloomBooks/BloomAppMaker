@@ -18,6 +18,8 @@ export class AppProducer implements OnInit{
     shortDError = "";
     fullDError = "";
     noColorError = "";
+    iconError = "";
+    featureError = "";
     noBookError = "";
     noBookInLanguageAlert = "";
     AllBookSelectedAlert = "";
@@ -29,6 +31,8 @@ export class AppProducer implements OnInit{
     
     colorSelection = "select a color";
     colorStyle = "#FFFFFF";
+    iconSrc = "";
+    featureSrc = "";
 
     result = [];
     data = {};
@@ -65,27 +69,49 @@ export class AppProducer implements OnInit{
     selectFromDefault (src: string, name: string) {
         if (name == 'icon') {
             $("#iconDisplay").attr('src', src);
+            this.iconError = "";
+            this.iconSrc = src;
         } else if (name == 'feature') {
             $("#featureDisplay").attr('src', src);
+            this.featureError = "";
+            this.featureSrc = src;
         }
     }
     onFileSelect (file, name: string) {
         if (file.files && file.files[0]) {
-            var reader = new FileReader();
-            if (name == "icon") {
-                reader.onload = this.loadIcon;
-                reader.readAsDataURL(file.files[0]);
-            } else if (name == "feature") {
-                reader.onload = this.loadFeature;
-                reader.readAsDataURL(file.files[0]);
+            this.iconError = "";
+            if (name == 'icon' && file.files[0].size > 1048576) {
+                this.iconError = "icon file size has to be smaller than 1MB";
+            } else {
+                var reader = new FileReader();
+                if (name == "icon") {
+                    reader.addEventListener("load", () => {
+                        var img = new Image();
+                        img.src = reader.result;
+                        if (img.width != 512 && img.height != 512) {
+                            this.iconError = "icon has to be 512px x 512px, this image is "+img.height+"px x "+img.width+"px";
+                        } else {
+                            $("#iconDisplay").attr('src', reader.result);
+                            this.iconSrc = reader.result;
+                        }
+                    });
+                    reader.readAsDataURL(file.files[0]);
+                } else if (name == "feature") {
+                    reader.addEventListener("load", () => {
+                        this.featureError = "";
+                        var img = new Image();
+                        img.src = reader.result;
+                        if (img.width != 1024 && img.height != 500) {
+                            this.featureError = "feature graphic has to be 500px x 1024px, this image is "+img.height+"px x "+img.width+"px";
+                        } else {
+                            $("#featureDisplay").attr('src', reader.result);
+                            this.featureSrc = reader.result;
+                        }
+                    });
+                    reader.readAsDataURL(file.files[0]);
+                }
             }
         }
-    }
-    loadIcon(e) {
-        $("#iconDisplay").attr('src', e.target.result);
-    }
-    loadFeature(e) {
-        $("#featureDisplay").attr('src', e.target.result);
     }
 
     //BooksPage
@@ -187,14 +213,18 @@ export class AppProducer implements OnInit{
             this.hasError = true;
         }
         if (!this.hasError) {
-            this.onBuild(title, shortD, fullD, color, this.result);
+            var icon = this.iconSrc;
+            var feature = this.featureSrc;
+            this.onBuild(title, shortD, fullD, color, icon, feature, this.result);
         }
     }
-    onBuild(title: string, shortD: string, fullD: string, color: string, result) {
+    onBuild(title: string, shortD: string, fullD: string, color: string, icon: string, feature: string, result) {
         this.data["title"]=title;
         this.data["shortDescription"]=shortD;
         this.data["fullDescription"]=fullD;
         this.data["color"]=color;
+        this.data["icon"]=icon;
+        this.data["feature"]=feature;
         this.data["books"]=result;
         this.hasValue = true;
     }
@@ -209,5 +239,7 @@ export class AppProducer implements OnInit{
     //on start
     ngOnInit() {
         this.getBooks("English");
+        this.iconSrc = "../../assets/ab-001-black.png";
+        this.featureSrc = "../../assets/bloom-feature-graphic.png";
     }
 }
