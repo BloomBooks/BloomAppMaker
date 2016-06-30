@@ -62,6 +62,24 @@ export class AppProducer implements OnInit{
             this.colorStyle = style;
         }
     }
+    onFileSelect (file, name: string) {
+        if (file.files && file.files[0]) {
+            var reader = new FileReader();
+            if (name == "icon") {
+                reader.onload = this.loadIcon;
+                reader.readAsDataURL(file.files[0]);
+            } else if (name == "feature") {
+                reader.onload = this.loadFeature;
+                reader.readAsDataURL(file.files[0]);
+            }
+        }
+    }
+    loadIcon(e) {
+        $("#iconDisplay").attr('src', e.target.result);
+    }
+    loadFeature(e) {
+        $("#featureDisplay").attr('src', e.target.result);
+    }
 
     //BooksPage
     getBooks(language: string) {
