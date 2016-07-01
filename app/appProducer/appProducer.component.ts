@@ -12,6 +12,8 @@ declare var $:JQueryStatic;
 })
 
 export class AppProducer implements OnInit{
+    currentStage="";
+
     hasValue = false;
     hasError = false;
     titleError = "";
@@ -219,7 +221,11 @@ export class AppProducer implements OnInit{
             var icon = this.iconSrc;
             var feature = this.featureSrc;
             // this.onBuild(title, shortD, fullD, color, icon, feature, this.result);
+            this.setServerResponse(1,"success");
             this.onBuild(title, shortD, fullD, color, icon, feature, this.resultBookTitle);
+        } else {
+            // tecnically, this should be called client side response
+            this.setServerResponse(1,"fail");
         }
     }
     onBuild(title: string, shortD: string, fullD: string, color: string, icon: string, feature: string, result) {
@@ -236,8 +242,42 @@ export class AppProducer implements OnInit{
         this.serverResponse[0]["requestId"] = id;
         this.serverResponse[0]["response"] = response;
         this.requestFailedError = "";
-        if (response == "fail") {
-            this.requestFailedError = "For some mysterious reasons, this process failed. Please try again. Good luck!";
+
+        if (id==1) {
+            if (response == "fail") {
+                this.currentStage = "Setting Up";
+                this.requestFailedError = "Unable to start build due to invalid input fields";
+            } else {
+                this.currentStage = "Making App";
+            }
+        } else if (id==2) {
+            if (response == "fail") {
+                this.currentStage = "Making App";
+                this.requestFailedError = "Our server is currently unable to build the app, please try again later";
+            } else {
+                this.currentStage = "Submitting to Play Store";
+            }
+        } else if (id==3) {
+            if (response == "fail") {
+                this.currentStage = "Submitting to Play Store";
+                this.requestFailedError = "We failed to update the app, please try again later";
+            } else {
+                this.currentStage = "Private on Play Store";
+            }
+        } else if (id==4) {
+            if (response == "fail") {
+                this.requestFailedError = "We failed to change the app from private to public, please try again later";
+                this.currentStage = "Private on Play Store";
+            } else {
+                this.currentStage = "Public on Play Store";
+            }
+        } else if (id==5) {
+            if (response == "fail") {
+                this.requestFailedError = "We failed to change the app from public to private, please try again later";
+                this.currentStage = "Public on Play Store";
+            } else {
+                this.currentStage = "Private on Play Store";
+            }
         }
     }
     //on start
@@ -245,5 +285,6 @@ export class AppProducer implements OnInit{
         this.getBooks("English");
         this.iconSrc = "../../assets/ab-001-black.png";
         this.featureSrc = "../../assets/bloom-feature-graphic.png";
+        this.currentStage = "Setting Up";
     }
 }
