@@ -10,13 +10,13 @@
         <p style="font-size: 18px;"><b>{{currentStage}}</b></p>
     </div>
     <ul class="nav nav-tabs">
-        <li [class]="detailsClass">
-            <a data-toggle="tab" (click)="onNavSelect('detail')">Details</a>
+        <li>
+            <a data-toggle="tab" (click)="currentStage=='Setting Up' ? onNavSelect('detail') : pass">Details</a>
         </li>
-        <li [class]="booksClass">
-            <a data-toggle="tab" (click)="onNavSelect('book')">Books</a>
+        <li>
+            <a data-toggle="tab" (click)="currentStage=='Setting Up' ? onNavSelect('book') : pass">Books</a>
         </li>
-        <li [class]="processClass">
+        <li>
             <a data-toggle="tab" (click)="onNavSelect('process')">Process</a>
         </li>
     </ul>
