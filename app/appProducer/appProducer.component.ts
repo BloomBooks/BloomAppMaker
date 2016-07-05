@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { AppInfo } from './appInfo';
 import { BloomBook } from './bloomBook';
 import { AppProducerService } from './appProducer.service';
 declare var $:JQueryStatic;
@@ -12,7 +13,10 @@ declare var $:JQueryStatic;
 })
 
 export class AppProducer implements OnInit{
-    currentStage="";
+    currentUser = "";
+    currentStage = "";
+    appName = "untitled";
+    appId = undefined;
 
     hasValue = false;
     hasError = false;
@@ -27,24 +31,68 @@ export class AppProducer implements OnInit{
     AllBookSelectedAlert = "";
     requestFailedError = "";
 
-    detailsClass = "active";
-    booksClass = "";
+    detailsClass = "";
+    booksClass = "active";
     processClass = "";
-    
+
     colorSelection = "select a color";
     colorStyle = "#FFFFFF";
     iconSrc = "";
     featureSrc = "";
 
+    userApps: AppInfo[];
     result = [];
     resultBookTitle = [];
-    data = {};
+    data: AppInfo;
     bloomBooks: BloomBook[];
     serverResponse = [{}];
 
-    constructor(private appProducerService: AppProducerService) {}
+    saveResponse = "";
 
-    //detail page
+    constructor(private appProducerService: AppProducerService) {}
+    
+    // user app info
+    getUserAppInfo(username) {
+        this.appProducerService.getAppsByUsername(username).then( (appInfos) => {
+            this.userApps = JSON.parse(JSON.stringify(appInfos));
+        });
+    }
+    onAppNameChange(name: string) {
+        this.appName = name;
+        if (name == "new app") {
+            this.ngOnInit();
+        } else {
+            for (var app of this.userApps) {
+                if (app.name == name) {
+                    this.data = app;
+                }
+            }
+        }
+    }
+    onSave() {
+        this.doTable();
+        this.save(this.appName, this.result);
+        this.getUserAppInfo(this.currentUser);
+    }
+    save(name: string, result) {
+        this.data.name=name;
+        // this.data.color=color;
+        this.data.books=result;
+        this.data.phase=[0,1];
+        this.hasValue = true;
+        console.log(this.data);
+        this.appProducerService.saveApp(this.data, this.currentUser).then( (response) => {
+            if (response == "201" || response == "202") {
+                this.saveResponse = response + " saved";
+                console.log(this.saveResponse);
+            } else {
+                this.saveResponse = response + " save failed";
+                console.log(this.saveResponse);
+            }
+        });
+    }
+
+    // detail page
     onNavSelect(item: string) {
         switch(item) {
             case "detail":
@@ -65,19 +113,15 @@ export class AppProducer implements OnInit{
     }
     onColorSelect(content: string, style: string) {
         if (content) {
-            this.colorSelection = content;
-            this.colorStyle = style;
+            this.data.color[0] = content;
+            this.data.color[1] = style;
         }
     }
     selectFromDefault (src: string, name: string) {
         if (name == 'icon') {
-            $("#iconDisplay").attr('src', src);
-            this.iconError = "";
-            this.iconSrc = src;
+            this.data.icon = src;
         } else if (name == 'feature') {
-            $("#featureDisplay").attr('src', src);
-            this.featureError = "";
-            this.featureSrc = src;
+            this.data.feature = src;
         }
     }
     onFileSelect (file, name: string) {
@@ -94,8 +138,8 @@ export class AppProducer implements OnInit{
                         if (img.width != 512 && img.height != 512) {
                             this.iconError = "icon has to be 512px x 512px, this image is "+img.height+"px x "+img.width+"px";
                         } else {
-                            $("#iconDisplay").attr('src', reader.result);
-                            this.iconSrc = reader.result;
+                            // $("#iconDisplay").attr('src', reader.result);
+                            this.data.icon = reader.result;
                         }
                     });
                     reader.readAsDataURL(file.files[0]);
@@ -107,8 +151,8 @@ export class AppProducer implements OnInit{
                         if (img.width != 1024 && img.height != 500) {
                             this.featureError = "feature graphic has to be 500px x 1024px, this image is "+img.height+"px x "+img.width+"px";
                         } else {
-                            $("#featureDisplay").attr('src', reader.result);
-                            this.featureSrc = reader.result;
+                            // $("#featureDisplay").attr('src', reader.result);
+                            this.data.feature = reader.result;
                         }
                     });
                     reader.readAsDataURL(file.files[0]);
@@ -117,7 +161,7 @@ export class AppProducer implements OnInit{
         }
     }
 
-    //BooksPage
+    // BooksPage
     getBooks(language: string) {
         this.appProducerService.getBooks().then( (bloomBooks) => {
             this.doTable();
@@ -177,8 +221,8 @@ export class AppProducer implements OnInit{
         }
     }
 
-    //process page
-    checkField(title: string, shortD: string, fullD: string, color: string) {
+    // process page
+    checkField() {
         this.hasError = false;
         this.hasValue = false;
         this.titleError = "";
@@ -187,28 +231,28 @@ export class AppProducer implements OnInit{
         this.noColorError = "";
         this.noBookError = "";
 
-        if (!title) {
+        if (!this.data.title) {
             this.titleError = "missing title field";
             this.hasError = true;
-        } else if (title.length > 30) {
+        } else if (this.data.title.length > 30) {
             this.titleError = "title field cannot exceed 30 characters";
             this.hasError = true;
         }
-        if (!shortD) {
+        if (!this.data.shortDescription) {
             this.shortDError = "missing short description field";
             this.hasError = true;
-        } else if (shortD.length > 80) {
+        } else if (this.data.shortDescription.length > 80) {
             this.shortDError = "short description field cannot exceed 80 characters";
             this.hasError = true;
         }
-        if (!fullD) {
+        if (!this.data.fullDescription) {
             this.fullDError = "missing full description field";
             this.hasError = true;
-        } else if (fullD.length > 4000) {
+        } else if (this.data.fullDescription.length > 4000) {
             this.fullDError = "full description field cannot exceed 4000 characters";
             this.hasError = true;
         }
-        if (color == "select a color") {
+        if (this.data.color[0] == "select a color") {
             this.noColorError = "missing color field";
             this.hasError = true;
         }
@@ -218,26 +262,20 @@ export class AppProducer implements OnInit{
             this.hasError = true;
         }
         if (!this.hasError) {
-            var icon = this.iconSrc;
-            var feature = this.featureSrc;
-            // this.onBuild(title, shortD, fullD, color, icon, feature, this.result);
-            this.setServerResponse(1,"success");
-            this.onBuild(title, shortD, fullD, color, icon, feature, this.resultBookTitle);
+            // this.save(this.appName, title, shortD, fullD, color, icon, feature, this.result);
+            this.save(this.appName, this.result);
+            this.onBuild(this.data);
+            // this.onBuild(title, shortD, fullD, color, icon, feature, this.resultBookTitle);
         } else {
             // tecnically, this should be called client side response
             this.setServerResponse(1,"fail");
         }
     }
-    onBuild(title: string, shortD: string, fullD: string, color: string, icon: string, feature: string, result) {
-        this.data["title"]=title;
-        this.data["shortDescription"]=shortD;
-        this.data["fullDescription"]=fullD;
-        this.data["color"]=color;
-        this.data["icon"]=icon;
-        this.data["feature"]=feature;
-        this.data["books"]=result;
-        this.hasValue = true;
+    onBuild(data: AppInfo) {
+        this.setServerResponse(1,"success");
+        console.log("built");
     }
+
     setServerResponse(id: number, response: string) {
         this.serverResponse[0]["requestId"] = id;
         this.serverResponse[0]["response"] = response;
@@ -280,11 +318,16 @@ export class AppProducer implements OnInit{
             }
         }
     }
-    //on start
+    
+    // on start
     ngOnInit() {
+        this.currentUser = "Jacob"
+        this.getUserAppInfo(this.currentUser);
         this.getBooks("English");
-        this.iconSrc = "../../assets/ab-001-black.png";
-        this.featureSrc = "../../assets/bloom-feature-graphic.png";
+        this.data = new AppInfo();
+        this.data.color = ["Select a Color","#FFFFFF"];
+        this.data.icon = "../../assets/ab-001-black.png";
+        this.data.feature = "../../assets/bloom-feature-graphic.png";
         this.currentStage = "Setting Up";
     }
 }
