@@ -1,9 +1,12 @@
 <div class="container">
     <h1>App Maker</h1>
     <!--<span [innerHTML]="title" style="font-size: 18px"></span>-->
-    <span style="font-size: 18px"><b>Foobar Kids Books</b></span>
-    <select>
-        <option>more</option>
+    <b><span #appname style="font-size: 18px">{{appName}}</span></b>
+    <input [(ngModel)]="appName">
+    <button>edit title</button>
+    <select (change)="changeAppName($event.target.value)">
+        <option selected disabled>more</option>
+        <option *ngFor="let app of userApps">{{app.name}}</option>
     </select>
     <div style="float: right" align="right">
         <span class="notes">Stage in Progress</span>
@@ -11,10 +14,10 @@
     </div>
     <ul class="nav nav-tabs">
         <li>
-            <a data-toggle="tab" (click)="currentStage=='Setting Up' ? onNavSelect('detail') : pass">Details</a>
+            <a data-toggle="tab" (click)="currentStage=='Setting Up' ? onNavSelect('book') : pass">Books</a>
         </li>
         <li>
-            <a data-toggle="tab" (click)="currentStage=='Setting Up' ? onNavSelect('book') : pass">Books</a>
+            <a data-toggle="tab" (click)="currentStage=='Setting Up' ? onNavSelect('detail') : pass">Details</a>
         </li>
         <li>
             <a data-toggle="tab" (click)="onNavSelect('process')">Process</a>
@@ -22,6 +25,54 @@
     </ul>
 
     <div class="tab-content">
+        <div #books [class]="'tab-pane ' + booksClass" id="books">
+            <section style="float: left">
+                <ul style="list-style: none;">
+                    <li>
+                        <h4>Books To Include In App</h4>
+                        <p *ngIf="noBookError" class="alert">{{noBookError}}</p>
+                    </li>
+                    <li>
+                        <p *ngIf="noBookInLanguageAlert" class="alert" [innerHTML]="noBookInLanguageAlert"></p>
+                        <p *ngIf="AllBookSelectedAlert" class="alert" [innerHTML]="AllBookSelectedAlert"></p>
+                        <span>Language</span>
+                        <input #language type="text" (keyup.enter)="getBooks(language.value)">
+                        <button (click)="getBooks(language.value)">search</button>
+                        <a><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>
+                    </li>
+                    <li>
+                        <table style="border: 1px solid black;" id="booksTable">
+                            <thead>
+                                <tr class="tableHead">
+                                    <th>Include</th>
+                                    <th>Title</th>
+                                    <th>Copyright/License</th>
+                                    <th>Note</th>
+                                    <th>Tools</th>
+                                </tr>
+                            </thead>
+                            <tbody #booksTableContent id="booksTableContent">
+                                <tr *ngFor="let bloomBook of bloomBooks" class="tableContent" [id]="bloomBook.id">
+                                    <td><input type="checkbox" class="checkbox"></td>
+                                    <td>{{bloomBook.title}}</td>
+                                    <td>{{bloomBook.copyright}}</td>
+                                    <td>{{bloomBook.note}}</td>
+                                    <td>
+                                        <input type="button" value="up" class="move up" (click)="move($event)">
+                                        <input type="button" value="down" class="move down" (click)="move($event)">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </li>
+                </ul>
+            </section>
+            <aside class="notes">
+                <p>To Get a new book into this list, upload it from the <a><u class="link">Bloom Editor</u></a> program</p>
+                <p>One or more books in this app have been updated since the last time the app was published.
+                    Consider making a new version. <a><u class="link">Go to Process</u></a></p>
+            </aside>
+        </div>
         <div #details [class]="'tab-pane ' + detailsClass" id="details">
             <ul style="list-style: none;">
                 <li>
@@ -34,7 +85,7 @@
                         <option>Chinese</option>
                     </select>
                     <!--<select>-->
-                        <!--<option *ngFor="let language of languages">{{language}}</option>-->
+                    <!--<option *ngFor="let language of languages">{{language}}</option>-->
                     <!--</select>-->
                 </li>
                 <li>
@@ -123,54 +174,6 @@
                     </div>
                 </li>
             </ul>
-        </div>
-        <div #books [class]="'tab-pane ' + booksClass" id="books">
-            <section style="float: left">
-                <ul style="list-style: none;">
-                    <li>
-                        <h4>Books To Include In App</h4>
-                        <p *ngIf="noBookError" class="alert">{{noBookError}}</p>
-                    </li>
-                    <li>
-                        <p *ngIf="noBookInLanguageAlert" class="alert" [innerHTML]="noBookInLanguageAlert"></p>
-                        <p *ngIf="AllBookSelectedAlert" class="alert" [innerHTML]="AllBookSelectedAlert"></p>
-                        <span>Language</span>
-                        <input #language type="text" (keyup.enter)="getBooks(language.value)">
-                        <button (click)="getBooks(language.value)">search</button>
-                        <a><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>
-                    </li>
-                    <li>
-                        <table style="border: 1px solid black;" id="booksTable">
-                            <thead>
-                                <tr class="tableHead">
-                                    <th>Include</th>
-                                    <th>Title</th>
-                                    <th>Copyright/License</th>
-                                    <th>Note</th>
-                                    <th>Tools</th>
-                                </tr>
-                            </thead>
-                            <tbody #booksTableContent id="booksTableContent">
-                                <tr *ngFor="let bloomBook of bloomBooks" class="tableContent" [id]="bloomBook.id">
-                                    <td><input type="checkbox" class="checkbox"></td>
-                                    <td>{{bloomBook.title}}</td>
-                                    <td>{{bloomBook.copyright}}</td>
-                                    <td>{{bloomBook.note}}</td>
-                                    <td>
-                                        <input type="button" value="up" class="move up" (click)="move($event)">
-                                        <input type="button" value="down" class="move down" (click)="move($event)">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </li>
-                </ul>
-            </section>
-            <aside class="notes">
-                <p>To Get a new book into this list, upload it from the <a><u class="link">Bloom Editor</u></a> program</p>
-                <p>One or more books in this app have been updated since the last time the app was published.
-                    Consider making a new version. <a><u class="link">Go to Process</u></a></p>
-            </aside>
         </div>
         <div #process [class]="'tab-pane ' + processClass" id="process">
             <h1>process</h1>
