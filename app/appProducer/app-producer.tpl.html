@@ -1,13 +1,11 @@
 <div class="container">
     <h1>App Maker</h1>
-    <!--<span [innerHTML]="title" style="font-size: 18px"></span>-->
-    <b><span #appname style="font-size: 18px">{{appName}}</span></b>
-    <input [(ngModel)]="appName">
-    <button>edit title</button>
-    <select (change)="changeAppName($event.target.value)">
-        <option selected disabled>more</option>
+    <input [(ngModel)]="appName" style="width: 100px;">
+    <select (change)="onAppNameChange($event.target.value)" style="width: initial;">
+        <option selected>new app</option>
         <option *ngFor="let app of userApps">{{app.name}}</option>
     </select>
+    <button (click)="onSave()">save</button>
     <div style="float: right" align="right">
         <span class="notes">Stage in Progress</span>
         <p style="font-size: 18px;"><b>{{currentStage}}</b></p>
@@ -91,17 +89,17 @@
                 <li>
                     <p>Title</p>
                     <p *ngIf="titleError" class="alert">{{titleError}}</p>
-                    <input #title>
+                    <input [(ngModel)]="data.title">
                 </li>
                 <li>
                     <p>Short Description</p>
                     <p *ngIf="shortDError" class="alert">{{shortDError}}</p>
-                    <input #shortD>
+                    <input [(ngModel)]="data.shortDescription">
                 </li>
                 <li>
                     <p>Full Description</p>
                     <p *ngIf="fullDError" class="alert">{{fullDError}}</p>
-                    <textarea #fullD></textarea>
+                    <textarea [(ngModel)]="data.fullDescription"></textarea>
                     <p class="notes">The following will be appended to the description</p>
                     <p class="notes">"These books and this app were created with <a class="link"><u>Bloom</u></a> from SIL International"</p>
                 </li>
@@ -109,7 +107,7 @@
                     <p>Color</p>
                     <p *ngIf="noColorError" class="alert">{{noColorError}}</p>
                     <div class="btn-group">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="dropDownMenu"><div [style.background]="colorStyle" class="colorSelection"></div><span #selectedColor [textContent]="colorSelection">Select a color</span><span class="caret"></span></button>
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="dropDownMenu"><div [style.background]="data.color[1]" class="colorSelection"></div><span #selectedColor [textContent]="data.color[0]">Select a color</span><span class="caret"></span></button>
                         <ul class="dropdown-menu scrollable-menu blackText" role="menu" style="height: auto;max-height: 200px;overflow-x: hidden;background: #E5E5E5">
                             <li><a #DGreen class="blackText" (click)="onColorSelect(DGreen.textContent,dg.style.background)"><div #dg class="colorSelection" style="background: #083F0E;"></div>Dark Green</a></li>
                             <li><a #DBlue class="blackText" (click)="onColorSelect(DBlue.textContent,db.style.background)"><div #db class="colorSelection" style="background: #000B63;"></div>Dark Blue</a></li>
@@ -140,7 +138,7 @@
                     <p *ngIf="iconError" class="alert">{{iconError}}</p>
                     <div style="width: 450px;">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="iconMenu"><img src="../../assets/ab-001-black.png" id="iconDisplay" height="60" width="60"><span class="caret"></span></button>
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="iconMenu"><img [src]="data.icon" id="iconDisplay" height="60" width="60"><span class="caret"></span></button>
                             <ul class="dropdown-menu scrollable-menu" role="menu" style="height: auto;max-height: 300px;overflow-x: hidden;background: #E5E5E5">
                                 <li><img #icon1 (click)="selectFromDefault(icon1.src,'icon')" src="../../assets/ab-001-black.png" width="60" height="60"></li>
                                 <li><img #icon2 (click)="selectFromDefault(icon2.src,'icon')" src="../../assets/ab-002-blue.png" width="60" height="60"></li>
@@ -163,7 +161,7 @@
                     <p *ngIf="featureError" class="alert">{{featureError}}</p>
                     <div style="width: 450px;">
                         <div class="btn-group" style="display: inline;">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="featureMenu"><img src="../../assets/bloom-feature-graphic.png" id="featureDisplay" height="120" width="240"><span class="caret"></span></button>
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="featureMenu"><img [src]="data.feature" id="featureDisplay" height="120" width="240"><span class="caret"></span></button>
                             <ul class="dropdown-menu scrollable-menu" role="menu" style="height: auto;max-height: 300px;overflow-x: hidden;background: #E5E5E5">
                                 <li><img #feature1 (click)="selectFromDefault(feature1.src,'feature')" src="../../assets/bloom-feature-graphic.png" width="240" height="120"></li>
                                 <li><img #feature2 (click)="selectFromDefault(feature2.src,'feature')" src="../../assets/featureGraphic.png" width="240" height="120"></li>
@@ -199,7 +197,7 @@
                         <b>Setting Up</b>
                         <p *ngIf="currentStage=='Setting Up'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
                         <p>Fill out all the App Details and select books. When you're ready, click this button</p>
-                        <button (click)="checkField(title.value, shortD.value, fullD.value, selectedColor.textContent)" [disabled]="currentStage!='Setting Up'" [class]="currentStage=='Setting Up' ? 'blackText' : 'content-disabled'">Make my App</button>
+                        <button (click)="checkField()" [disabled]="currentStage!='Setting Up'" [class]="currentStage=='Setting Up' ? 'blackText' : 'content-disabled'">Make my App</button>
                     </li>
                     <li [class]="currentStage=='Making App' ? 'blackText' : 'content-disabled'">
                         <b>Making App</b>
