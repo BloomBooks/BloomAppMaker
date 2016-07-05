@@ -7,5 +7,6 @@ export class AppInfo {
     color: string;
     icon: string;
     feature: string;
-    books: Array<number>
+    books: Array<number>;
+    phase: Array<number>
 }

@@ -9,10 +9,20 @@ export class AppProducerService {
     getBooks() {
         return Promise.resolve(BLOOMBOOKS);
     }
-    getApp() {
-        return Promise.resolve(APPINFOS);
+    getAppsByUsername(username: string) {
+        var id = [];
+        for (var i=0;i<USERINFOS.length;i++) {
+            if (USERINFOS[i].username == username) {
+                id = USERINFOS[i].apps.slice();
+            }
+        }
+        var result = [];
+        for (var i=0;i<APPINFOS.length;i++) {
+            if (id.includes(APPINFOS[i].id)) {
+                result.push(APPINFOS[i]);
+            }
+        }
+        return Promise.resolve(result);
     }
-    getUser() {
-        return Promise.resolve(USERINFOS);
-    }
+    
 }
