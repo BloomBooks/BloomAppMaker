@@ -35,11 +35,6 @@ export class AppProducer implements OnInit{
     booksClass = "active";
     processClass = "";
 
-    colorSelection = "select a color";
-    colorStyle = "#FFFFFF";
-    iconSrc = "";
-    featureSrc = "";
-
     userApps: AppInfo[];
     result = [];
     resultBookTitle = [];
@@ -65,18 +60,19 @@ export class AppProducer implements OnInit{
             for (var app of this.userApps) {
                 if (app.name == name) {
                     this.data = app;
+                    this.getBooks("english");
+                    this.writeTable();
                 }
             }
         }
     }
     onSave() {
-        this.doTable();
+        this.readTable();
         this.save(this.appName, this.result);
         this.getUserAppInfo(this.currentUser);
     }
     save(name: string, result) {
         this.data.name=name;
-        // this.data.color=color;
         this.data.books=result;
         this.data.phase=[0,1];
         this.hasValue = true;
@@ -164,11 +160,19 @@ export class AppProducer implements OnInit{
     // BooksPage
     getBooks(language: string) {
         this.appProducerService.getBooks().then( (bloomBooks) => {
-            this.doTable();
             this.bloomBooks = [];
             var noLanguageAlert = true;
             var noOtherBookAlert = true;
-            var searchResult = this.result.slice();
+            var searchResult;
+            if (this.data.books) {
+                searchResult = this.data.books.slice();
+                console.log("data");
+                console.log(this.data.books);
+            } else if (this.result) {
+                searchResult = this.result.slice();
+                console.log("result");
+                console.log(this.result);
+            }
             if (searchResult.length != 0 ) {
                 for (var i = 0; i < searchResult.length; i++) {
                     var findBook = $.grep(bloomBooks, function(a) { return a.id == searchResult[i]});
@@ -209,14 +213,26 @@ export class AppProducer implements OnInit{
             row.next().after(row);
         }
     }
-    doTable() {
+    readTable() {
         var row = <HTMLElement[]><any>document.getElementsByClassName("tableContent");
         this.result = [];
         this.resultBookTitle = [];
         for(var i=0;i<row.length;i++) {
             if (row[i].getElementsByClassName("checkbox")[0]["checked"]) {
-                this.result.push(row[i].id);
+                this.result.push(parseInt(row[i].id));
                 this.resultBookTitle.push(row[i].getElementsByTagName("td")[1].innerHTML);
+            }
+        }
+    }
+    writeTable() {
+        var row = <HTMLElement[]><any>document.getElementsByClassName("tableContent");
+        for(var i=0;i<row.length;i++) {
+            if (this.data.books.indexOf(parseInt(row[i].id)) > -1) {
+                row[i].getElementsByClassName("checkbox")[0]["checked"]=true;
+                console.log(true);
+            } else {
+                row[i].getElementsByClassName("checkbox")[0]["checked"]=false;
+                console.log(false);
             }
         }
     }
@@ -252,11 +268,11 @@ export class AppProducer implements OnInit{
             this.fullDError = "full description field cannot exceed 4000 characters";
             this.hasError = true;
         }
-        if (this.data.color[0] == "select a color") {
+        if (this.data.color[0] == "Select a Color" || this.data.color[1] == "#FFFFFF") {
             this.noColorError = "missing color field";
             this.hasError = true;
         }
-        this.doTable();
+        this.readTable();
         if (this.result.length == 0) {
             this.noBookError = "missing book selection";
             this.hasError = true;
@@ -323,11 +339,14 @@ export class AppProducer implements OnInit{
     ngOnInit() {
         this.currentUser = "Jacob"
         this.getUserAppInfo(this.currentUser);
-        this.getBooks("English");
+        this.result = [];
         this.data = new AppInfo();
         this.data.color = ["Select a Color","#FFFFFF"];
         this.data.icon = "../../assets/ab-001-black.png";
         this.data.feature = "../../assets/bloom-feature-graphic.png";
+        this.data.books=[];
         this.currentStage = "Setting Up";
+        this.getBooks("English");
+        this.writeTable();
     }
 }
