@@ -60,7 +60,7 @@ export class AppProducer implements OnInit{
             for (var app of this.userApps) {
                 if (app.name == name) {
                     this.data = app;
-                    this.getBooks("english");
+                    this.getBooks("english", "load");
                     this.writeTable();
                     if (this.data.phase[1]==0) {
                         this.setServerResponse(this.data.phase[0],"fail");
@@ -164,20 +164,20 @@ export class AppProducer implements OnInit{
     }
 
     // BooksPage
-    getBooks(language: string) {
+    searchBooks(language: string) {
+        this.readTable();
+        this.getBooks(language, "search");
+    }
+    getBooks(language: string, from: string) {
         this.appProducerService.getBooks().then( (bloomBooks) => {
             this.bloomBooks = [];
             var noLanguageAlert = true;
             var noOtherBookAlert = true;
             var searchResult;
-            if (this.data.books) {
+            if (from == "load") {
                 searchResult = this.data.books.slice();
-                console.log("data");
-                console.log(this.data.books);
-            } else if (this.result) {
+            } else if (from == "search") {
                 searchResult = this.result.slice();
-                console.log("result");
-                console.log(this.result);
             }
             if (searchResult.length != 0 ) {
                 for (var i = 0; i < searchResult.length; i++) {
@@ -235,10 +235,8 @@ export class AppProducer implements OnInit{
         for(var i=0;i<row.length;i++) {
             if (this.data.books.indexOf(parseInt(row[i].id)) > -1) {
                 row[i].getElementsByClassName("checkbox")[0]["checked"]=true;
-                console.log(true);
             } else {
                 row[i].getElementsByClassName("checkbox")[0]["checked"]=false;
-                console.log(false);
             }
         }
     }
@@ -362,7 +360,7 @@ export class AppProducer implements OnInit{
         this.data.feature = "../../assets/bloom-feature-graphic.png";
         this.data.books=[];
         this.currentStage = "Setting Up";
-        this.getBooks("English");
+        this.getBooks("English", "search");
         this.writeTable();
     }
 }

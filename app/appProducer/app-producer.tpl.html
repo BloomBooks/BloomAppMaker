@@ -34,8 +34,8 @@
                         <p *ngIf="noBookInLanguageAlert" class="alert" [innerHTML]="noBookInLanguageAlert"></p>
                         <p *ngIf="AllBookSelectedAlert" class="alert" [innerHTML]="AllBookSelectedAlert"></p>
                         <span>Language</span>
-                        <input #language type="text" (keyup.enter)="getBooks(language.value)">
-                        <button (click)="getBooks(language.value)">search</button>
+                        <input #language type="text" (keyup.enter)="searchBooks(language.value)">
+                        <button (click)="searchBooks(language.value)">search</button>
                         <a><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>
                     </li>
                     <li>
