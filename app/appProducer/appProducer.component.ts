@@ -62,6 +62,12 @@ export class AppProducer implements OnInit{
                     this.data = app;
                     this.getBooks("english");
                     this.writeTable();
+                    if (this.data.phase[1]==0) {
+                        this.setServerResponse(this.data.phase[0],"fail");
+                    } else {
+                        this.setServerResponse(this.data.phase[0],"success");
+                    }
+
                 }
             }
         }
@@ -296,41 +302,50 @@ export class AppProducer implements OnInit{
         this.serverResponse[0]["requestId"] = id;
         this.serverResponse[0]["response"] = response;
         this.requestFailedError = "";
-
-        if (id==1) {
-            if (response == "fail") {
-                this.currentStage = "Setting Up";
-                this.requestFailedError = "Unable to start build due to invalid input fields";
-            } else {
-                this.currentStage = "Making App";
-            }
-        } else if (id==2) {
-            if (response == "fail") {
-                this.currentStage = "Making App";
-                this.requestFailedError = "Our server is currently unable to build the app, please try again later";
-            } else {
-                this.currentStage = "Submitting to Play Store";
-            }
-        } else if (id==3) {
-            if (response == "fail") {
-                this.currentStage = "Submitting to Play Store";
-                this.requestFailedError = "We failed to update the app, please try again later";
-            } else {
-                this.currentStage = "Private on Play Store";
-            }
-        } else if (id==4) {
-            if (response == "fail") {
-                this.requestFailedError = "We failed to change the app from private to public, please try again later";
-                this.currentStage = "Private on Play Store";
-            } else {
-                this.currentStage = "Public on Play Store";
-            }
-        } else if (id==5) {
-            if (response == "fail") {
-                this.requestFailedError = "We failed to change the app from public to private, please try again later";
-                this.currentStage = "Public on Play Store";
-            } else {
-                this.currentStage = "Private on Play Store";
+        if (id==0) {
+            this.currentStage = "Setting Up";
+            this.booksClass = "active";
+            this.detailsClass = "";
+            this.processClass = "";
+        } else {
+            this.booksClass = "";
+            this.detailsClass = "";
+            this.processClass = "active";
+            if (id==1) {
+                if (response == "fail") {
+                    this.currentStage = "Setting Up";
+                    this.requestFailedError = "Unable to start build due to invalid input fields";
+                } else {
+                    this.currentStage = "Making App";
+                }
+            } else if (id==2) {
+                if (response == "fail") {
+                    this.currentStage = "Making App";
+                    this.requestFailedError = "Our server is currently unable to build the app, please try again later";
+                } else {
+                    this.currentStage = "Submitting to Play Store";
+                }
+            } else if (id==3) {
+                if (response == "fail") {
+                    this.currentStage = "Submitting to Play Store";
+                    this.requestFailedError = "We failed to update the app, please try again later";
+                } else {
+                    this.currentStage = "Private on Play Store";
+                }
+            } else if (id==4) {
+                if (response == "fail") {
+                    this.requestFailedError = "We failed to change the app from private to public, please try again later";
+                    this.currentStage = "Private on Play Store";
+                } else {
+                    this.currentStage = "Public on Play Store";
+                }
+            } else if (id==5) {
+                if (response == "fail") {
+                    this.requestFailedError = "We failed to change the app from public to private, please try again later";
+                    this.currentStage = "Public on Play Store";
+                } else {
+                    this.currentStage = "Private on Play Store";
+                }
             }
         }
     }
@@ -339,6 +354,7 @@ export class AppProducer implements OnInit{
     ngOnInit() {
         this.currentUser = "Jacob"
         this.getUserAppInfo(this.currentUser);
+        this.setServerResponse(0,"");
         this.result = [];
         this.data = new AppInfo();
         this.data.color = ["Select a Color","#FFFFFF"];
