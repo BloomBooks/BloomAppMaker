@@ -30,7 +30,11 @@ export class AppProducerService {
             app.id = APPINFOS[APPINFOS.length-1].id + 1;
             var app_copy = JSON.parse(JSON.stringify(app));
             APPINFOS.push(app_copy);
-            console.log(APPINFOS);
+            for (var user of USERINFOS) {
+                if (user.username == username) {
+                    user.apps.push(app.id);
+                }
+            }
             return Promise.resolve("201");
         } else {
             for (var oldApp of APPINFOS) {
