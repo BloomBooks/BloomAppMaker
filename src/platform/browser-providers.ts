@@ -16,7 +16,6 @@ import { provideWebpack } from '@angularclass/webpack-toolkit';
 import { providePrefetchIdleCallbacks } from '@angularclass/request-idle-callback';
 
 
-import { routes, APP_ROUTER_PROVIDERS } from '../app/app.routes';
 import { APP_RESOLVER_PROVIDERS } from '../app/app.resolver';
 /*
 * Application Providers/Directives/Pipes
@@ -28,9 +27,6 @@ export const APPLICATION_PROVIDERS = [
   provideForms(),
 
   ...APP_RESOLVER_PROVIDERS,
-
-  provideRouter(routes),
-  provideWebpack(APP_ROUTER_PROVIDERS),
 
   ...HTTP_PROVIDERS,
 
