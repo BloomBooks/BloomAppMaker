@@ -2,6 +2,7 @@
 
 ### Getting Started
 **Make sure you have Node version >= 5.0 and NPM >= 3**
+**You may not be able to build correctly if you are not building it on your local drive
 
 ```bash
 # WINDOWS ONLY
