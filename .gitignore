@@ -1,7 +1,6 @@
 .idea
-npm-debug.log
+dist
 node_modules
-app/*.js
-app/*.js.map
-app/*/*.js
-app/*/*.js.map
+typings
+src/app/*/*.js
+src/app/*/*.js.map
