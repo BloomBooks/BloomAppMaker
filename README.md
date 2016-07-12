@@ -1,59 +1,43 @@
 # Bloom Library App Maker
 
-### Getting Started
-**Make sure you have Node version >= 5.0 and NPM >= 3**
+An Angular 2 - based web app that lets users order new custom apps composed of Bloom Books found on the [Bloom Library](http://bloomlibrary.org) and publish them to the Google Play Store.
 
-**You may not be able to build correctly if you are not building it on your local drive**
+## Dependencies
+Node version >= 5.0 and NPM >= 3**.
 
+Access to BloomLibrary's Parse Server api.
+
+## Building
 ```bash
-# WINDOWS ONLY
-# add required global libraries `typings webpack-dev-server rimraf webpack`
+# (WINDOWS ONLY) add required global libraries `typings webpack-dev-server rimraf webpack`
 npm install -g typings webpack-dev-server rimraf webpack
 
 # install the repo with npm
 npm install
 
-# WINDOWS ONLY
-# install typings
+# install typings, which typescript uses to know the types of javascript libraries
+# (WINDOWS ONLY)  Review: why windows only?
 npm run typings-install
 
-# install jQuery typescript
-tsd install
-
-# edit jquery
-path:"typings/jquery/jquery.d.ts"
-
-# Modify jquery.d.ts and change
-declare module "jquery" {
-    export = $;
-}
-declare var jQuery: JQueryStatic;
-declare var $: JQueryStatic;
-
-# to:
-declare module "jquery" {
-    export = jQuery;
-}
-declare var jQuery: JQueryStatic;
-
-# start server
-npm start
-```
-
-## Other Command
-
-### build files
-```bash
-# development
+# build without running server
 npm run build:dev
-# production
+
+# or
 npm run build:prod
 ```
 
-### server
+## Running with continuous build and update
+
 ```bash
 # development
 npm run server
+
 # production
 npm run server:prod
 ```
+These start a local server at http://localhost:3000 using webpack-dev-server which will watch, build (in-memory), and reload for you.
+
+Note: You may not be able to build correctly if you are not building it on your local drive.
+
+# The build system
+This project is based on the https://github.com/AngularClass/angular2-webpack-starter.
