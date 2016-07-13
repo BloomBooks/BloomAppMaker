@@ -202,16 +202,17 @@ export class AppProducer implements OnInit{
             this.AllBookSelectedAlert = "";
             this.noBookInLanguageAlert = "";
             if (noLanguageAlert) {
-                this.noBookInLanguageAlert = "There is no book available in '" + language.toLowerCase() + "'. <br>Check your spelling may help";
+                // this.getBooks("english","search");
+                this.noBookInLanguageAlert = "There is no book available in '" + language.toLowerCase() + "'<br>Check your spelling may help<br>Result shows English books";
             } else if (noOtherBookAlert) {
                 this.AllBookSelectedAlert = "You already selected all books in this language";
             }
         });
     }
     move($event) {
-        var button = $event.path[0];
+        var button = $event.target;
         var row = $(button).closest('tr');
-        if ($(button).hasClass('up')) {
+        if ($(button).hasClass('glyphicon-arrow-up')) {
             if (!row.prev().hasClass('tableHead')) {
                 row.prev().before(row);
             }

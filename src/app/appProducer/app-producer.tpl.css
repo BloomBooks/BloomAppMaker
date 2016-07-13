@@ -30,3 +30,10 @@ table, th, td {
     border: 1px solid black;
     padding: 5px;
 }
+ul {
+    padding: 0px;
+}
+.alert {
+    padding-top: 0px;
+    margin-bottom: 0px;
+}
