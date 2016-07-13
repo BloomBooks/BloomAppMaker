@@ -1,253 +1,258 @@
 <div class="container">
-    <h1>App Maker</h1>
-    <input [(ngModel)]="appName" style="width: 100px;">
-    <select (change)="onAppNameChange($event.target.value)" style="width: initial;">
-        <option selected>new app</option>
-        <option *ngFor="let app of userApps">{{app.name}}</option>
-    </select>
-    <button (click)="onSave()">save</button>
-    <div style="float: right" align="right">
-        <span class="notes">Stage in Progress</span>
-        <p style="font-size: 18px;"><b>{{currentStage}}</b></p>
-    </div>
-    <ul class="nav nav-tabs">
-        <li [class]="booksClass">
-            <a data-toggle="tab" (click)="currentStage=='Setting Up' ? onNavSelect('book') : pass">Books</a>
-        </li>
-        <li [class]="detailsClass">
-            <a data-toggle="tab" (click)="currentStage=='Setting Up' ? onNavSelect('detail') : pass">Details</a>
-        </li>
-        <li [class]="processClass">
-            <a data-toggle="tab" (click)="onNavSelect('process')">Process</a>
-        </li>
-    </ul>
-
-    <div class="tab-content">
-        <div #books [class]="'tab-pane ' + booksClass" id="books">
-            <section style="float: left">
-                <ul style="list-style: none;">
-                    <li>
-                        <h4>Books To Include In App</h4>
-                        <p *ngIf="noBookError" class="alert">{{noBookError}}</p>
-                    </li>
-                    <li>
-                        <p *ngIf="noBookInLanguageAlert" class="alert" [innerHTML]="noBookInLanguageAlert"></p>
-                        <p *ngIf="AllBookSelectedAlert" class="alert" [innerHTML]="AllBookSelectedAlert"></p>
-                        <span>Language</span>
-                        <input #language type="text" (keyup.enter)="searchBooks(language.value)">
-                        <button (click)="searchBooks(language.value)">search</button>
-                        <a><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>
-                    </li>
-                    <li>
-                        <table style="border: 1px solid black;" id="booksTable">
-                            <thead>
-                                <tr class="tableHead">
-                                    <th>Include</th>
-                                    <th>Title</th>
-                                    <th>Copyright/License</th>
-                                    <th>Note</th>
-                                    <th>Tools</th>
-                                </tr>
-                            </thead>
-                            <tbody #booksTableContent id="booksTableContent">
-                                <tr *ngFor="let bloomBook of bloomBooks" class="tableContent" [id]="bloomBook.id">
-                                    <td><input type="checkbox" class="checkbox"></td>
-                                    <td>{{bloomBook.title}}</td>
-                                    <td>{{bloomBook.copyright}}</td>
-                                    <td>{{bloomBook.note}}</td>
-                                    <td>
-                                        <input type="button" value="up" class="move up" (click)="move($event)">
-                                        <input type="button" value="down" class="move down" (click)="move($event)">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </li>
-                </ul>
-            </section>
-            <aside class="notes">
-                <p>To Get a new book into this list, upload it from the <a><u class="link">Bloom Editor</u></a> program</p>
-                <p>One or more books in this app have been updated since the last time the app was published.
-                    Consider making a new version. <a><u class="link">Go to Process</u></a></p>
-            </aside>
+    <div class="row">
+        <input [(ngModel)]="appName" style="width: 100px;">
+        <select (change)="onAppNameChange($event.target.value)" style="width: auto;">
+            <option selected>new app</option>
+            <option *ngFor="let app of userApps">{{app.name}}</option>
+        </select>
+        <button (click)="onSave()">save</button>
+        <div style="float: right" align="right">
+            <span class="notes">Stage in Progress</span>
+            <p style="font-size: 18px;"><b>{{currentStage}}</b></p>
         </div>
-        <div #details [class]="'tab-pane ' + detailsClass" id="details">
-            <ul style="list-style: none;">
-                <li>
-                    <h4>App Details</h4>
-                </li>
-                <li>
-                    <span>Store Listing Language</span>
-                    <select>
-                        <option>English</option>
-                        <option>Chinese</option>
-                    </select>
-                    <!--<select>-->
-                    <!--<option *ngFor="let language of languages">{{language}}</option>-->
-                    <!--</select>-->
-                </li>
-                <li>
-                    <p>Title</p>
-                    <p *ngIf="titleError" class="alert">{{titleError}}</p>
-                    <input [(ngModel)]="data.title">
-                </li>
-                <li>
-                    <p>Short Description</p>
-                    <p *ngIf="shortDError" class="alert">{{shortDError}}</p>
-                    <input [(ngModel)]="data.shortDescription">
-                </li>
-                <li>
-                    <p>Full Description</p>
-                    <p *ngIf="fullDError" class="alert">{{fullDError}}</p>
-                    <textarea [(ngModel)]="data.fullDescription"></textarea>
-                    <p class="notes">The following will be appended to the description</p>
-                    <p class="notes">"These books and this app were created with <a class="link"><u>Bloom</u></a> from SIL International"</p>
-                </li>
-                <li>
-                    <p>Color</p>
-                    <p *ngIf="noColorError" class="alert">{{noColorError}}</p>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="dropDownMenu"><div [style.background]="data.color[1]" class="colorSelection"></div><span #selectedColor [textContent]="data.color[0]">Select a color</span><span class="caret"></span></button>
-                        <ul class="dropdown-menu scrollable-menu blackText" role="menu" style="height: auto;max-height: 200px;overflow-x: hidden;background: #E5E5E5">
-                            <li><a #DGreen class="blackText" (click)="onColorSelect(DGreen.textContent,dg.style.background)"><div #dg class="colorSelection" style="background: #083F0E;"></div>Dark Green</a></li>
-                            <li><a #DBlue class="blackText" (click)="onColorSelect(DBlue.textContent,db.style.background)"><div #db class="colorSelection" style="background: #000B63;"></div>Dark Blue</a></li>
-                            <li><a #RBlue class="blackText" (click)="onColorSelect(RBlue.textContent,rb.style.background)"><div #rb class="colorSelection" style="background: #0D47A1"></div>Royal Blue</a></li>
-                            <li><a #Indigo class="blackText" (click)="onColorSelect(Indigo.textContent,in.style.background)"><div #in class="colorSelection" style="background: #3F51B5;"></div>Indigo</a></li>
-                            <li><a #DIndigo class="blackText" (click)="onColorSelect(DIndigo.textContent,di.style.background)"><div #di class="colorSelection" style="background: #1A237E;"></div>Dark Indigo</a></li>
-                            <li><a #Blue class="blackText" (click)="onColorSelect(Blue.textContent,bu.style.background)"><div #bu class="colorSelection" style="background: #2196F3;"></div>Blue</a></li>
-                            <li><a #DRed class="blackText" (click)="onColorSelect(DRed.textContent,dr.style.background)"><div #dr class="colorSelection" style="background: #6C0000;"></div>Dark Red</a></li>
-                            <li><a #Purple class="blackText" (click)="onColorSelect(Purple.textContent,pu.style.background)"><div #pu class="colorSelection" style="background: #9C27B0;"></div>Purple</a></li>
-                            <li><a #DPurple class="blackText" (click)="onColorSelect(DPurple.textContent,dp.style.background)"><div #dp class="colorSelection" style="background: #673AB7;"></div>Deep Purple</a></li>
-                            <li><a #LBlue class="blackText" (click)="onColorSelect(LBlue.textContent,lb.style.background)"><div #lb class="colorSelection" style="background: #03A9F4;"></div>Light Blue</a></li>
-                            <li><a #Cyan class="blackText" (click)="onColorSelect(Cyan.textContent,cy.style.background)"><div #cy class="colorSelection" style="background: #00BCD4;"></div>Cyan</a></li>
-                            <li><a #Teal class="blackText" (click)="onColorSelect(Teal.textContent,te.style.background)"><div #te class="colorSelection" style="background: #009688;"></div>Teal</a></li>
-                            <li><a #Green class="blackText" (click)="onColorSelect(Green.textContent,gr.style.background)"><div #gr class="colorSelection" style="background: #4CAF50;"></div>Green</a></li>
-                            <li><a #LGreen class="blackText" (click)="onColorSelect(LGreen.textContent,lg.style.background)"><div #lg class="colorSelection" style="background: #8BC34A;"></div>Light Green</a></li>
-                            <li><a #Lime class="blackText" (click)="onColorSelect(Lime.textContent,li.style.background)"><div #li class="colorSelection" style="background: #C0CA33;"></div>Lime</a></li>
-                            <li><a #Amber class="blackText" (click)="onColorSelect(Amber.textContent,am.style.background)"><div #am class="colorSelection" style="background: #FFC107;"></div>Amber</a></li>
-                            <li><a #Orange class="blackText" (click)="onColorSelect(Orange.textContent,or.style.background)"><div #or class="colorSelection" style="background: #FF9800;"></div>Orange</a></li>
-                            <li><a #DOrange class="blackText" (click)="onColorSelect(DOrange.textContent,do.style.background)"><div #do class="colorSelection" style="background: #FF5722;"></div>Deep Orange</a></li>
-                            <li><a #Red class="blackText" (click)="onColorSelect(Red.textContent,re.style.background)"><div #re class="colorSelection" style="background: #F44336;"></div>Red</a></li>
-                            <li><a #Brown class="blackText" (click)="onColorSelect(Brown.textContent,br.style.background)"><div #br class="colorSelection" style="background: #4E342E;"></div>Brown</a></li>
-                            <li><a #Black class="blackText" (click)="onColorSelect(Black.textContent,ba.style.background)"><div #ba class="colorSelection" style="background: #000000;"></div>Black</a></li>
+    </div>
+    <div class="row">
+        <ul class="nav nav-tabs">
+            <li [class]="booksClass">
+                <a data-toggle="tab" (click)="currentStage=='Setting Up' ? onNavSelect('book') : pass">Books</a>
+            </li>
+            <li [class]="detailsClass">
+                <a data-toggle="tab" (click)="currentStage=='Setting Up' ? onNavSelect('detail') : pass">Details</a>
+            </li>
+            <li [class]="processClass">
+                <a data-toggle="tab" (click)="onNavSelect('process')">Process</a>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="tab-content">
+            <div #books [class]="'tab-pane ' + booksClass" id="books">
+                <div class="row" style="margin-bottom: 15px;">
+                    <h4 style="margin-left: 15px;"><b>Books To Include In App</b></h4>
+                    <p *ngIf="noBookError" class="alert">{{noBookError}}</p>
+
+                    <p *ngIf="noBookInLanguageAlert" class="alert" [innerHTML]="noBookInLanguageAlert"></p>
+                    <p *ngIf="AllBookSelectedAlert" class="alert" [innerHTML]="AllBookSelectedAlert"></p>
+                    <span style="margin-left: 15px;margin-right: 15px;">Language</span>
+                    <input #language type="text" (keyup.enter)="searchBooks(language.value)">
+                    <a (click)="searchBooks(language.value)"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>
+                </div>
+                <div class="row">
+                    <div class="col-md-7">
+                        <ul style="list-style: none;">
+                            <li>
+                                <table style="border: 1px solid black;" id="booksTable">
+                                    <thead>
+                                        <tr class="tableHead">
+                                            <th>Include</th>
+                                            <th>Title</th>
+                                            <th>Copyright/License</th>
+                                            <th>Note</th>
+                                            <th>Tools</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody #booksTableContent id="booksTableContent">
+                                        <tr *ngFor="let bloomBook of bloomBooks" class="tableContent" [id]="bloomBook.id">
+                                            <td><input type="checkbox" class="checkbox"></td>
+                                            <td>{{bloomBook.title}}</td>
+                                            <td>{{bloomBook.copyright}}</td>
+                                            <td>{{bloomBook.note}}</td>
+                                            <td>
+                                                <button (click)="move($event)"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></button>
+                                                <button (click)="move($event)"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </li>
                         </ul>
                     </div>
-                </li>
-                <li>
-                    <p>Icon</p>
-                    <p *ngIf="iconError" class="alert">{{iconError}}</p>
-                    <div style="width: 450px;">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="iconMenu"><img [src]="data.icon" id="iconDisplay" height="60" width="60"><span class="caret"></span></button>
-                            <ul class="dropdown-menu scrollable-menu" role="menu" style="height: auto;max-height: 300px;overflow-x: hidden;background: #E5E5E5">
-                                <li><img #icon1 (click)="selectFromDefault(icon1.src,'icon')" src="../../assets/ab-001-black.png" width="60" height="60"></li>
-                                <li><img #icon2 (click)="selectFromDefault(icon2.src,'icon')" src="../../assets/ab-002-blue.png" width="60" height="60"></li>
-                                <li><img #icon3 (click)="selectFromDefault(icon3.src,'icon')" src="../../assets/ab-003-green.png" width="60" height="60"></li>
-                                <li><img #icon4 (click)="selectFromDefault(icon4.src,'icon')" src="../../assets/ab-004-green-ornament.png" width="60" height="60"></li>
-                                <li><img #icon5 (click)="selectFromDefault(icon5.src,'icon')" src="../../assets/ab-005-red.png" width="60" height="60"></li>
-                                <li><img #icon6 (click)="selectFromDefault(icon6.src,'icon')" src="../../assets/ab-006-audio-black.png" width="60" height="60"></li>
-                                <li><img #icon7 (click)="selectFromDefault(icon7.src,'icon')" src="../../assets/ab-007-audio-blue.png" width="60" height="60"></li>
-                                <li><img #icon8 (click)="selectFromDefault(icon8.src,'icon')" src="../../assets/ab-008-audio-green.png" width="60" height="60"></li>
-                                <li><img #icon9 (click)="selectFromDefault(icon9.src,'icon')" src="../../assets/ab-009-audio-green-ornament.png" width="60" height="60"></li>
-                                <li><img #icon10 (click)="selectFromDefault(icon10.src,'icon')" src="../../assets/ab-010-audio-red.png" width="60" height="60"></li>
-                            </ul>
-                        </div>
-                        <section align="right" class="notes" style="float: right;margin-top: 30px;">The icon shown in the store and on the device.</section>
-                        <input #iconFile (change)="onFileSelect(iconFile, 'icon')" type="file">
+
+                    <div class="col-md-5 notes">
+                        <p>To Get a new book into this list, upload it from the <a><u class="link">Bloom Editor</u></a> program</p>
+                        <p>One or more books in this app have been updated since the last time the app was published.
+                            Consider making a new version. <a><u class="link">Go to Process</u></a></p>
                     </div>
-                </li>
-                <li>
-                    <p>Feature Graphic</p>
-                    <p *ngIf="featureError" class="alert">{{featureError}}</p>
-                    <div style="width: 450px;">
-                        <div class="btn-group" style="display: inline;">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="featureMenu"><img [src]="data.feature" id="featureDisplay" height="120" width="240"><span class="caret"></span></button>
-                            <ul class="dropdown-menu scrollable-menu" role="menu" style="height: auto;max-height: 300px;overflow-x: hidden;background: #E5E5E5">
-                                <li><img #feature1 (click)="selectFromDefault(feature1.src,'feature')" src="../../assets/bloom-feature-graphic.png" width="240" height="120"></li>
-                                <li><img #feature2 (click)="selectFromDefault(feature2.src,'feature')" src="../../assets/featureGraphic.png" width="240" height="120"></li>
-                            </ul>
-                        </div>
-                        <section align="right">The Feature Graphic is displayed at the top of the store entry. You can use a site like <a style="color: blue"><u>www.Norio.be/android-feature-graphic-generator/</u></a> or make your own using a some other software</section>
-                        <input #featureFile (change)="onFileSelect(featureFile, 'feature')" type="file">
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div #process [class]="'tab-pane ' + processClass" id="process">
-            <h1>process</h1>
-            <div *ngIf="hasValue">
-                <ul>
-                    <li>title is: {{data["title"]}}</li>
-                    <li>shortD is: {{data["shortDescription"]}}</li>
-                    <li>fullD is: {{data["fullDescription"]}}</li>
-                    <li>color is: {{data["color"]}}</li>
-                    <li>icon is: <img [src]="data['icon']" width="60" height="60"></li>
-                    <li>feature is: <img [src]="data['feature']" width="200" height="100"></li>
+                </div>
+            </div>
+            <div #details [class]="'tab-pane ' + detailsClass" id="details">
+                <ul style="list-style: none;">
                     <li>
-                        <p>books are:</p>
-                        <ol>
-                            <li *ngFor="let book of resultBookTitle">{{book}}</li>
-                        </ol>
+                        <h4>App Details</h4>
+                    </li>
+                    <li>
+                        <span>Store Listing Language</span>
+                        <select>
+                            <option>English</option>
+                            <option>Chinese</option>
+                        </select>
+                        <!--<select>-->
+                        <!--<option *ngFor="let language of languages">{{language}}</option>-->
+                        <!--</select>-->
+                    </li>
+                    <li>
+                        <p>Title</p>
+                        <p *ngIf="titleError" class="alert">{{titleError}}</p>
+                        <input [(ngModel)]="data.title">
+                    </li>
+                    <li>
+                        <p>Short Description</p>
+                        <p *ngIf="shortDError" class="alert">{{shortDError}}</p>
+                        <input [(ngModel)]="data.shortDescription">
+                    </li>
+                    <li>
+                        <p>Full Description</p>
+                        <p *ngIf="fullDError" class="alert">{{fullDError}}</p>
+                        <textarea [(ngModel)]="data.fullDescription"></textarea>
+                        <p class="notes">The following will be appended to the description</p>
+                        <p class="notes">"These books and this app were created with <a class="link"><u>Bloom</u></a> from SIL International"</p>
+                    </li>
+                    <li>
+                        <p>Color</p>
+                        <p *ngIf="noColorError" class="alert">{{noColorError}}</p>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="dropDownMenu"><div [style.background]="data.color[1]" class="colorSelection"></div><span #selectedColor [textContent]="data.color[0]">Select a color</span><span class="caret"></span></button>
+                            <ul class="dropdown-menu scrollable-menu blackText" role="menu" style="height: auto;max-height: 200px;overflow-x: hidden;background: #E5E5E5">
+                                <li><a #DGreen class="blackText" (click)="onColorSelect(DGreen.textContent,dg.style.background)"><div #dg class="colorSelection" style="background: #083F0E;"></div>Dark Green</a></li>
+                                <li><a #DBlue class="blackText" (click)="onColorSelect(DBlue.textContent,db.style.background)"><div #db class="colorSelection" style="background: #000B63;"></div>Dark Blue</a></li>
+                                <li><a #RBlue class="blackText" (click)="onColorSelect(RBlue.textContent,rb.style.background)"><div #rb class="colorSelection" style="background: #0D47A1"></div>Royal Blue</a></li>
+                                <li><a #Indigo class="blackText" (click)="onColorSelect(Indigo.textContent,in.style.background)"><div #in class="colorSelection" style="background: #3F51B5;"></div>Indigo</a></li>
+                                <li><a #DIndigo class="blackText" (click)="onColorSelect(DIndigo.textContent,di.style.background)"><div #di class="colorSelection" style="background: #1A237E;"></div>Dark Indigo</a></li>
+                                <li><a #Blue class="blackText" (click)="onColorSelect(Blue.textContent,bu.style.background)"><div #bu class="colorSelection" style="background: #2196F3;"></div>Blue</a></li>
+                                <li><a #DRed class="blackText" (click)="onColorSelect(DRed.textContent,dr.style.background)"><div #dr class="colorSelection" style="background: #6C0000;"></div>Dark Red</a></li>
+                                <li><a #Purple class="blackText" (click)="onColorSelect(Purple.textContent,pu.style.background)"><div #pu class="colorSelection" style="background: #9C27B0;"></div>Purple</a></li>
+                                <li><a #DPurple class="blackText" (click)="onColorSelect(DPurple.textContent,dp.style.background)"><div #dp class="colorSelection" style="background: #673AB7;"></div>Deep Purple</a></li>
+                                <li><a #LBlue class="blackText" (click)="onColorSelect(LBlue.textContent,lb.style.background)"><div #lb class="colorSelection" style="background: #03A9F4;"></div>Light Blue</a></li>
+                                <li><a #Cyan class="blackText" (click)="onColorSelect(Cyan.textContent,cy.style.background)"><div #cy class="colorSelection" style="background: #00BCD4;"></div>Cyan</a></li>
+                                <li><a #Teal class="blackText" (click)="onColorSelect(Teal.textContent,te.style.background)"><div #te class="colorSelection" style="background: #009688;"></div>Teal</a></li>
+                                <li><a #Green class="blackText" (click)="onColorSelect(Green.textContent,gr.style.background)"><div #gr class="colorSelection" style="background: #4CAF50;"></div>Green</a></li>
+                                <li><a #LGreen class="blackText" (click)="onColorSelect(LGreen.textContent,lg.style.background)"><div #lg class="colorSelection" style="background: #8BC34A;"></div>Light Green</a></li>
+                                <li><a #Lime class="blackText" (click)="onColorSelect(Lime.textContent,li.style.background)"><div #li class="colorSelection" style="background: #C0CA33;"></div>Lime</a></li>
+                                <li><a #Amber class="blackText" (click)="onColorSelect(Amber.textContent,am.style.background)"><div #am class="colorSelection" style="background: #FFC107;"></div>Amber</a></li>
+                                <li><a #Orange class="blackText" (click)="onColorSelect(Orange.textContent,or.style.background)"><div #or class="colorSelection" style="background: #FF9800;"></div>Orange</a></li>
+                                <li><a #DOrange class="blackText" (click)="onColorSelect(DOrange.textContent,do.style.background)"><div #do class="colorSelection" style="background: #FF5722;"></div>Deep Orange</a></li>
+                                <li><a #Red class="blackText" (click)="onColorSelect(Red.textContent,re.style.background)"><div #re class="colorSelection" style="background: #F44336;"></div>Red</a></li>
+                                <li><a #Brown class="blackText" (click)="onColorSelect(Brown.textContent,br.style.background)"><div #br class="colorSelection" style="background: #4E342E;"></div>Brown</a></li>
+                                <li><a #Black class="blackText" (click)="onColorSelect(Black.textContent,ba.style.background)"><div #ba class="colorSelection" style="background: #000000;"></div>Black</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <p>Icon</p>
+                        <p *ngIf="iconError" class="alert">{{iconError}}</p>
+                        <div style="width: 450px;">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="iconMenu"><img [src]="data.icon" id="iconDisplay" height="60" width="60"><span class="caret"></span></button>
+                                <ul class="dropdown-menu scrollable-menu" role="menu" style="height: auto;max-height: 300px;overflow-x: hidden;background: #E5E5E5">
+                                    <li><img #icon1 (click)="selectFromDefault(icon1.src,'icon')" src="../../assets/ab-001-black.png" width="60" height="60"></li>
+                                    <li><img #icon2 (click)="selectFromDefault(icon2.src,'icon')" src="../../assets/ab-002-blue.png" width="60" height="60"></li>
+                                    <li><img #icon3 (click)="selectFromDefault(icon3.src,'icon')" src="../../assets/ab-003-green.png" width="60" height="60"></li>
+                                    <li><img #icon4 (click)="selectFromDefault(icon4.src,'icon')" src="../../assets/ab-004-green-ornament.png" width="60" height="60"></li>
+                                    <li><img #icon5 (click)="selectFromDefault(icon5.src,'icon')" src="../../assets/ab-005-red.png" width="60" height="60"></li>
+                                    <li><img #icon6 (click)="selectFromDefault(icon6.src,'icon')" src="../../assets/ab-006-audio-black.png" width="60" height="60"></li>
+                                    <li><img #icon7 (click)="selectFromDefault(icon7.src,'icon')" src="../../assets/ab-007-audio-blue.png" width="60" height="60"></li>
+                                    <li><img #icon8 (click)="selectFromDefault(icon8.src,'icon')" src="../../assets/ab-008-audio-green.png" width="60" height="60"></li>
+                                    <li><img #icon9 (click)="selectFromDefault(icon9.src,'icon')" src="../../assets/ab-009-audio-green-ornament.png" width="60" height="60"></li>
+                                    <li><img #icon10 (click)="selectFromDefault(icon10.src,'icon')" src="../../assets/ab-010-audio-red.png" width="60" height="60"></li>
+                                </ul>
+                            </div>
+                            <section align="right" class="notes" style="float: right;margin-top: 30px;">The icon shown in the store and on the device.</section>
+                            <input #iconFile (change)="onFileSelect(iconFile, 'icon')" type="file">
+                        </div>
+                    </li>
+                    <li>
+                        <p>Feature Graphic</p>
+                        <p *ngIf="featureError" class="alert">{{featureError}}</p>
+                        <div style="width: 450px;">
+                            <div class="btn-group" style="display: inline;">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="featureMenu"><img [src]="data.feature" id="featureDisplay" height="120" width="240"><span class="caret"></span></button>
+                                <ul class="dropdown-menu scrollable-menu" role="menu" style="height: auto;max-height: 300px;overflow-x: hidden;background: #E5E5E5">
+                                    <li><img #feature1 (click)="selectFromDefault(feature1.src,'feature')" src="../../assets/bloom-feature-graphic.png" width="240" height="120"></li>
+                                    <li><img #feature2 (click)="selectFromDefault(feature2.src,'feature')" src="../../assets/featureGraphic.png" width="240" height="120"></li>
+                                </ul>
+                            </div>
+                            <section align="right">The Feature Graphic is displayed at the top of the store entry. You can use a site like <a style="color: blue"><u>www.Norio.be/android-feature-graphic-generator/</u></a> or make your own using a some other software</section>
+                            <input #featureFile (change)="onFileSelect(featureFile, 'feature')" type="file">
+                        </div>
                     </li>
                 </ul>
             </div>
-            <div>
-                <ol>
-                    <li [class]="currentStage=='Setting Up' ? 'blackText' : 'content-disabled'">
-                        <b>Setting Up</b>
-                        <p *ngIf="currentStage=='Setting Up'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
-                        <p>Fill out all the App Details and select books. When you're ready, click this button</p>
-                        <button (click)="checkField()" [disabled]="currentStage!='Setting Up'" [class]="currentStage=='Setting Up' ? 'blackText' : 'content-disabled'">Make my App</button>
-                    </li>
-                    <li [class]="currentStage=='Making App' ? 'blackText' : 'content-disabled'">
-                        <b>Making App</b>
-                        <p *ngIf="currentStage=='Making App'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
-                        <p>Our server is making your Android app! This usually takes about 10 minutes.</p>
-                    </li>
-                    <li [class]="currentStage=='Submitting to Play Store' ? 'blackText' : 'content-disabled'">
-                        <b>Submitting to Play Store</b>
-                        <p *ngIf="currentStage=='Submitting to Play Store'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
-                        <p>We are submitting your app to the Google Play Store. If this is the first edition, one of
-                            our staff will get things ready for Google, and this can take anywhere from an hour to several days.
-                            If you are publishing an update, this is automated and takes just a few hours.</p>
-                        <p>In the mean time, if your phone has been <a><u [class]="currentStage=='Submitting to Play Store' ? 'link' : 'link-disabled'">set up to allow side loading</u></a>, here is a
-                            <a><u [class]="currentStage=='Submitting to Play Store' ? 'link' : 'link-disabled'">link to the APK</u></a>, and here is a QR code to download it to your phone:</p>
-                        <img *ngIf="currentStage=='Submitting to Play Store'||currentStage=='Private'||currentStage=='Submitting to Play Store'" src="../../assets/ch.png" width="50" height="50">
-                    </li>
-                    <li [class]="currentStage=='Private on Play Store' ? 'blackText' : 'content-disabled'">
-                        <b>Private on Play Store</b>
-                        <p *ngIf="currentStage=='Private on Play Store'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
-                        <p>Your app can now be installed <a><u [class]="currentStage=='Private on Play Store' ? 'link' : 'link-disabled'">from the Play Store</u></a>, but the public won't see it until you're ready</p>
-                        <button [disabled]="currentStage!='Private on Play Store'" [class]="currentStage=='Private on Play Store' ? 'blackText' : 'content-disabled'">Go Public</button>
-                    </li>
-                    <li [class]="currentStage=='Public on Play Store' ? 'blackText' : 'content-disabled'">
-                        <b>Public on Play Store</b>
-                        <p *ngIf="currentStage=='Public on Play Store'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
-                        <p>Your book is now <a><u [class]="currentStage=='Public on Play Store' ? 'link' : 'link-disabled'">on the store</u></a> andfreely available for anyone with a compatible device.
-                            You can always publish new editions using new or updated books, and people with the app will get the new version automatically.</p>
-                        <p>If you change your mind, you can <a><u [class]="currentStage=='Public on Play Store' ? 'link' : 'link-disabled'">Go Private</u></a> again.</p>
-                        <p>If you want to make changes to the app, click this button:</p>
-                        <button [disabled]="currentStage!='Public on Play Store'" [class]="currentStage=='Public on Play Store' ? 'blackText' : 'content-disabled'">Make a new version of this App</button>
-                    </li>
-                </ol>
-            </div>
-            <div>
-                <p *ngIf="currentStage!='Setting Up'">Use these buttons to control server response and see what should happen</p>
-                <div *ngIf="currentStage=='Making App'">
-                    <input type="button" value="app build success" (click)="setServerResponse(2,'success')">
-                    <input type="button" value="app build failed" (click)="setServerResponse(2,'fail')">
+            <div #process [class]="'tab-pane ' + processClass" id="process">
+                <h1>process</h1>
+                <div *ngIf="hasValue">
+                    <ul>
+                        <li>title is: {{data["title"]}}</li>
+                        <li>shortD is: {{data["shortDescription"]}}</li>
+                        <li>fullD is: {{data["fullDescription"]}}</li>
+                        <li>color is: {{data["color"]}}</li>
+                        <li>icon is: <img [src]="data['icon']" width="60" height="60"></li>
+                        <li>feature is: <img [src]="data['feature']" width="200" height="100"></li>
+                        <li>
+                            <p>books are:</p>
+                            <ol>
+                                <li *ngFor="let book of resultBookTitle">{{book}}</li>
+                            </ol>
+                        </li>
+                    </ul>
                 </div>
-                <div *ngIf="currentStage=='Submitting to Play Store'">
-                    <input type="button" value="submitting success" (click)="setServerResponse(3,'success')">
-                    <input type="button" value="submitting failed" (click)="setServerResponse(3,'fail')">
+                <div>
+                    <ol>
+                        <li [class]="currentStage=='Setting Up' ? 'blackText' : 'content-disabled'">
+                            <b>Setting Up</b>
+                            <p *ngIf="currentStage=='Setting Up'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
+                            <p>Fill out all the App Details and select books. When you're ready, click this button</p>
+                            <button (click)="checkField()" [disabled]="currentStage!='Setting Up'" [class]="currentStage=='Setting Up' ? 'blackText' : 'content-disabled'">Make my App</button>
+                        </li>
+                        <li [class]="currentStage=='Making App' ? 'blackText' : 'content-disabled'">
+                            <b>Making App</b>
+                            <p *ngIf="currentStage=='Making App'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
+                            <p>Our server is making your Android app! This usually takes about 10 minutes.</p>
+                        </li>
+                        <li [class]="currentStage=='Submitting to Play Store' ? 'blackText' : 'content-disabled'">
+                            <b>Submitting to Play Store</b>
+                            <p *ngIf="currentStage=='Submitting to Play Store'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
+                            <p>We are submitting your app to the Google Play Store. If this is the first edition, one of
+                                our staff will get things ready for Google, and this can take anywhere from an hour to several days.
+                                If you are publishing an update, this is automated and takes just a few hours.</p>
+                            <p>In the mean time, if your phone has been <a><u [class]="currentStage=='Submitting to Play Store' ? 'link' : 'link-disabled'">set up to allow side loading</u></a>, here is a
+                                <a><u [class]="currentStage=='Submitting to Play Store' ? 'link' : 'link-disabled'">link to the APK</u></a>, and here is a QR code to download it to your phone:</p>
+                            <img *ngIf="currentStage=='Submitting to Play Store'||currentStage=='Private'||currentStage=='Submitting to Play Store'" src="../../assets/ch.png" width="50" height="50">
+                        </li>
+                        <li [class]="currentStage=='Private on Play Store' ? 'blackText' : 'content-disabled'">
+                            <b>Private on Play Store</b>
+                            <p *ngIf="currentStage=='Private on Play Store'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
+                            <p>Your app can now be installed <a><u [class]="currentStage=='Private on Play Store' ? 'link' : 'link-disabled'">from the Play Store</u></a>, but the public won't see it until you're ready</p>
+                            <button [disabled]="currentStage!='Private on Play Store'" [class]="currentStage=='Private on Play Store' ? 'blackText' : 'content-disabled'">Go Public</button>
+                        </li>
+                        <li [class]="currentStage=='Public on Play Store' ? 'blackText' : 'content-disabled'">
+                            <b>Public on Play Store</b>
+                            <p *ngIf="currentStage=='Public on Play Store'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
+                            <p>Your book is now <a><u [class]="currentStage=='Public on Play Store' ? 'link' : 'link-disabled'">on the store</u></a> andfreely available for anyone with a compatible device.
+                                You can always publish new editions using new or updated books, and people with the app will get the new version automatically.</p>
+                            <p>If you change your mind, you can <a><u [class]="currentStage=='Public on Play Store' ? 'link' : 'link-disabled'">Go Private</u></a> again.</p>
+                            <p>If you want to make changes to the app, click this button:</p>
+                            <button [disabled]="currentStage!='Public on Play Store'" [class]="currentStage=='Public on Play Store' ? 'blackText' : 'content-disabled'">Make a new version of this App</button>
+                        </li>
+                    </ol>
                 </div>
-                <div *ngIf="currentStage=='Private on Play Store'">
-                    <input type="button" value="go public success" (click)="setServerResponse(4,'success')">
-                    <input type="button" value="go public failed" (click)="setServerResponse(4,'fail')">
-                </div>
-                <div *ngIf="currentStage=='Public on Play Store'">
-                    <input type="button" value="go private success" (click)="setServerResponse(5,'success')">
-                    <input type="button" value="go private failed" (click)="setServerResponse(5,'fail')">
+                <div>
+                    <p *ngIf="currentStage!='Setting Up'">Use these buttons to control server response and see what should happen</p>
+                    <div *ngIf="currentStage=='Making App'">
+                        <input type="button" value="app build success" (click)="setServerResponse(2,'success')">
+                        <input type="button" value="app build failed" (click)="setServerResponse(2,'fail')">
+                    </div>
+                    <div *ngIf="currentStage=='Submitting to Play Store'">
+                        <input type="button" value="submitting success" (click)="setServerResponse(3,'success')">
+                        <input type="button" value="submitting failed" (click)="setServerResponse(3,'fail')">
+                    </div>
+                    <div *ngIf="currentStage=='Private on Play Store'">
+                        <input type="button" value="go public success" (click)="setServerResponse(4,'success')">
+                        <input type="button" value="go public failed" (click)="setServerResponse(4,'fail')">
+                    </div>
+                    <div *ngIf="currentStage=='Public on Play Store'">
+                        <input type="button" value="go private success" (click)="setServerResponse(5,'success')">
+                        <input type="button" value="go private failed" (click)="setServerResponse(5,'fail')">
+                    </div>
                 </div>
             </div>
         </div>
