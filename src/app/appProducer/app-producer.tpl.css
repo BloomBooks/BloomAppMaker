@@ -1,5 +1,8 @@
 .alert {
     color: red;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
 }
 .success {
     color: green;
@@ -33,7 +36,9 @@ table, th, td {
 ul {
     padding: 0px;
 }
-.alert {
-    padding-top: 0px;
-    margin-bottom: 0px;
+.processList {
+    padding-left: 0px;
+}
+.processList > div > div > li {
+    margin-bottom: 15px;
 }
