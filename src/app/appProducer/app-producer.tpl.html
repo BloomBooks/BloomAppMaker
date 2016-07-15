@@ -80,7 +80,7 @@
                     </div>
                     <div class="row"  style="margin-top:10px;">
                         <p style="display: inline; margin-right: 30px;"><b>Store Listing Language</b></p>
-                        <select>
+                        <select style="width: auto;">
                             <option>English</option>
                             <option>Chinese</option>
                         </select>
@@ -107,7 +107,7 @@
                         <p *ngIf="noColorError" class="alert">{{noColorError}}</p>
                         <div class="btn-group">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="dropDownMenu"><div [style.background]="data.color" class="colorSelected"></div><span class="caret"></span></button>
-                            <ul class="dropdown-menu scrollable-menu" role="menu" style="height: auto;max-height: 200px;overflow-x: hidden;background: #E5E5E5;width: 255px;margin-top: 0px;">
+                            <ul class="dropdown-menu" role="menu" style="background: #E5E5E5;width: 255px;margin-top: 0px;">
                                 <li>
                                     <div style="margin-top: 10px;">
                                         <span><a class="colorOption" (click)="onColorSelect(dg.style.background)"><div #dg class="colorSelection" style="background: #083F0E;"></div></a></span>
@@ -152,17 +152,17 @@
                         <div class="row noMargin">
                             <div class="btn-group" style="display: inline;">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="iconMenu"><img [src]="data.icon" id="iconDisplay" height="60" width="60"><span class="caret"></span></button>
-                                <ul class="dropdown-menu scrollable-menu" role="menu" style="height: auto;max-height: 300px;overflow-x: hidden;background: #E5E5E5">
-                                    <li><img #icon1 (click)="selectFromDefault(icon1.src,'icon')" src="../../assets/ab-001-black.png" width="60" height="60"></li>
-                                    <li><img #icon2 (click)="selectFromDefault(icon2.src,'icon')" src="../../assets/ab-002-blue.png" width="60" height="60"></li>
-                                    <li><img #icon3 (click)="selectFromDefault(icon3.src,'icon')" src="../../assets/ab-003-green.png" width="60" height="60"></li>
-                                    <li><img #icon4 (click)="selectFromDefault(icon4.src,'icon')" src="../../assets/ab-004-green-ornament.png" width="60" height="60"></li>
-                                    <li><img #icon5 (click)="selectFromDefault(icon5.src,'icon')" src="../../assets/ab-005-red.png" width="60" height="60"></li>
-                                    <li><img #icon6 (click)="selectFromDefault(icon6.src,'icon')" src="../../assets/ab-006-audio-black.png" width="60" height="60"></li>
-                                    <li><img #icon7 (click)="selectFromDefault(icon7.src,'icon')" src="../../assets/ab-007-audio-blue.png" width="60" height="60"></li>
-                                    <li><img #icon8 (click)="selectFromDefault(icon8.src,'icon')" src="../../assets/ab-008-audio-green.png" width="60" height="60"></li>
-                                    <li><img #icon9 (click)="selectFromDefault(icon9.src,'icon')" src="../../assets/ab-009-audio-green-ornament.png" width="60" height="60"></li>
-                                    <li><img #icon10 (click)="selectFromDefault(icon10.src,'icon')" src="../../assets/ab-010-audio-red.png" width="60" height="60"></li>
+                                <ul class="dropdown-menu" role="menu" style="height: auto;max-height: 300px;overflow-x: hidden;background: #E5E5E5;min-width: 100px;">
+                                    <li class="iconOption"><img #icon1 (click)="selectFromDefault(icon1.src,'icon')" src="../../assets/ab-001-black.png" width="60" height="60"></li>
+                                    <li class="iconOption"><img #icon2 (click)="selectFromDefault(icon2.src,'icon')" src="../../assets/ab-002-blue.png" width="60" height="60"></li>
+                                    <li class="iconOption"><img #icon3 (click)="selectFromDefault(icon3.src,'icon')" src="../../assets/ab-003-green.png" width="60" height="60"></li>
+                                    <li class="iconOption"><img #icon4 (click)="selectFromDefault(icon4.src,'icon')" src="../../assets/ab-004-green-ornament.png" width="60" height="60"></li>
+                                    <li class="iconOption"><img #icon5 (click)="selectFromDefault(icon5.src,'icon')" src="../../assets/ab-005-red.png" width="60" height="60"></li>
+                                    <li class="iconOption"><img #icon6 (click)="selectFromDefault(icon6.src,'icon')" src="../../assets/ab-006-audio-black.png" width="60" height="60"></li>
+                                    <li class="iconOption"><img #icon7 (click)="selectFromDefault(icon7.src,'icon')" src="../../assets/ab-007-audio-blue.png" width="60" height="60"></li>
+                                    <li class="iconOption"><img #icon8 (click)="selectFromDefault(icon8.src,'icon')" src="../../assets/ab-008-audio-green.png" width="60" height="60"></li>
+                                    <li class="iconOption"><img #icon9 (click)="selectFromDefault(icon9.src,'icon')" src="../../assets/ab-009-audio-green-ornament.png" width="60" height="60"></li>
+                                    <li class="iconOption"><img #icon10 (click)="selectFromDefault(icon10.src,'icon')" src="../../assets/ab-010-audio-red.png" width="60" height="60"></li>
                                 </ul>
                             </div>
                             <div style="height: 74px;">
@@ -177,9 +177,9 @@
                         <div class="row noMargin">
                             <div class="btn-group" style="display: inline;">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="featureMenu"><img [src]="data.feature" id="featureDisplay" height="150" width="300"><span class="caret"></span></button>
-                                <ul class="dropdown-menu scrollable-menu" role="menu" style="height: auto;max-height: 300px;overflow-x: hidden;background: #E5E5E5">
-                                    <li><img #feature1 (click)="selectFromDefault(feature1.src,'feature')" src="../../assets/bloom-feature-graphic.png" width="240" height="120"></li>
-                                    <li><img #feature2 (click)="selectFromDefault(feature2.src,'feature')" src="../../assets/featureGraphic.png" width="240" height="120"></li>
+                                <ul class="dropdown-menu" role="menu" style="height: auto;max-height: 300px;overflow-x: hidden;background: #E5E5E5;min-width: 340px">
+                                    <li class="featureOption"><img #feature1 (click)="selectFromDefault(feature1.src,'feature')" src="../../assets/bloom-feature-graphic.png" width="300" height="150"></li>
+                                    <li class="featureOption"><img #feature2 (click)="selectFromDefault(feature2.src,'feature')" src="../../assets/featureGraphic.png" width="300" height="150"></li>
                                 </ul>
                             </div>
                             <div style="height:150px;">
