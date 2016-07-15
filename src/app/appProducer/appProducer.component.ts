@@ -113,10 +113,9 @@ export class AppProducer implements OnInit{
                 this.processClass = "active";
         }
     }
-    onColorSelect(content: string, style: string) {
-        if (content) {
-            this.data.color[0] = content;
-            this.data.color[1] = style;
+    onColorSelect(style: string) {
+        if (style) {
+            this.data.color = style;
         }
     }
     selectFromDefault (src: string, name: string) {
@@ -273,7 +272,7 @@ export class AppProducer implements OnInit{
             this.fullDError = "full description field cannot exceed 4000 characters";
             this.hasError = true;
         }
-        if (this.data.color[0] == "Select a Color" || this.data.color[1] == "#FFFFFF") {
+        if (this.data.color == "#FFFFFF") {
             this.noColorError = "missing color field";
             this.hasError = true;
         }
@@ -356,7 +355,7 @@ export class AppProducer implements OnInit{
         this.setServerResponse(0,"");
         this.result = [];
         this.data = new AppInfo();
-        this.data.color = ["Select a Color","#FFFFFF"];
+        this.data.color = "#FFFFFF";
         this.data.icon = "../../assets/ab-001-black.png";
         this.data.feature = "../../assets/bloom-feature-graphic.png";
         this.data.books=[];

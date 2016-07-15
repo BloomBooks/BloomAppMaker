@@ -4,7 +4,7 @@ export class AppInfo {
     title: string;
     shortDescription: string;
     fullDescription: string;
-    color: Array<string>;
+    color: string;
     icon: string;
     feature: string;
     books: Array<number>;
