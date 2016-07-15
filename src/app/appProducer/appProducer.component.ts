@@ -16,7 +16,6 @@ export class AppProducer implements OnInit{
     currentUser = "";
     currentStage = "";
     appName = "untitled";
-    appId = undefined;
 
     hasValue = false;
     hasError = false;
