@@ -61,3 +61,13 @@ ul {
     float: left;
     display: inline;
 }
+.iconOption {
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.featureOption {
+    margin-top: 4px;
+    margin-left: 12px;
+    margin-bottom: 4px;
+}
