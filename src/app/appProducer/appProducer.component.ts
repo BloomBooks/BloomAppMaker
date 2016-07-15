@@ -177,6 +177,8 @@ export class AppProducer implements OnInit{
                 searchResult = this.data.books.slice();
             } else if (from == "search") {
                 searchResult = this.result.slice();
+            } else if (from == "research") {
+                searchResult = this.result.slice();
             }
             if (searchResult.length != 0 ) {
                 for (var i = 0; i < searchResult.length; i++) {
@@ -198,10 +200,12 @@ export class AppProducer implements OnInit{
                 }
             }
 
-            this.AllBookSelectedAlert = "";
-            this.noBookInLanguageAlert = "";
+            if (from != "research") {
+                this.AllBookSelectedAlert = "";
+                this.noBookInLanguageAlert = "";
+            }
             if (noLanguageAlert) {
-                // this.getBooks("english","search");
+                this.getBooks("english","research");
                 this.noBookInLanguageAlert = "There is no book available in '" + language.toLowerCase() + "'<br>Check your spelling may help<br>Result shows English books";
             } else if (noOtherBookAlert) {
                 this.AllBookSelectedAlert = "You already selected all books in this language";

@@ -53,6 +53,7 @@
                             <tbody #booksTableContent id="booksTableContent">
                                 <tr *ngFor="let bloomBook of bloomBooks" class="tableContent" [id]="bloomBook.id">
                                     <td><input type="checkbox" class="checkbox"></td>
+                                    <!--<td><input type="checkbox" class="checkbox" [disabled]="bloomBook.note=='Unavailable'"></td>-->
                                     <td>{{bloomBook.title}}</td>
                                     <td>{{bloomBook.copyright}}</td>
                                     <td>{{bloomBook.note}}</td>
