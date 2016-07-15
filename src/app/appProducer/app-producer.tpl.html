@@ -85,56 +85,70 @@
                         </select>
                     </div>
                     <div class="row" style="margin-top:20px;">
-                        <p style="margin:0px;"><b>Title</b></p>
+                        <p class="noMargin"><b>Title</b></p>
                         <p *ngIf="titleError" class="alert">{{titleError}}</p>
                         <input [(ngModel)]="data.title" style="width:90%;">
                     </div>
                     <div class="row" style="margin-top:20px;">
-                        <p style="margin:0px;"><b>Short Description</b></p>
+                        <p class="noMargin"><b>Short Description</b></p>
                         <p *ngIf="shortDError" class="alert">{{shortDError}}</p>
                         <input [(ngModel)]="data.shortDescription" style="width:90%;">
                     </div>
                     <div class="row" style="margin-top:20px;">
-                        <p style="margin:0px;"><b>Full Description</b></p>
+                        <p class="noMargin"><b>Full Description</b></p>
                         <p *ngIf="fullDError" class="alert">{{fullDError}}</p>
                         <textarea [(ngModel)]="data.fullDescription" style="width:90%;height: 70px;"></textarea>
-                        <p class="notes" style="margin:0px;">The following will be appended to the description:</p>
-                        <p class="notes" style="margin:0px;">"These books and this app were created with <a class="link"><u>Bloom</u></a> from SIL International"</p>
+                        <p class="notes noMargin">The following will be appended to the description:</p>
+                        <p class="notes noMargin">"These books and this app were created with <a class="link"><u>Bloom</u></a> from SIL International"</p>
                     </div>
                     <div class="row" style="margin-top:20px;">
-                        <p style="margin:0px;"><b>Color</b></p>
+                        <p class="noMargin"><b>Color</b></p>
                         <p *ngIf="noColorError" class="alert">{{noColorError}}</p>
                         <div class="btn-group">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="dropDownMenu"><div [style.background]="data.color[1]" class="colorSelection"></div><span #selectedColor [textContent]="data.color[0]">Select a color</span><span class="caret"></span></button>
-                            <ul class="dropdown-menu scrollable-menu blackText" role="menu" style="height: auto;max-height: 200px;overflow-x: hidden;background: #E5E5E5">
-                                <li><a #DGreen class="blackText" (click)="onColorSelect(DGreen.textContent,dg.style.background)"><div #dg class="colorSelection" style="background: #083F0E;"></div>Dark Green</a></li>
-                                <li><a #DBlue class="blackText" (click)="onColorSelect(DBlue.textContent,db.style.background)"><div #db class="colorSelection" style="background: #000B63;"></div>Dark Blue</a></li>
-                                <li><a #RBlue class="blackText" (click)="onColorSelect(RBlue.textContent,rb.style.background)"><div #rb class="colorSelection" style="background: #0D47A1"></div>Royal Blue</a></li>
-                                <li><a #Indigo class="blackText" (click)="onColorSelect(Indigo.textContent,in.style.background)"><div #in class="colorSelection" style="background: #3F51B5;"></div>Indigo</a></li>
-                                <li><a #DIndigo class="blackText" (click)="onColorSelect(DIndigo.textContent,di.style.background)"><div #di class="colorSelection" style="background: #1A237E;"></div>Dark Indigo</a></li>
-                                <li><a #Blue class="blackText" (click)="onColorSelect(Blue.textContent,bu.style.background)"><div #bu class="colorSelection" style="background: #2196F3;"></div>Blue</a></li>
-                                <li><a #DRed class="blackText" (click)="onColorSelect(DRed.textContent,dr.style.background)"><div #dr class="colorSelection" style="background: #6C0000;"></div>Dark Red</a></li>
-                                <li><a #Purple class="blackText" (click)="onColorSelect(Purple.textContent,pu.style.background)"><div #pu class="colorSelection" style="background: #9C27B0;"></div>Purple</a></li>
-                                <li><a #DPurple class="blackText" (click)="onColorSelect(DPurple.textContent,dp.style.background)"><div #dp class="colorSelection" style="background: #673AB7;"></div>Deep Purple</a></li>
-                                <li><a #LBlue class="blackText" (click)="onColorSelect(LBlue.textContent,lb.style.background)"><div #lb class="colorSelection" style="background: #03A9F4;"></div>Light Blue</a></li>
-                                <li><a #Cyan class="blackText" (click)="onColorSelect(Cyan.textContent,cy.style.background)"><div #cy class="colorSelection" style="background: #00BCD4;"></div>Cyan</a></li>
-                                <li><a #Teal class="blackText" (click)="onColorSelect(Teal.textContent,te.style.background)"><div #te class="colorSelection" style="background: #009688;"></div>Teal</a></li>
-                                <li><a #Green class="blackText" (click)="onColorSelect(Green.textContent,gr.style.background)"><div #gr class="colorSelection" style="background: #4CAF50;"></div>Green</a></li>
-                                <li><a #LGreen class="blackText" (click)="onColorSelect(LGreen.textContent,lg.style.background)"><div #lg class="colorSelection" style="background: #8BC34A;"></div>Light Green</a></li>
-                                <li><a #Lime class="blackText" (click)="onColorSelect(Lime.textContent,li.style.background)"><div #li class="colorSelection" style="background: #C0CA33;"></div>Lime</a></li>
-                                <li><a #Amber class="blackText" (click)="onColorSelect(Amber.textContent,am.style.background)"><div #am class="colorSelection" style="background: #FFC107;"></div>Amber</a></li>
-                                <li><a #Orange class="blackText" (click)="onColorSelect(Orange.textContent,or.style.background)"><div #or class="colorSelection" style="background: #FF9800;"></div>Orange</a></li>
-                                <li><a #DOrange class="blackText" (click)="onColorSelect(DOrange.textContent,do.style.background)"><div #do class="colorSelection" style="background: #FF5722;"></div>Deep Orange</a></li>
-                                <li><a #Red class="blackText" (click)="onColorSelect(Red.textContent,re.style.background)"><div #re class="colorSelection" style="background: #F44336;"></div>Red</a></li>
-                                <li><a #Brown class="blackText" (click)="onColorSelect(Brown.textContent,br.style.background)"><div #br class="colorSelection" style="background: #4E342E;"></div>Brown</a></li>
-                                <li><a #Black class="blackText" (click)="onColorSelect(Black.textContent,ba.style.background)"><div #ba class="colorSelection" style="background: #000000;"></div>Black</a></li>
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="dropDownMenu"><div [style.background]="data.color" class="colorSelected"></div><span class="caret"></span></button>
+                            <ul class="dropdown-menu scrollable-menu" role="menu" style="height: auto;max-height: 200px;overflow-x: hidden;background: #E5E5E5;width: 255px;margin-top: 0px;">
+                                <li>
+                                    <div style="margin-top: 10px;">
+                                        <span><a class="colorOption" (click)="onColorSelect(dg.style.background)"><div #dg class="colorSelection" style="background: #083F0E;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(db.style.background)"><div #db class="colorSelection" style="background: #000B63;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(rb.style.background)"><div #rb class="colorSelection" style="background: #0D47A1;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(in.style.background)"><div #in class="colorSelection" style="background: #3F51B5;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(di.style.background)"><div #di class="colorSelection" style="background: #1A237E;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(bu.style.background)"><div #bu class="colorSelection" style="background: #2196F3;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(dr.style.background)"><div #dr class="colorSelection" style="background: #6C0000;"></div></a></span>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div>
+                                        <span><a class="colorOption" (click)="onColorSelect(pu.style.background)"><div #pu class="colorSelection" style="background: #9C27B0;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(dp.style.background)"><div #dp class="colorSelection" style="background: #673AB7;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(lb.style.background)"><div #lb class="colorSelection" style="background: #03A9F4;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(cy.style.background)"><div #cy class="colorSelection" style="background: #00BCD4;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(te.style.background)"><div #te class="colorSelection" style="background: #009688;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(gr.style.background)"><div #gr class="colorSelection" style="background: #4CAF50;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(lg.style.background)"><div #lg class="colorSelection" style="background: #8BC34A;"></div></a></span>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div>
+                                        <span><a class="colorOption" (click)="onColorSelect(li.style.background)"><div #li class="colorSelection" style="background: #C0CA33;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(am.style.background)"><div #am class="colorSelection" style="background: #FFC107;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(or.style.background)"><div #or class="colorSelection" style="background: #FF9800;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(do.style.background)"><div #do class="colorSelection" style="background: #FF5722;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(re.style.background)"><div #re class="colorSelection" style="background: #F44336;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(br.style.background)"><div #br class="colorSelection" style="background: #4E342E;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(ba.style.background)"><div #ba class="colorSelection" style="background: #000000;"></div></a></span>
+                                    </div>
+                                </li>
                             </ul>
                         </div>
                     </div>
                     <div class="row" style="margin-top:20px;">
-                        <p style="margin:0px;"><b>Icon</b></p>
+                        <p class="noMargin"><b>Icon</b></p>
                         <p *ngIf="iconError" class="alert">{{iconError}}</p>
-                        <div class="row" style="margin-left: 0px; margin-right: 0px;">
+                        <div class="row noMargin">
                             <div class="btn-group" style="display: inline;">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="iconMenu"><img [src]="data.icon" id="iconDisplay" height="60" width="60"><span class="caret"></span></button>
                                 <ul class="dropdown-menu scrollable-menu" role="menu" style="height: auto;max-height: 300px;overflow-x: hidden;background: #E5E5E5">
@@ -157,9 +171,9 @@
                         <input #iconFile (change)="onFileSelect(iconFile, 'icon')" type="file">
                     </div>
                     <div class="row" style="margin-top:20px;">
-                        <p style="margin:0px;"><b>Feature Graphic</b></p>
+                        <p class="noMargin"><b>Feature Graphic</b></p>
                         <p *ngIf="featureError" class="alert">{{featureError}}</p>
-                        <div>
+                        <div class="row noMargin">
                             <div class="btn-group" style="display: inline;">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="featureMenu"><img [src]="data.feature" id="featureDisplay" height="150" width="300"><span class="caret"></span></button>
                                 <ul class="dropdown-menu scrollable-menu" role="menu" style="height: auto;max-height: 300px;overflow-x: hidden;background: #E5E5E5">
@@ -167,9 +181,11 @@
                                     <li><img #feature2 (click)="selectFromDefault(feature2.src,'feature')" src="../../assets/featureGraphic.png" width="240" height="120"></li>
                                 </ul>
                             </div>
-                            <p style="text-align: right; padding-right: 10%;">The Feature Graphic is displayed at the top of the store entry. You can use a site like <a style="color: blue"><u>www.Norio.be/android-feature-graphic-generator/</u></a> or make your own using a some other software</p>
-                            <input #featureFile (change)="onFileSelect(featureFile, 'feature')" type="file">
+                            <div style="height:150px;">
+                                <p style="text-align: right; padding-right: 10%;">The Feature Graphic is displayed at the top of the store entry. You can use a site like <a style="color: blue"><u>www.Norio.be/android-feature-graphic-generator/</u></a> or make your own using a some other software</p>
+                            </div>
                         </div>
+                        <input #featureFile (change)="onFileSelect(featureFile, 'feature')" type="file">
                     </div>
                 </div>
             </div>
@@ -180,23 +196,23 @@
                     <div class="col-md-5">
                         <ol class="processList">
                             <div class="row">
-                                <div class="col-md-1" style="padding: 0px;">
-                                    <span *ngIf="currentStage=='Setting Up'" class="glyphicon glyphicon-circle-arrow-right" style="font-size: 2em;" aria-hidden="true"></span>
+                                <div class="col-md-1">
+                                    <span *ngIf="currentStage=='Setting Up'" class="glyphicon glyphicon-circle-arrow-right processPointer" aria-hidden="true"></span>
                                 </div>
                                 <div class="col-md-11">
                                     <li [class]="currentStage=='Setting Up' ? 'blackText' : 'content-disabled'">
                                         <b>Setting Up</b>
                                         <div class="row">
                                             <p *ngIf="currentStage=='Setting Up'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
-                                            <p style="margin: 0px;">Fill out all the App Details and select books. When you're ready, click this button</p>
+                                            <p class="noMargin">Fill out all the App Details and select books. When you're ready, click this button</p>
                                             <button style="float: right;margin-right: 15px;" (click)="checkField()" [disabled]="currentStage!='Setting Up'" [class]="currentStage=='Setting Up' ? 'blackText' : 'content-disabled'">Make my App</button>
                                         </div>
                                     </li>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-1" style="padding: 0px;">
-                                    <span *ngIf="currentStage=='Making App'" class="glyphicon glyphicon-circle-arrow-right" style="font-size: 2em;" aria-hidden="true"></span>
+                                <div class="col-md-1">
+                                    <span *ngIf="currentStage=='Making App'" class="glyphicon glyphicon-circle-arrow-right processPointer" aria-hidden="true"></span>
                                 </div>
                                 <div class="col-md-11">
                                     <li [class]="currentStage=='Making App' ? 'blackText' : 'content-disabled'">
@@ -207,8 +223,8 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-1" style="padding: 0px;">
-                                    <span *ngIf="currentStage=='Submitting to Play Store'" class="glyphicon glyphicon-circle-arrow-right" style="font-size: 2em;" aria-hidden="true"></span>
+                                <div class="col-md-1">
+                                    <span *ngIf="currentStage=='Submitting to Play Store'" class="glyphicon glyphicon-circle-arrow-right processPointer" aria-hidden="true"></span>
                                 </div>
                                 <div class="col-md-11">
                                     <li [class]="currentStage=='Submitting to Play Store' ? 'blackText' : 'content-disabled'">
@@ -229,8 +245,8 @@
                     <div class="col-md-5">
                         <ol start="4" class="processList">
                             <div class="row">
-                                <div class="col-md-1" style="padding: 0px;">
-                                    <span *ngIf="currentStage=='Private on Play Store'" class="glyphicon glyphicon-circle-arrow-right" style="font-size: 2em;" aria-hidden="true"></span>
+                                <div class="col-md-1">
+                                    <span *ngIf="currentStage=='Private on Play Store'" class="glyphicon glyphicon-circle-arrow-right processPointer" aria-hidden="true"></span>
                                 </div>
                                 <div class="col-md-11">
                                     <li [class]="currentStage=='Private on Play Store' ? 'blackText' : 'content-disabled'">
@@ -244,8 +260,8 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-1" style="padding: 0px;">
-                                    <span *ngIf="currentStage=='Public on Play Store'" class="glyphicon glyphicon-circle-arrow-right" style="font-size: 2em;" aria-hidden="true"></span>
+                                <div class="col-md-1">
+                                    <span *ngIf="currentStage=='Public on Play Store'" class="glyphicon glyphicon-circle-arrow-right processPointer" aria-hidden="true"></span>
                                 </div>
                                 <div class="col-md-11">
                                     <li [class]="currentStage=='Public on Play Store' ? 'blackText' : 'content-disabled'">
