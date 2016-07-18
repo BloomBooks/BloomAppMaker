@@ -5,7 +5,6 @@
             <option selected>new app</option>
             <option *ngFor="let app of userApps">{{app.name}}</option>
         </select>
-        <button (click)="onSave()">save</button>
         <div style="float: right" align="right">
             <span class="notes">Stage in Progress</span>
             <p style="font-size: 18px;"><b>{{currentStage}}</b></p>
