@@ -106,6 +106,11 @@ export class AppProducer implements OnInit{
                 this.processClass = "active";
         }
     }
+    onLanguageSelect(language: string) {
+        if (language) {
+            this.data.language = language;
+        }
+    }
     onColorSelect(style: string) {
         if (style) {
             this.data.color = style;
