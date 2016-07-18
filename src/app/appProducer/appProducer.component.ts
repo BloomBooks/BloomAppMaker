@@ -70,11 +70,6 @@ export class AppProducer implements OnInit{
             }
         }
     }
-    onSave() {
-        this.readTable();
-        this.save(this.appName, this.result);
-        this.getUserAppInfo(this.currentUser);
-    }
     save(name: string, result: number[]) {
         this.data.name=name;
         this.data.books=result;
