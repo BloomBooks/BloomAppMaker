@@ -22,7 +22,6 @@ export class AppProducer implements OnInit{
     titleError: string;
     shortDError: string;
     fullDError: string;
-    noColorError: string;
     iconError: string;
     featureError: string;
     noBookError: string;
@@ -251,7 +250,6 @@ export class AppProducer implements OnInit{
         this.titleError = "";
         this.shortDError = "";
         this.fullDError = "";
-        this.noColorError = "";
         this.noBookError = "";
 
         if (!this.data.title) {
@@ -275,20 +273,14 @@ export class AppProducer implements OnInit{
             this.fullDError = "full description field cannot exceed 4000 characters.";
             this.hasError = true;
         }
-        if (this.data.color == "#FFFFFF") {
-            this.noColorError = "Required color field.";
-            this.hasError = true;
-        }
         this.readTable();
         if (this.result.length == 0) {
             this.noBookError = "Please select at least one book.";
             this.hasError = true;
         }
         if (!this.hasError) {
-            // this.save(this.appName, title, shortD, fullD, color, icon, feature, this.result);
             this.save(this.appName, this.result);
             this.onBuild(this.data);
-            // this.onBuild(title, shortD, fullD, color, icon, feature, this.resultBookTitle);
         } else {
             // tecnically, this should be called client side response
             this.setServerResponse(1,"fail");
@@ -359,7 +351,7 @@ export class AppProducer implements OnInit{
         this.setServerResponse(0,"");
         this.result = [];
         this.data = new AppInfo();
-        this.data.color = "#FFFFFF";
+        this.data.color = "#083F0E";
         this.data.icon = "../../assets/ab-001-black.png";
         this.data.feature = "../../assets/bloom-feature-graphic.png";
         this.data.books=[];
