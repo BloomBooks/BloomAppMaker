@@ -51,13 +51,13 @@ export class AppProducer implements OnInit{
         });
     }
     onAppNameChange(name: string) {
-        this.appName = name;
-        if (name == "new app") {
+        if (name == "Create New App") {
             this.ngOnInit();
         } else {
             for (var app of this.userApps) {
-                if (app.name == name) {
+                if (app.title == name) {
                     this.data = app;
+                    this.data.title = name;
                     this.getBooks("english", "load");
                     this.writeTable();
                     if (this.data.phase[1]==0) {
@@ -69,9 +69,9 @@ export class AppProducer implements OnInit{
                 }
             }
         }
+        console.log(this.data);
     }
-    save(name: string, result: number[]) {
-        this.data.name=name;
+    save(result: number[]) {
         this.data.books=result;
         this.data.phase=[0,1];
         this.hasValue = true;
@@ -279,7 +279,7 @@ export class AppProducer implements OnInit{
             this.hasError = true;
         }
         if (!this.hasError) {
-            this.save(this.appName, this.result);
+            this.save(this.result);
             this.onBuild(this.data);
         } else {
             // tecnically, this should be called client side response
@@ -351,6 +351,7 @@ export class AppProducer implements OnInit{
         this.setServerResponse(0,"");
         this.result = [];
         this.data = new AppInfo();
+        this.data.title = "Untitled"
         this.data.color = "#083F0E";
         this.data.icon = "../../assets/ab-001-black.png";
         this.data.feature = "../../assets/bloom-feature-graphic.png";
