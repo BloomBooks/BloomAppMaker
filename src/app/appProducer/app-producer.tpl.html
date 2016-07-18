@@ -38,7 +38,7 @@
                     <a (click)="searchBooks(language.value)"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>
                 </div>
                 <div class="row">
-                    <div class="col-md-7">
+                    <div class="col-sm-7">
                         <p *ngIf="noBookError" class="alert">{{noBookError}}</p>
                         <table style="border: 1px solid black;" id="booksTable">
                             <thead>
@@ -65,7 +65,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-md-5 notes">
+                    <div class="col-sm-5 notes">
                         <p>To Get a new book into this list, upload it from the <a><u class="link">Bloom Editor</u></a> program</p>
                         <p>One or more books in this app have been updated since the last time the app was published.
                             Consider making a new version. <a><u class="link">Go to Process</u></a></p>
@@ -194,13 +194,13 @@
             <div #process [class]="'tab-pane ' + processClass" id="process">
                 <h4><b>process</b></h4>
                 <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-sm-5">
                         <ol class="processList">
                             <div class="row">
-                                <div class="col-md-1">
+                                <div class="col-md-1 col-xs-1 col-xs-offset-1">
                                     <span *ngIf="currentStage=='Setting Up'" class="glyphicon glyphicon-circle-arrow-right processPointer" aria-hidden="true"></span>
                                 </div>
-                                <div class="col-md-11">
+                                <div class="col-md-10 col-xs-9">
                                     <li [class]="currentStage=='Setting Up' ? 'blackText' : 'content-disabled'">
                                         <b>Setting Up</b>
                                         <div class="row">
@@ -212,10 +212,10 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-1">
+                                <div class="col-md-1 col-xs-1 col-xs-offset-1">
                                     <span *ngIf="currentStage=='Making App'" class="glyphicon glyphicon-circle-arrow-right processPointer" aria-hidden="true"></span>
                                 </div>
-                                <div class="col-md-11">
+                                <div class="col-md-10 col-xs-9">
                                     <li [class]="currentStage=='Making App' ? 'blackText' : 'content-disabled'">
                                         <b>Making App</b>
                                         <p *ngIf="currentStage=='Making App'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
@@ -224,10 +224,10 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-1">
+                                <div class="col-md-1 col-xs-1 col-xs-offset-1">
                                     <span *ngIf="currentStage=='Submitting to Play Store'" class="glyphicon glyphicon-circle-arrow-right processPointer" aria-hidden="true"></span>
                                 </div>
-                                <div class="col-md-11">
+                                <div class="col-md-10 col-xs-9">
                                     <li [class]="currentStage=='Submitting to Play Store' ? 'blackText' : 'content-disabled'">
                                         <b>Submitting to Play Store</b>
                                         <p *ngIf="currentStage=='Submitting to Play Store'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
@@ -242,14 +242,14 @@
                             </div>
                         </ol>
                     </div>
-                    <div class="col-md-1"></div>
-                    <div class="col-md-5">
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-5">
                         <ol start="4" class="processList">
                             <div class="row">
-                                <div class="col-md-1">
+                                <div class="col-md-1 col-xs-1 col-xs-offset-1">
                                     <span *ngIf="currentStage=='Private on Play Store'" class="glyphicon glyphicon-circle-arrow-right processPointer" aria-hidden="true"></span>
                                 </div>
-                                <div class="col-md-11">
+                                <div class="col-md-10 col-xs-9">
                                     <li [class]="currentStage=='Private on Play Store' ? 'blackText' : 'content-disabled'">
                                         <b>Private on Play Store</b>
                                         <div class="row">
@@ -261,10 +261,10 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-1">
+                                <div class="col-md-1 col-xs-1 col-xs-offset-1">
                                     <span *ngIf="currentStage=='Public on Play Store'" class="glyphicon glyphicon-circle-arrow-right processPointer" aria-hidden="true"></span>
                                 </div>
-                                <div class="col-md-11">
+                                <div class="col-md-10 col-xs-9">
                                     <li [class]="currentStage=='Public on Play Store' ? 'blackText' : 'content-disabled'">
                                         <b>Public on Play Store</b>
                                         <div class="row">
