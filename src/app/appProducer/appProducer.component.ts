@@ -255,33 +255,33 @@ export class AppProducer implements OnInit{
         this.noBookError = "";
 
         if (!this.data.title) {
-            this.titleError = "missing title field";
+            this.titleError = "Required title field.";
             this.hasError = true;
         } else if (this.data.title.length > 30) {
-            this.titleError = "title field cannot exceed 30 characters";
+            this.titleError = "title field cannot exceed 30 characters.";
             this.hasError = true;
         }
         if (!this.data.shortDescription) {
-            this.shortDError = "missing short description field";
+            this.shortDError = "Required short description field.";
             this.hasError = true;
         } else if (this.data.shortDescription.length > 80) {
-            this.shortDError = "short description field cannot exceed 80 characters";
+            this.shortDError = "short description field cannot exceed 80 characters.";
             this.hasError = true;
         }
         if (!this.data.fullDescription) {
-            this.fullDError = "missing full description field";
+            this.fullDError = "Required full description field.";
             this.hasError = true;
         } else if (this.data.fullDescription.length > 4000) {
-            this.fullDError = "full description field cannot exceed 4000 characters";
+            this.fullDError = "full description field cannot exceed 4000 characters.";
             this.hasError = true;
         }
         if (this.data.color == "#FFFFFF") {
-            this.noColorError = "missing color field";
+            this.noColorError = "Required color field.";
             this.hasError = true;
         }
         this.readTable();
         if (this.result.length == 0) {
-            this.noBookError = "missing book selection";
+            this.noBookError = "Please select at least one book.";
             this.hasError = true;
         }
         if (!this.hasError) {
@@ -315,7 +315,7 @@ export class AppProducer implements OnInit{
             if (id==1) {
                 if (response == "fail") {
                     this.currentStage = "Setting Up";
-                    this.requestFailedError = "Unable to start build due to invalid input fields";
+                    this.requestFailedError = "Please check the 'Books' and 'Details' tabs for information that we need before we can make your app.";
                 } else {
                     this.currentStage = "Making App";
                 }
