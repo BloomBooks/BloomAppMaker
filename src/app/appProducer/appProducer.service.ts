@@ -39,7 +39,6 @@ export class AppProducerService {
         } else {
             for (var oldApp of APPINFOS) {
                 if (oldApp.id == app.id) {
-                    oldApp.name = app.name;
                     oldApp.title = app.title;
                     oldApp.shortDescription = app.shortDescription;
                     oldApp.fullDescription = app.fullDescription;
