@@ -79,9 +79,19 @@
                     </div>
                     <div class="row"  style="margin-top:10px;">
                         <p style="display: inline; margin-right: 30px;"><b>Store Listing Language</b></p>
-                        <select style="width: auto;">
-                            <option>English</option>
-                            <option>Chinese</option>
+                        <select (change)="onLanguageSelect($event.target.value)" style="width: auto;">
+                            <option value="Arabic --> ar">Arabic</option>
+                            <option value="Chinese --> zh-CN">Chinese</option>
+                            <option value="English --> en-GB">English</option>
+                            <option value="French --> fr-FR">French</option>
+                            <option value="Hindi --> hi-IN">Hindi</option>
+                            <option value="Indonesian -> id">Indonesian</option>
+                            <option value="Malay --> ms">Malay</option>
+                            <option value="Portuguese --> pt-PT">Portuguese</option>
+                            <option value="Russian --> ru-RK">Russian</option>
+                            <option value="Spanish  --> es-419">Spanish</option>
+                            <option value="Thai --> th">Thai</option>
+                            <option value="Vietnamese --> vi">Vietnamese</option>
                         </select>
                     </div>
                     <div class="row" style="margin-top:20px;">
@@ -281,6 +291,7 @@
                 </div>
                 <div *ngIf="hasValue">
                     <ul>
+                        <li>language is: {{data["language"]}}</li>
                         <li>title is: {{data["title"]}}</li>
                         <li>shortD is: {{data["shortDescription"]}}</li>
                         <li>fullD is: {{data["fullDescription"]}}</li>

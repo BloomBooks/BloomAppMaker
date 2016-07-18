@@ -1,6 +1,7 @@
 export class AppInfo {
     id: number;
     name: string;
+    language: string;
     title: string;
     shortDescription: string;
     fullDescription: string;
