@@ -13,30 +13,30 @@ declare var $:JQueryStatic;
 })
 
 export class AppProducer implements OnInit{
-    currentUser = "";
-    currentStage = "";
-    appName = "untitled";
+    currentUser: string;
+    currentStage: string;
+    appName: string;
 
-    hasValue = false;
-    hasError = false;
-    titleError = "";
-    shortDError = "";
-    fullDError = "";
-    noColorError = "";
-    iconError = "";
-    featureError = "";
-    noBookError = "";
-    noBookInLanguageAlert = "";
-    AllBookSelectedAlert = "";
-    requestFailedError = "";
+    hasValue: boolean = false;
+    hasError: boolean = false;
+    titleError: string;
+    shortDError: string;
+    fullDError: string;
+    noColorError: string;
+    iconError: string;
+    featureError: string;
+    noBookError: string;
+    noBookInLanguageAlert: string;
+    AllBookSelectedAlert: string;
+    requestFailedError: string;
 
-    detailsClass = "";
-    booksClass = "active";
-    processClass = "";
+    detailsClass: string;
+    booksClass: string = "active";
+    processClass: string;
 
     userApps: AppInfo[];
-    result = [];
-    resultBookTitle = [];
+    result: number[];
+    resultBookTitle: string[];
     data: AppInfo;
     bloomBooks: BloomBook[];
     serverResponse = [{}];
@@ -46,7 +46,7 @@ export class AppProducer implements OnInit{
     constructor(private appProducerService: AppProducerService) {}
     
     // user app info
-    getUserAppInfo(username) {
+    getUserAppInfo(username: string) {
         this.appProducerService.getAppsByUsername(username).then( (appInfos) => {
             this.userApps = JSON.parse(JSON.stringify(appInfos));
         });
@@ -76,7 +76,7 @@ export class AppProducer implements OnInit{
         this.save(this.appName, this.result);
         this.getUserAppInfo(this.currentUser);
     }
-    save(name: string, result) {
+    save(name: string, result: number[]) {
         this.data.name=name;
         this.data.books=result;
         this.data.phase=[0,1];
@@ -169,8 +169,8 @@ export class AppProducer implements OnInit{
     getBooks(language: string, from: string) {
         this.appProducerService.getBooks().then( (bloomBooks) => {
             this.bloomBooks = [];
-            var noLanguageAlert = true;
-            var noOtherBookAlert = true;
+            var noLanguageAlert: boolean = true;
+            var noOtherBookAlert: boolean = true;
             var searchResult;
             if (from == "load") {
                 searchResult = this.data.books.slice();
@@ -353,7 +353,8 @@ export class AppProducer implements OnInit{
     
     // on start
     ngOnInit() {
-        this.currentUser = "Jacob"
+        this.currentUser = "Jacob";
+        this.appName = "untitled";
         this.getUserAppInfo(this.currentUser);
         this.setServerResponse(0,"");
         this.result = [];
