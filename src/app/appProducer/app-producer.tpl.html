@@ -205,7 +205,7 @@
                                         <b>Setting Up</b>
                                         <div class="row">
                                             <p *ngIf="currentStage=='Setting Up'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
-                                            <p class="noMargin">Fill out all the App Details and select books. When you're ready, click this button</p>
+                                            <p class="noMargin">Fill out all the App Details and select books. When you're ready, click this button;</p>
                                             <button style="float: right;margin-right: 15px;" (click)="checkField()" [disabled]="currentStage!='Setting Up'" [class]="currentStage=='Setting Up' ? 'blackText' : 'content-disabled'">Make my App</button>
                                         </div>
                                     </li>
