@@ -1,11 +1,14 @@
 <div class="container">
     <div class="row">
-        <input [(ngModel)]="appName" style="width: 100px;">
-        <select (change)="onAppNameChange($event.target.value)" style="width: auto;">
-            <option selected>new app</option>
-            <option *ngFor="let app of userApps">{{app.name}}</option>
-        </select>
-        <div style="float: right" align="right">
+        <div class="col-sm-9 col-xs-8">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="border: none;padding: 0px;margin-left:80px;">More <span class="caret"></span></button>
+            <ul class="dropdown-menu" role="menu" style="margin-top: 0px;">
+                <li *ngFor="let app of userApps"><a (click)="onAppNameChange($event.target.text)">{{app.title}}</a></li>
+                <li style="border-top: 1px solid black;"><a (click)="onAppNameChange($event.target.text)">Create New App</a></li>
+            </ul>
+            <h2 [innerHTML]="data.title" style="margin-top: 0px;"></h2>
+        </div>
+        <div class="col-sm-3 col-xs-4" style="float: right" align="right">
             <span class="notes">Stage in Progress</span>
             <p style="font-size: 18px;"><b>{{currentStage}}</b></p>
         </div>
@@ -98,7 +101,7 @@
                     <div class="row" style="margin-top:20px;">
                         <p class="noMargin"><b>Title</b></p>
                         <p *ngIf="titleError" class="alert">{{titleError}}</p>
-                        <input [(ngModel)]="data.title" style="width:90%;">
+                        <input #title [(ngModel)]="data.title" style="width:90%;" (change)="title.innerHTML=='' ? data.title='Untitled' : pass">
                     </div>
                     <div class="row" style="margin-top:20px;">
                         <p class="noMargin"><b>Short Description</b></p>
@@ -115,7 +118,7 @@
                     <div class="row" style="margin-top:20px;">
                         <p class="noMargin"><b>Color</b></p>
                         <div class="btn-group">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="dropDownMenu"><div [style.background]="data.color" class="colorSelected"></div><span class="caret"></span></button>
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><div [style.background]="data.color" class="colorSelected"></div><span class="caret"></span></button>
                             <ul class="dropdown-menu" role="menu" style="background: #E5E5E5;width: 255px;margin-top: 0px;">
                                 <li>
                                     <div style="margin-top: 10px;">
