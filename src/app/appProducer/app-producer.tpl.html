@@ -54,14 +54,14 @@
                             </thead>
                             <tbody #booksTableContent id="booksTableContent">
                                 <tr *ngFor="let bloomBook of bloomBooks" class="tableContent" [id]="bloomBook.id">
-                                    <td><input type="checkbox" class="checkbox"></td>
+                                    <td><input [(ngModel)]="bloomBook.state" type="checkbox" class="checkbox"></td>
                                     <!--<td><input type="checkbox" class="checkbox" [disabled]="bloomBook.note=='Unavailable'"></td>-->
                                     <td>{{bloomBook.title}}</td>
                                     <td>{{bloomBook.copyright}}</td>
                                     <td>{{bloomBook.note}}</td>
                                     <td>
-                                        <button (click)="move($event)"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></button>
-                                        <button (click)="move($event)"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span></button>
+                                        <button (click)="move($event)" [disabled]="!bloomBook.state" [class]="bloomBook.state==false ? 'content-disabled' : pass"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></button>
+                                        <button (click)="move($event)" [disabled]="!bloomBook.state" [class]="bloomBook.state==false ? 'content-disabled' : pass"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span></button>
                                     </td>
                                 </tr>
                             </tbody>

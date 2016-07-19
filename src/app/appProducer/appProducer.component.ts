@@ -181,6 +181,7 @@ export class AppProducer implements OnInit{
             if (searchResult.length != 0 ) {
                 for (var i = 0; i < searchResult.length; i++) {
                     var findBook = $.grep(bloomBooks, function(a) { return a.id == searchResult[i]});
+                    findBook[0]["state"] = true;
                     this.bloomBooks.push(findBook[0]);
                 }
             }
@@ -191,6 +192,7 @@ export class AppProducer implements OnInit{
                 }
                 if (bloomBooks[i].language.indexOf(language.toLowerCase()) > -1 ) {
                     if (this.bloomBooks.indexOf(bloomBooks[i]) < 0) {
+                        bloomBooks[i]["state"] = false;
                         this.bloomBooks.push(bloomBooks[i]);
                         noOtherBookAlert = false;
                     }
