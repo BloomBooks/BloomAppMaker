@@ -5404,13 +5404,19 @@ div.container.not-centered {
     padding-right: 0;
   }
 }
-@media (max-width: 919px) {
+@media (max-width: 767px) {
   #book-library-link-lg {
     display: none;
   }
+  #app-maker-lg {
+    display: none;
+  }
 }
-@media (min-width: 920px) {
+@media (min-width: 768px) {
   #book-library-link-sm {
+    display: none;
+  }
+  #app-maker-sm {
     display: none;
   }
 }
