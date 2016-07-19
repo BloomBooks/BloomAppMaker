@@ -244,6 +244,14 @@ export class AppProducer implements OnInit{
             }
         }
     }
+    checkTable() {
+        for (var i=0;i<this.bloomBooks.length;i++) {
+            if (this.bloomBooks[i]["state"] == true) {
+                return true
+            }
+        }
+        return false
+    }
 
     // process page
     checkField() {

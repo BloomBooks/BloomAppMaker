@@ -41,7 +41,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-7">
-                        <p *ngIf="noBookError" class="alert">{{noBookError}}</p>
+                        <p *ngIf="noBookError&&!checkTable()" class="alert">{{noBookError}}</p>
                         <table style="border: 1px solid black;" id="booksTable">
                             <thead>
                                 <tr class="tableHead">
@@ -89,7 +89,7 @@
                             <option value="English --> en-GB">English</option>
                             <option value="French --> fr-FR">French</option>
                             <option value="Hindi --> hi-IN">Hindi</option>
-                            <option value="Indonesian -> id">Indonesian</option>
+                            <option value="Indonesian --> id">Indonesian</option>
                             <option value="Malay --> ms">Malay</option>
                             <option value="Portuguese --> pt-PT">Portuguese</option>
                             <option value="Russian --> ru-RK">Russian</option>
@@ -100,17 +100,17 @@
                     </div>
                     <div class="row" style="margin-top:20px;">
                         <p class="noMargin"><b>Title</b></p>
-                        <p *ngIf="titleError" class="alert">{{titleError}}</p>
+                        <p *ngIf="titleError&&!data.title" class="alert">{{titleError}}</p>
                         <input #title [(ngModel)]="data.title" style="width:90%;" (change)="title.innerHTML=='' ? data.title='Untitled' : pass">
                     </div>
                     <div class="row" style="margin-top:20px;">
                         <p class="noMargin"><b>Short Description</b></p>
-                        <p *ngIf="shortDError" class="alert">{{shortDError}}</p>
+                        <p *ngIf="shortDError&&!data.shortDescription" class="alert">{{shortDError}}</p>
                         <input [(ngModel)]="data.shortDescription" style="width:90%;">
                     </div>
                     <div class="row" style="margin-top:20px;">
                         <p class="noMargin"><b>Full Description</b></p>
-                        <p *ngIf="fullDError" class="alert">{{fullDError}}</p>
+                        <p *ngIf="fullDError&&!data.fullDescription" class="alert">{{fullDError}}</p>
                         <textarea [(ngModel)]="data.fullDescription" style="width:90%;height: 70px;"></textarea>
                         <p class="notes noMargin">The following will be appended to the description:</p>
                         <p class="notes noMargin">"These books and this app were created with <a class="link"><u>Bloom</u></a> from SIL International"</p>
