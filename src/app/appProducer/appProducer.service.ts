@@ -1,9 +1,9 @@
 import {Injectable, Inject} from '@angular/core';
 
-import { BLOOMBOOKS } from './mock-bloomBook';
-import {APPINFOS} from "./mock-appInfo";
-import {USERINFOS} from "./mock-userInfo";
-import {AppInfo} from "./appInfo";
+import { BLOOMBOOKS } from '../mock/mock-bloomBook';
+import {APPINFOS} from "../mock/mock-appInfo";
+import {USERINFOS} from "../mock/mock-userInfo";
+import {AppInfo} from "../mock/appInfo";
 
 @Injectable()
 export class AppProducerService {
