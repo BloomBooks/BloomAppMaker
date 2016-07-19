@@ -213,7 +213,7 @@ export class AppProducer implements OnInit{
     move($event) {
         var button = $event.target;
         var row = $(button).closest('tr');
-        if ($(button).hasClass('glyphicon-arrow-up')) {
+        if ($(button).hasClass('glyphicon-arrow-up') || $(button).children().hasClass('glyphicon-arrow-up')) {
             if (!row.prev().hasClass('tableHead')) {
                 row.prev().before(row);
             }
