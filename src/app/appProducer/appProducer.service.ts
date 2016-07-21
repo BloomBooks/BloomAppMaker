@@ -1,5 +1,9 @@
 import {Injectable, Inject} from '@angular/core';
 
+import {Headers, Http, Response} from '@angular/http';
+import {Observable} from "rxjs/Rx";
+
+import { AppProducerHeaders } from './appProducer.headers';
 import { BLOOMBOOKS } from '../mock/mock-bloomBook';
 import {APPINFOS} from "../mock/mock-appInfo";
 import {USERINFOS} from "../mock/mock-userInfo";
@@ -7,6 +11,9 @@ import {AppInfo} from "../mock/appInfo";
 
 @Injectable()
 export class AppProducerService {
+    Books;
+    constructor(private http: Http) {}
+
     getBooks() {
         return Promise.resolve(BLOOMBOOKS);
     }
@@ -53,5 +60,15 @@ export class AppProducerService {
             }
         }
         return Promise.resolve("404");
+    }
+
+    getBooksByLanguage(languageId: string) {
+        return this.http.get('https://api.parse.com/1/classes/books?where={"langPointers": {"__type":"Pointer","className":"language","objectId":"'+languageId+'"}}',{ headers: AppProducerHeaders })
+            .map((response: Response) => response.json());
+    }
+
+    getAllLanguages() {
+        return this.http.get('https://api.parse.com/1/classes/language',{ headers: AppProducerHeaders })
+            .map((response: Response) => response.json());
     }
 }

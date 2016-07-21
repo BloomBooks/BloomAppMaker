@@ -26,7 +26,6 @@ export class AppProducer implements OnInit{
     featureError: string;
     noBookError: string;
     noBookInLanguageAlert: string;
-    AllBookSelectedAlert: string;
     requestFailedError: string;
 
     detailsClass: string;
@@ -34,13 +33,15 @@ export class AppProducer implements OnInit{
     processClass: string;
 
     userApps: AppInfo[];
-    result: number[];
-    resultBookTitle: string[];
+    result: string[];
     data: AppInfo;
     bloomBooks: BloomBook[];
     serverResponse = [{}];
 
-    saveResponse = "";
+    // saveResponse = "";
+
+    Books;
+    allLanguages;
 
     constructor(private appProducerService: AppProducerService) {}
     
@@ -58,8 +59,8 @@ export class AppProducer implements OnInit{
                 if (app.title == name) {
                     this.data = app;
                     this.data.title = name;
-                    this.getBooks("english", "load");
-                    this.writeTable();
+                    this.getBooks("english");
+                    // this.writeTable();
                     if (this.data.phase[1]==0) {
                         this.setServerResponse(this.data.phase[0],"fail");
                     } else {
@@ -70,21 +71,6 @@ export class AppProducer implements OnInit{
             }
         }
         console.log(this.data);
-    }
-    save(result: number[]) {
-        this.data.books=result;
-        this.data.phase=[0,1];
-        this.hasValue = true;
-        console.log(this.data);
-        this.appProducerService.saveApp(this.data, this.currentUser).then( (response) => {
-            if (response == "201" || response == "202") {
-                this.saveResponse = response + " saved";
-                console.log(this.saveResponse);
-            } else {
-                this.saveResponse = response + " save failed";
-                console.log(this.saveResponse);
-            }
-        });
     }
 
     // detail page
@@ -161,56 +147,44 @@ export class AppProducer implements OnInit{
     }
 
     // BooksPage
-    searchBooks(language: string) {
-        this.readTable();
-        this.getBooks(language, "search");
+    getAllLanguages() {
+        this.appProducerService.getAllLanguages()
+            .subscribe(
+                (languages) => this.allLanguages = languages.results,
+                error => console.log(error)
+            );
     }
-    getBooks(language: string, from: string) {
-        this.appProducerService.getBooks().then( (bloomBooks) => {
-            this.bloomBooks = [];
+    getBooks(language: string) {
+        this.bloomBooks = [];
+        if (language == "") {
+            this.noBookInLanguageAlert = "Please insert a language."
+        } else {
             var noLanguageAlert: boolean = true;
             var noOtherBookAlert: boolean = true;
-            var searchResult;
-            if (from == "load") {
-                searchResult = this.data.books.slice();
-            } else if (from == "search") {
-                searchResult = this.result.slice();
-            } else if (from == "research") {
-                searchResult = this.result.slice();
-            }
-            if (searchResult.length != 0 ) {
-                for (var i = 0; i < searchResult.length; i++) {
-                    var findBook = $.grep(bloomBooks, function(a) { return a.id == searchResult[i]});
-                    findBook[0]["state"] = true;
-                    this.bloomBooks.push(findBook[0]);
+            this.noBookInLanguageAlert = "There is no book available in '" + language + "'";
+            for (var i=0;i<this.allLanguages.length;i++) {
+                if (this.allLanguages[i].name == language) {
+                    this.noBookInLanguageAlert = "";
+                    this.appProducerService.getBooksByLanguage(this.allLanguages[i].objectId)
+                        .subscribe((bloomBooks) => this.Books = bloomBooks.results,
+                            error => console.log(error),
+                            () => {
+                                for (var i=0;i<this.Books.length;i++) {
+                                    var a:BloomBook = new BloomBook();
+                                    a.id = this.Books[i].bookInstanceId;
+                                    a.title = this.Books[i].title;
+                                    a.copyright = this.Books[i].copyright;
+                                    a.note = this.Books[i].librarianNote;
+                                    if (this.bloomBooks.indexOf(a) < 0) {
+                                        a["state"] = false;
+                                        this.bloomBooks.push(a);
+                                    }
+                                }
+                            }
+                        );
                 }
             }
-
-            for (var i=0;i<bloomBooks.length;i++) {
-                if (language == "") {
-                    language = "english";
-                }
-                if (bloomBooks[i].language.indexOf(language.toLowerCase()) > -1 ) {
-                    if (this.bloomBooks.indexOf(bloomBooks[i]) < 0) {
-                        bloomBooks[i]["state"] = false;
-                        this.bloomBooks.push(bloomBooks[i]);
-                        noOtherBookAlert = false;
-                    }
-                    noLanguageAlert = false;
-                }
-            }
-
-            if (from != "research") {
-                this.AllBookSelectedAlert = "";
-                this.noBookInLanguageAlert = "";
-            }
-            if (noLanguageAlert) {
-                this.getBooks("english","research");
-                this.noBookInLanguageAlert = "There is no book available in '" + language.toLowerCase() + "'<br>Check your spelling may help<br>Result shows English books";
-            } else if (noOtherBookAlert) {
-                this.AllBookSelectedAlert = "You already selected all books in this language";
-            }
-        });
+        }
     }
     move($event) {
         var button = $event.target;
@@ -225,22 +199,10 @@ export class AppProducer implements OnInit{
     }
     readTable() {
         var row = <HTMLElement[]><any>document.getElementsByClassName("tableContent");
-        this.result = [];
-        this.resultBookTitle = [];
         for(var i=0;i<row.length;i++) {
-            if (row[i].getElementsByClassName("checkbox")[0]["checked"]) {
-                this.result.push(parseInt(row[i].id));
-                this.resultBookTitle.push(row[i].getElementsByTagName("td")[1].innerHTML);
-            }
-        }
-    }
-    writeTable() {
-        var row = <HTMLElement[]><any>document.getElementsByClassName("tableContent");
-        for(var i=0;i<row.length;i++) {
-            if (this.data.books.indexOf(parseInt(row[i].id)) > -1) {
-                row[i].getElementsByClassName("checkbox")[0]["checked"]=true;
-            } else {
-                row[i].getElementsByClassName("checkbox")[0]["checked"]=false;
+            var idx = this.result.indexOf(row[i].id);
+            if (row[i].getElementsByClassName("checkbox")[0]["checked"] && idx<0) {
+                this.data.books.push(row[i].id);
             }
         }
     }
@@ -284,12 +246,13 @@ export class AppProducer implements OnInit{
             this.hasError = true;
         }
         this.readTable();
-        if (this.result.length == 0) {
+        if (this.data.books.length == 0) {
             this.noBookError = "Please select at least one book.";
             this.hasError = true;
         }
         if (!this.hasError) {
-            this.save(this.result);
+            this.hasValue = true;
+            console.log(this.data);
             this.onBuild(this.data);
         } else {
             // tecnically, this should be called client side response
@@ -355,11 +318,12 @@ export class AppProducer implements OnInit{
     
     // on start
     ngOnInit() {
+        this.getAllLanguages();
         this.currentUser = "Jacob";
-        this.appName = "untitled";
         this.getUserAppInfo(this.currentUser);
         this.setServerResponse(0,"");
         this.result = [];
+        this.bloomBooks = [];
         this.data = new AppInfo();
         this.data.title = "Untitled"
         this.data.color = "#083F0E";
@@ -367,7 +331,5 @@ export class AppProducer implements OnInit{
         this.data.feature = "../../assets/bloom-feature-graphic.png";
         this.data.books=[];
         this.currentStage = "Setting Up";
-        this.getBooks("English", "search");
-        this.writeTable();
     }
 }
