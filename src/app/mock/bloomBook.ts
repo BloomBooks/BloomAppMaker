@@ -1,5 +1,5 @@
 export class BloomBook {
-    id: number;
+    id: string;
     title: string;
     copyright: string;
     note: string;
