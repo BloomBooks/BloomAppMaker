@@ -40,6 +40,7 @@ export class AppProducer implements OnInit{
 
     // saveResponse = "";
 
+    bookPerPage: number = 15;
     Books;
     allLanguages;
     totalPages: number[];
@@ -181,7 +182,7 @@ export class AppProducer implements OnInit{
                                         this.bloomBooks.push(a);
                                     }
                                 }
-                                this.totalPages = Array.from(new Array(Math.floor(this.bloomBooks.length/15)+1), (x,i) => i+1);
+                                this.totalPages = Array.from(new Array(Math.floor(this.bloomBooks.length/this.bookPerPage)+1), (x,i) => i+1);
                             }
                         );
                 }
@@ -222,7 +223,7 @@ export class AppProducer implements OnInit{
         this.currentPage = page;
     }
     displayPage(book) {
-        return Math.floor(this.bloomBooks.indexOf(book)/15+1) != this.currentPage;
+        return Math.floor(this.bloomBooks.indexOf(book)/this.bookPerPage+1) != this.currentPage;
     }
     displayNumber(page:number) {
         if (page == 1 || page == 2 ||  page == this.totalPages.length-1 || page == this.totalPages.length) {
