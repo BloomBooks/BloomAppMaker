@@ -53,7 +53,6 @@
                             </thead>
                             <tbody #booksTableContent id="booksTableContent">
                                 <tr *ngFor="let bloomBook of bloomBooks" [hidden]="displayPage(bloomBook)" class="tableContent" [id]="bloomBook.id">
-                                <!--<tr *ngFor="let bloomBook of bloomBooks" [hidden]="(bloomBooks.indexOf(bloomBook)+1)/15 != currentPage" class="tableContent" [id]="bloomBook.id">-->
                                     <td><input [(ngModel)]="bloomBook.state" type="checkbox" class="checkbox"></td>
                                     <td>{{bloomBook.title}}</td>
                                     <td>{{bloomBook.copyright}}</td>
