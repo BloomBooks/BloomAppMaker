@@ -42,6 +42,8 @@ export class AppProducer implements OnInit{
 
     Books;
     allLanguages;
+    totalPages: number[];
+    currentPage: number;
 
     constructor(private appProducerService: AppProducerService) {}
     
@@ -70,7 +72,6 @@ export class AppProducer implements OnInit{
                 }
             }
         }
-        console.log(this.data);
     }
 
     // detail page
@@ -180,6 +181,7 @@ export class AppProducer implements OnInit{
                                         this.bloomBooks.push(a);
                                     }
                                 }
+                                this.totalPages = Array.from(new Array(Math.floor(this.bloomBooks.length/15)+1), (x,i) => i+1);
                             }
                         );
                 }
@@ -205,6 +207,42 @@ export class AppProducer implements OnInit{
                 this.data.books.push(row[i].id);
             }
         }
+    }
+    previousPage() {
+        if (this.currentPage > 1) {
+            this.currentPage -= 1;
+        }
+    }
+    nextPage() {
+        if (this.currentPage < this.totalPages.length) {
+            this.currentPage += 1;
+        }
+    }
+    toPage(page:number) {
+        this.currentPage = page;
+    }
+    displayPage(book) {
+        return Math.floor(this.bloomBooks.indexOf(book)/15+1) != this.currentPage;
+    }
+    displayNumber(page:number) {
+        if (page == 1 || page == 2 ||  page == this.totalPages.length-1 || page == this.totalPages.length) {
+            return true
+        } else if (page-this.currentPage >= -2 && page-this.currentPage <= 2) {
+            return true
+        }
+        return false
+    }
+    showDot(page:number) {
+        if (this.currentPage <= 5 && page==this.currentPage+2) {
+            return true
+        } else if (this.currentPage > 5) {
+            if (page==2) {
+                return true
+            } else if (this.currentPage < this.totalPages.length-4 && page==this.currentPage+2) {
+                return true
+            }
+        }
+        return false
     }
     checkTable() {
         for (var i=0;i<this.bloomBooks.length;i++) {
@@ -331,5 +369,7 @@ export class AppProducer implements OnInit{
         this.data.feature = "../../assets/bloom-feature-graphic.png";
         this.data.books=[];
         this.currentStage = "Setting Up";
+        this.totalPages = [1];
+        this.currentPage = 1;
     }
 }

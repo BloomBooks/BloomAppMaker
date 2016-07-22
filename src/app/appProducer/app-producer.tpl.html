@@ -52,9 +52,9 @@
                                 </tr>
                             </thead>
                             <tbody #booksTableContent id="booksTableContent">
-                                <tr *ngFor="let bloomBook of bloomBooks" class="tableContent" [id]="bloomBook.id">
+                                <tr *ngFor="let bloomBook of bloomBooks" [hidden]="displayPage(bloomBook)" class="tableContent" [id]="bloomBook.id">
+                                <!--<tr *ngFor="let bloomBook of bloomBooks" [hidden]="(bloomBooks.indexOf(bloomBook)+1)/15 != currentPage" class="tableContent" [id]="bloomBook.id">-->
                                     <td><input [(ngModel)]="bloomBook.state" type="checkbox" class="checkbox"></td>
-                                    <!--<td><input type="checkbox" class="checkbox" [disabled]="bloomBook.note=='Unavailable'"></td>-->
                                     <td>{{bloomBook.title}}</td>
                                     <td>{{bloomBook.copyright}}</td>
                                     <td>{{bloomBook.note}}</td>
@@ -65,6 +65,13 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <div class="pagination" *ngIf="totalPages.length!=1">
+                            <ul>
+                                <li><a (click)="previousPage()" [class]="currentPage==1 ? 'content-disabled' : pass">Previous</a></li>
+                                <li *ngFor="let index of totalPages"><a *ngIf="displayNumber(index)" (click)="toPage(index)" [class]="currentPage==index ? 'pageNumberActive' : pass">{{index}}</a><span *ngIf="showDot(index)" style="background-color: #ffffff; color: #333333;">...</span></li>
+                                <li><a (click)="nextPage()" [class]="currentPage==totalPages.length ? 'content-disabled' : pass">Next</a></li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="col-sm-5 notes">
                         <p style="padding-left: 32px;">To Get a new book into this list, upload it from the <a href="http://www.bloomlibrary.org"><u class="link">Bloom Editor</u></a> program</p>
