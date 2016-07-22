@@ -72,3 +72,6 @@ ul {
     margin-left: 12px;
     margin-bottom: 4px;
 }
+.pageNumberActive {
+    background-color: #cccccc;
+}

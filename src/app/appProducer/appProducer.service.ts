@@ -63,7 +63,7 @@ export class AppProducerService {
     }
 
     getBooksByLanguage(languageId: string) {
-        return this.http.get('https://api.parse.com/1/classes/books?where={"langPointers": {"__type":"Pointer","className":"language","objectId":"'+languageId+'"}}',{ headers: AppProducerHeaders })
+        return this.http.get('https://api.parse.com/1/classes/books?limit%3D9999&&where={"langPointers": {"__type":"Pointer","className":"language","objectId":"'+languageId+'"}}',{ headers: AppProducerHeaders })
             .map((response: Response) => response.json());
     }
 
