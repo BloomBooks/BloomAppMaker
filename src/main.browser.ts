@@ -14,7 +14,8 @@ import { ENV_PROVIDERS, decorateComponentRef } from './platform/environment';
 * App Component
 * our top level component that holds all of our components
 */
-import { AppProducer } from './app/appProducer/appProducer.component';
+import { RootComponent } from './app/root/app.component';
+import { APP_ROUTER_PROVIDERS } from './app/root/app.routes';
 
 /*
  * Bootstrap our Angular app with a top level component `App` and inject
@@ -22,10 +23,11 @@ import { AppProducer } from './app/appProducer/appProducer.component';
  */
 export function main(initialHmrState?: any): Promise<any> {
 
-  return bootstrap(AppProducer, [
+  return bootstrap(RootComponent, [
     // To add more vendor providers please look in the platform/ folder
     ...PLATFORM_PROVIDERS,
     ...ENV_PROVIDERS,
+      APP_ROUTER_PROVIDERS,
   ])
   .then(decorateComponentRef)
   .catch(err => console.error(err));
