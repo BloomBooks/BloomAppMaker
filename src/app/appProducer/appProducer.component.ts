@@ -50,9 +50,9 @@ export class AppProducer implements OnInit{
     
     // user app info
     getUserAppInfo(username: string) {
-        this.appProducerService.getAppsByUsername(username).then( (appInfos) => {
-            this.userApps = JSON.parse(JSON.stringify(appInfos));
-        });
+        // this.appProducerService.getAppsByUsername(username).then( (appInfos) => {
+        //     this.userApps = JSON.parse(JSON.stringify(appInfos));
+        // });
     }
     onAppNameChange(name: string) {
         if (name == "Create New App") {
@@ -99,9 +99,10 @@ export class AppProducer implements OnInit{
             this.data.language = language;
         }
     }
-    onColorSelect(style: string) {
-        if (style) {
-            this.data.color = style;
+    onColorSelect(style: string, name: string) {
+        if (style && name) {
+            this.data.color[0] = name;
+            this.data.color[1] = style;
         }
     }
     selectFromDefault (src: string, name: string) {
@@ -173,7 +174,7 @@ export class AppProducer implements OnInit{
                             () => {
                                 for (var i=0;i<this.Books.length;i++) {
                                     var a:BloomBook = new BloomBook();
-                                    a.id = this.Books[i].bookInstanceId;
+                                    a.id = this.Books[i].objectId;
                                     a.title = this.Books[i].title;
                                     a.copyright = this.Books[i].copyright;
                                     a.note = this.Books[i].librarianNote;
@@ -299,8 +300,7 @@ export class AppProducer implements OnInit{
         }
     }
     onBuild(data: AppInfo) {
-        this.setServerResponse(1,"success");
-        console.log("built");
+        this.postApp();
     }
 
     setServerResponse(id: number, response: string) {
@@ -354,6 +354,38 @@ export class AppProducer implements OnInit{
             }
         }
     }
+    postApp() {
+        this.appProducerService.postApp(this.data)
+            .subscribe(
+                (response1) => {
+                    var appDetailId = response1.objectId
+                    this.appProducerService.postAppSpecific(this.data, appDetailId)
+                        .subscribe(
+                            (response2) => {
+                                var appSpecificId = response2.objectId;
+                                this.appProducerService.createRelation(appDetailId, appSpecificId)
+                                    .subscribe(
+                                        (response3) => {
+                                            console.log(response3);
+                                        },
+                                        error => console.log(error)
+                                    );
+                                for (var i=0;i<this.data.books.length;i++) {
+                                    this.appProducerService.addBooksInApp(this.data.books[i], appSpecificId,i)
+                                        .subscribe(
+                                            (response4) => {
+                                                console.log(response4);
+                                            },
+                                            error => console.log(error)
+                                        );
+                                }
+                            },
+                            error => console.log(error)
+                        )
+                },
+                error => console.log(error)
+            );
+    }
     
     // on start
     ngOnInit() {
@@ -365,10 +397,13 @@ export class AppProducer implements OnInit{
         this.bloomBooks = [];
         this.data = new AppInfo();
         this.data.title = "Untitled"
-        this.data.color = "#083F0E";
+        this.data.color = [];
+        this.data.color[0] = "Dark Green";
+        this.data.color[1] = "#083F0E";
         this.data.icon = "../../assets/ab-001-black.png";
         this.data.feature = "../../assets/bloom-feature-graphic.png";
         this.data.books=[];
+        this.data.language = "ar";
         this.currentStage = "Setting Up";
         this.totalPages = [1];
         this.currentPage = 1;
