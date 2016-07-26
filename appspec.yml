@@ -1,6 +1,11 @@
 version: 0.0
 os: linux
 
+files:
+  - source: \
+    destination: \
+
 # This is for awscodedeply. We're not actually using this service,
 # because we are just running this site as a static site out of S3.
 # But our TeamCity uploader expects it.
+
