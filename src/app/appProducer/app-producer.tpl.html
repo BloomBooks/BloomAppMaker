@@ -123,41 +123,41 @@
                     <div class="row" style="margin-top:20px;">
                         <p class="noMargin"><b>Color</b></p>
                         <div class="btn-group">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><div [style.background]="data.color" class="colorSelected"></div><span class="caret"></span></button>
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><div [style.background]="data.color[1]" class="colorSelected"></div><span class="caret"></span></button>
                             <ul class="dropdown-menu" role="menu" style="background: #E5E5E5;width: 255px;margin-top: 0px;">
                                 <li>
                                     <div style="margin-top: 10px;">
-                                        <span><a class="colorOption" (click)="onColorSelect(dg.style.background)"><div #dg class="colorSelection" style="background: #083F0E;"></div></a></span>
-                                        <span><a class="colorOption" (click)="onColorSelect(db.style.background)"><div #db class="colorSelection" style="background: #000B63;"></div></a></span>
-                                        <span><a class="colorOption" (click)="onColorSelect(rb.style.background)"><div #rb class="colorSelection" style="background: #0D47A1;"></div></a></span>
-                                        <span><a class="colorOption" (click)="onColorSelect(in.style.background)"><div #in class="colorSelection" style="background: #3F51B5;"></div></a></span>
-                                        <span><a class="colorOption" (click)="onColorSelect(di.style.background)"><div #di class="colorSelection" style="background: #1A237E;"></div></a></span>
-                                        <span><a class="colorOption" (click)="onColorSelect(bu.style.background)"><div #bu class="colorSelection" style="background: #2196F3;"></div></a></span>
-                                        <span><a class="colorOption" (click)="onColorSelect(dr.style.background)"><div #dr class="colorSelection" style="background: #6C0000;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(dg.style.background,'Dark Green')"><div #dg class="colorSelection" style="background: #083F0E;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(db.style.background,'Dark Blue')"><div #db class="colorSelection" style="background: #000B63;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(rb.style.background,'Royal Blue')"><div #rb class="colorSelection" style="background: #0D47A1;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(in.style.background,'Indigo')"><div #in class="colorSelection" style="background: #3F51B5;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(di.style.background,'Dark Indigo')"><div #di class="colorSelection" style="background: #1A237E;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(bu.style.background,'Blue')"><div #bu class="colorSelection" style="background: #2196F3;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(dr.style.background,'Dark Red')"><div #dr class="colorSelection" style="background: #6C0000;"></div></a></span>
                                     </div>
                                 </li>
 
                                 <li>
                                     <div>
-                                        <span><a class="colorOption" (click)="onColorSelect(pu.style.background)"><div #pu class="colorSelection" style="background: #9C27B0;"></div></a></span>
-                                        <span><a class="colorOption" (click)="onColorSelect(dp.style.background)"><div #dp class="colorSelection" style="background: #673AB7;"></div></a></span>
-                                        <span><a class="colorOption" (click)="onColorSelect(lb.style.background)"><div #lb class="colorSelection" style="background: #03A9F4;"></div></a></span>
-                                        <span><a class="colorOption" (click)="onColorSelect(cy.style.background)"><div #cy class="colorSelection" style="background: #00BCD4;"></div></a></span>
-                                        <span><a class="colorOption" (click)="onColorSelect(te.style.background)"><div #te class="colorSelection" style="background: #009688;"></div></a></span>
-                                        <span><a class="colorOption" (click)="onColorSelect(gr.style.background)"><div #gr class="colorSelection" style="background: #4CAF50;"></div></a></span>
-                                        <span><a class="colorOption" (click)="onColorSelect(lg.style.background)"><div #lg class="colorSelection" style="background: #8BC34A;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(pu.style.background,'Purple')"><div #pu class="colorSelection" style="background: #9C27B0;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(dp.style.background,'Deep Purple')"><div #dp class="colorSelection" style="background: #673AB7;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(lb.style.background,'Light Blue')"><div #lb class="colorSelection" style="background: #03A9F4;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(cy.style.background,'Cyan')"><div #cy class="colorSelection" style="background: #00BCD4;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(te.style.background,'Teal')"><div #te class="colorSelection" style="background: #009688;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(gr.style.background,'Green')"><div #gr class="colorSelection" style="background: #4CAF50;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(lg.style.background,'Light Green')"><div #lg class="colorSelection" style="background: #8BC34A;"></div></a></span>
                                     </div>
                                 </li>
 
                                 <li>
                                     <div>
-                                        <span><a class="colorOption" (click)="onColorSelect(li.style.background)"><div #li class="colorSelection" style="background: #C0CA33;"></div></a></span>
-                                        <span><a class="colorOption" (click)="onColorSelect(am.style.background)"><div #am class="colorSelection" style="background: #FFC107;"></div></a></span>
-                                        <span><a class="colorOption" (click)="onColorSelect(or.style.background)"><div #or class="colorSelection" style="background: #FF9800;"></div></a></span>
-                                        <span><a class="colorOption" (click)="onColorSelect(do.style.background)"><div #do class="colorSelection" style="background: #FF5722;"></div></a></span>
-                                        <span><a class="colorOption" (click)="onColorSelect(re.style.background)"><div #re class="colorSelection" style="background: #F44336;"></div></a></span>
-                                        <span><a class="colorOption" (click)="onColorSelect(br.style.background)"><div #br class="colorSelection" style="background: #4E342E;"></div></a></span>
-                                        <span><a class="colorOption" (click)="onColorSelect(ba.style.background)"><div #ba class="colorSelection" style="background: #000000;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(li.style.background,'Lime')"><div #li class="colorSelection" style="background: #C0CA33;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(am.style.background,'Amber')"><div #am class="colorSelection" style="background: #FFC107;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(or.style.background,'Orange')"><div #or class="colorSelection" style="background: #FF9800;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(do.style.background,'Deep Orange')"><div #do class="colorSelection" style="background: #FF5722;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(re.style.background,'Red')"><div #re class="colorSelection" style="background: #F44336;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(br.style.background,'Brown')"><div #br class="colorSelection" style="background: #4E342E;"></div></a></span>
+                                        <span><a class="colorOption" (click)="onColorSelect(ba.style.background,'Black')"><div #ba class="colorSelection" style="background: #000000;"></div></a></span>
                                     </div>
                                 </li>
                             </ul>
@@ -297,23 +297,6 @@
                             </div>
                         </ol>
                     </div>
-                </div>
-                <div *ngIf="hasValue">
-                    <ul>
-                        <li>language is: {{data["language"]}}</li>
-                        <li>title is: {{data["title"]}}</li>
-                        <li>shortD is: {{data["shortDescription"]}}</li>
-                        <li>fullD is: {{data["fullDescription"]}}</li>
-                        <li>color is: {{data["color"]}}</li>
-                        <li>icon is: <img [src]="data['icon']" width="60" height="60"></li>
-                        <li>feature is: <img [src]="data['feature']" width="200" height="100"></li>
-                        <li>
-                            <p>books are:</p>
-                            <ol>
-                                <li *ngFor="let book of resultBookTitle">{{book}}</li>
-                            </ol>
-                        </li>
-                    </ul>
                 </div>
                 <div>
                     <p *ngIf="currentStage!='Setting Up'">Use these buttons to control server response and see what should happen</p>
