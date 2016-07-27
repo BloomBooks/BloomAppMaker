@@ -80,9 +80,34 @@ export class AppProducerService {
             .map((response: Response) => response.json());
     }
 
-    postAppSpecific(app, appDetailId, userId) {
+    putApp(app, field, id) {
+        switch(field) {
+            case "language":
+                return this.http.put('https://api.parse.com/1/classes/appDetailsInLanguage/'+id,
+                    {"androidStoreLanguageIso": app.language},
+                    { headers: AppProducerHeaders })
+                    .map((response: Response) => response.json());
+            case "title":
+                return this.http.put('https://api.parse.com/1/classes/appDetailsInLanguage/'+id,
+                    {"title": app.title},
+                    { headers: AppProducerHeaders })
+                    .map((response: Response) => response.json());
+            case "short":
+                return this.http.put('https://api.parse.com/1/classes/appDetailsInLanguage/'+id,
+                    {"shortDescription": app.shortDescription},
+                    { headers: AppProducerHeaders })
+                    .map((response: Response) => response.json());
+            case "full":
+                return this.http.put('https://api.parse.com/1/classes/appDetailsInLanguage/'+id,
+                    {"fullDescription": app.fullDescription},
+                    { headers: AppProducerHeaders })
+                    .map((response: Response) => response.json());
+        }
+    }
+
+    postAppSpecific(app, userId) {
         var language = "";
-        var idx = app.language.indexOf("-")
+        var idx = app.language.indexOf("-");
         if (idx>-1) {
             language = app.language.substring(0,idx);
         } else {
@@ -104,6 +129,39 @@ export class AppProducerService {
             { headers: AppProducerHeaders })
 
             .map((response: Response) => response.json());
+    }
+
+    putAppSpecific(app, field, id) {
+        switch(field) {
+            case "language":
+                var language = "";
+                var idx = app.language.indexOf("-");
+                if (idx>-1) {
+                    language = app.language.substring(0,idx);
+                } else {
+                    language = app.language;
+                }
+                return this.http.put('https://api.parse.com/1/classes/appSpecification/'+id,
+                    {"bookVernacularLanguageIso": language,
+                    "defaultStoreLanguageIso": app.language},
+                    { headers: AppProducerHeaders })
+                    .map((response: Response) => response.json());
+            case "color":
+                return this.http.put('https://api.parse.com/1/classes/appSpecification/'+id,
+                    {"colorScheme": app.color[0]},
+                    { headers: AppProducerHeaders })
+                    .map((response: Response) => response.json());
+            case "icon":
+                return this.http.put('https://api.parse.com/1/classes/appSpecification/'+id,
+                    {"icon1024x1024": app.icon},
+                    { headers: AppProducerHeaders })
+                    .map((response: Response) => response.json());
+            case "feature":
+                return this.http.put('https://api.parse.com/1/classes/appSpecification/'+id,
+                    {"featureGraphic1024x500": app.feature},
+                    { headers: AppProducerHeaders })
+                    .map((response: Response) => response.json());
+        }
     }
 
     createRelation(appDetailId, appSpecificId) {
@@ -138,6 +196,13 @@ export class AppProducerService {
                 },
                 "index": index
             },
+            { headers: AppProducerHeaders })
+
+            .map((response: Response) => response.json());
+    }
+
+    deleteBooksInApp(appSpecificId) {
+        return this.http.post('https://api.parse.com/1/classes/booksInApp'+'?where={"__type":"Pointer","className":"appSpecification","objectId":'+appSpecificId+'}',
             { headers: AppProducerHeaders })
 
             .map((response: Response) => response.json());
