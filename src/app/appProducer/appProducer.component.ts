@@ -162,8 +162,6 @@ export class AppProducer implements OnInit{
         if (language == "") {
             this.noBookInLanguageAlert = "Please insert a language."
         } else {
-            var noLanguageAlert: boolean = true;
-            var noOtherBookAlert: boolean = true;
             this.noBookInLanguageAlert = "There is no book available in '" + language + "'";
             for (var i=0;i<this.allLanguages.length;i++) {
                 if (this.allLanguages[i].name == language) {
@@ -248,7 +246,7 @@ export class AppProducer implements OnInit{
     }
     checkTable() {
         for (var i=0;i<this.bloomBooks.length;i++) {
-            if (this.bloomBooks[i]["state"] == true) {
+            if (this.bloomBooks[i]["state"] === true) {
                 return true
             }
         }
