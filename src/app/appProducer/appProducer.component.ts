@@ -357,7 +357,7 @@ export class AppProducer implements OnInit{
             .subscribe(
                 (response1) => {
                     var appDetailId = response1.objectId
-                    this.appProducerService.postAppSpecific(this.data, appDetailId)
+                    this.appProducerService.postAppSpecific(this.data, appDetailId, "vUGQP4mbby")
                         .subscribe(
                             (response2) => {
                                 var appSpecificId = response2.objectId;
