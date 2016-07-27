@@ -13,9 +13,11 @@ declare var $:JQueryStatic;
 })
 
 export class AppProducer implements OnInit{
-    currentUser: string;
+    currentUser;
     currentStage: string;
     appName: string;
+    appDetailId: string;
+    appSpecificId: string;
 
     hasValue: boolean = false;
     hasError: boolean = false;
@@ -56,7 +58,7 @@ export class AppProducer implements OnInit{
     }
     onAppNameChange(name: string) {
         if (name == "Create New App") {
-            this.ngOnInit();
+            this.onInit();
         } else {
             for (var app of this.userApps) {
                 if (app.title == name) {
@@ -97,19 +99,23 @@ export class AppProducer implements OnInit{
     onLanguageSelect(language: string) {
         if (language) {
             this.data.language = language;
+            this.putApp("language");
         }
     }
     onColorSelect(style: string, name: string) {
         if (style && name) {
             this.data.color[0] = name;
             this.data.color[1] = style;
+            this.putApp("color");
         }
     }
     selectFromDefault (src: string, name: string) {
         if (name == 'icon') {
             this.data.icon = src;
+            this.putApp("icon");
         } else if (name == 'feature') {
             this.data.feature = src;
+            this.putApp("feature");
         }
     }
     onFileSelect (file, name: string) {
@@ -126,8 +132,8 @@ export class AppProducer implements OnInit{
                         if (img.width != 512 && img.height != 512) {
                             this.iconError = "icon has to be 512px x 512px, this image is "+img.height+"px x "+img.width+"px";
                         } else {
-                            // $("#iconDisplay").attr('src', reader.result);
                             this.data.icon = reader.result;
+                            this.putApp("icon");
                         }
                     });
                     reader.readAsDataURL(file.files[0]);
@@ -139,8 +145,8 @@ export class AppProducer implements OnInit{
                         if (img.width != 1024 && img.height != 500) {
                             this.featureError = "feature graphic has to be 500px x 1024px, this image is "+img.height+"px x "+img.width+"px";
                         } else {
-                            // $("#featureDisplay").attr('src', reader.result);
                             this.data.feature = reader.result;
+                            this.putApp("feature");
                         }
                     });
                     reader.readAsDataURL(file.files[0]);
@@ -298,7 +304,7 @@ export class AppProducer implements OnInit{
         }
     }
     onBuild(data: AppInfo) {
-        this.postApp();
+        return
     }
 
     setServerResponse(id: number, response: string) {
@@ -352,31 +358,23 @@ export class AppProducer implements OnInit{
             }
         }
     }
-    postApp() {
+    
+    postEmptyApp() {
         this.appProducerService.postApp(this.data)
             .subscribe(
                 (response1) => {
-                    var appDetailId = response1.objectId
-                    this.appProducerService.postAppSpecific(this.data, appDetailId, "vUGQP4mbby")
+                    this.appDetailId = response1.objectId;
+                    this.appProducerService.postAppSpecific(this.data, this.currentUser.id)
                         .subscribe(
                             (response2) => {
-                                var appSpecificId = response2.objectId;
-                                this.appProducerService.createRelation(appDetailId, appSpecificId)
+                                this.appSpecificId = response2.objectId;
+                                this.appProducerService.createRelation(this.appDetailId, this.appSpecificId)
                                     .subscribe(
                                         (response3) => {
                                             console.log(response3);
                                         },
                                         error => console.log(error)
                                     );
-                                for (var i=0;i<this.data.books.length;i++) {
-                                    this.appProducerService.addBooksInApp(this.data.books[i], appSpecificId,i)
-                                        .subscribe(
-                                            (response4) => {
-                                                console.log(response4);
-                                            },
-                                            error => console.log(error)
-                                        );
-                                }
                             },
                             error => console.log(error)
                         )
@@ -385,11 +383,90 @@ export class AppProducer implements OnInit{
             );
     }
     
+    putApp(field) {
+        switch (field) {
+            /////// worry about books later, there must be someway to do it more effective
+            case "books":
+                this.appProducerService.deleteBooksInApp(this.appSpecificId);
+                this.data.books=[];
+                this.readTable();
+                for (var i=0;i<this.data.books.length;i++) {
+                    this.appProducerService.addBooksInApp(this.data.books[i], this.appSpecificId,i)
+                        .subscribe(
+                            (response) => console.log(response),
+                            error => console.log(error)
+                        );
+                }
+                break;
+            case "language":
+                this.appProducerService.putApp(this.data, field, this.appDetailId)
+                    .subscribe(
+                        (response) => console.log(response),
+                        error => console.log(error)
+                );
+                this.appProducerService.putAppSpecific(this.data, field, this.appSpecificId)
+                    .subscribe(
+                        (response) => console.log(response),
+                        error => console.log(error)
+                    );
+                break;
+            case "title":
+                this.appProducerService.putApp(this.data, field, this.appDetailId)
+                    .subscribe(
+                        (response) => console.log(response),
+                        error => console.log(error)
+                    );
+                break;
+            case "short":
+                this.appProducerService.putApp(this.data, field, this.appDetailId)
+                    .subscribe(
+                        (response) => console.log(response),
+                        error => console.log(error)
+                    );
+                break;
+            case "full":
+                this.appProducerService.putApp(this.data, field, this.appDetailId)
+                    .subscribe(
+                        (response) => console.log(response),
+                        error => console.log(error)
+                    );
+                break;
+            case "color":
+                this.appProducerService.putAppSpecific(this.data, field, this.appSpecificId)
+                    .subscribe(
+                        (response) => console.log(response),
+                        error => console.log(error)
+                    );
+                break;
+            case "icon":
+                this.appProducerService.putAppSpecific(this.data, field, this.appSpecificId)
+                    .subscribe(
+                        (response) => console.log(response),
+                        error => console.log(error)
+                    );
+                break;
+            case "feature":
+                this.appProducerService.putAppSpecific(this.data, field, this.appSpecificId)
+                    .subscribe(
+                        (response) => console.log(response),
+                        error => console.log(error)
+                    );
+                break;
+        }
+    }
+    
     // on start
     ngOnInit() {
         this.getAllLanguages();
-        this.currentUser = "Jacob";
-        this.getUserAppInfo(this.currentUser);
+        this.currentUser = {};
+        this.currentUser["name"] = "Jacob";
+        this.currentUser["id"] = "vUGQP4mbby";
+        this.onInit();
+
+    }
+
+    onInit() {
+        this.getUserAppInfo(this.currentUser.id);
         this.setServerResponse(0,"");
         this.result = [];
         this.bloomBooks = [];
@@ -402,8 +479,12 @@ export class AppProducer implements OnInit{
         this.data.feature = "../../assets/bloom-feature-graphic.png";
         this.data.books=[];
         this.data.language = "ar";
+
+        this.appProducerService.postApp(this.data)
+
         this.currentStage = "Setting Up";
         this.totalPages = [1];
         this.currentPage = 1;
+        this.postEmptyApp();
     }
 }
