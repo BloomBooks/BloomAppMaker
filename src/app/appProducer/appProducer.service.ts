@@ -80,7 +80,7 @@ export class AppProducerService {
             .map((response: Response) => response.json());
     }
 
-    postAppSpecific(app, appDetailId) {
+    postAppSpecific(app, appDetailId, userId) {
         var language = "";
         var idx = app.language.indexOf("-")
         if (idx>-1) {
@@ -94,7 +94,12 @@ export class AppProducerService {
                 "defaultStoreLanguageIso": app.language,
                 "colorScheme": app.color[0],
                 "icon1024x1024": app.icon,
-                "featureGraphic1024x500": app.feature
+                "featureGraphic1024x500": app.feature,
+                "owner": {
+                    "__type": "Pointer",
+                    "className": "_User",
+                    "objectId": userId
+                }
             },
             { headers: AppProducerHeaders })
 
