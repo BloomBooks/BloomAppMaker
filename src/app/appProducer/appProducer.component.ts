@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AppInfo } from '../customClass/appInfo';
-import { BloomBook } from '../customClass/bloomBook';
+import { AppInfo } from '../custom/appInfoClass';
+import { BloomBook } from '../custom/bloomBookClass';
 import { AppProducerService } from './appProducer.service';
 declare var $:JQueryStatic;
 
