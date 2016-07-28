@@ -1,32 +1,23 @@
-import {Injectable, Inject} from '@angular/core';
+import {Injectable} from '@angular/core';
 
-import {Headers, Http, Response} from '@angular/http';
-import {Observable} from "rxjs/Rx";
+import {Http, Response} from '@angular/http';
+// import {Observable} from "rxjs/Rx";
 
 import { AppProducerHeaders } from './appProducer.headers';
-import { BLOOMBOOKS } from '../mock/mock-bloomBook';
-import {USERINFOS} from "../mock/mock-userInfo";
-import {AppInfo} from "../mock/appInfo";
 
 @Injectable()
 export class AppProducerService {
     constructor(private http: Http) {}
     
-    // getAppsByUsername(username: string) {
-    //     var id = [];
-    //     for (var user of USERINFOS) {
-    //         if (user.username == username) {
-    //             id = user.apps.slice();
-    //         }
-    //     }
-    //     var result = [];
-    //     for (var app of APPINFOS) {
-    //         if (id.includes(app.id)) {
-    //             result.push(app);
-    //         }
-    //     }
-    //     return Promise.resolve(result);
-    // }
+    getAppsByUserId(userId: string) {
+        return this.http.get('https://api.parse.com/1/classes/appSpecification?where={"owner": {"__type":"Pointer","className":"_User","objectId":"'+userId+'"}}',{ headers: AppProducerHeaders })
+            .map((response: Response) => response.json());
+    }
+
+    getAppsIdByRelation(id) {
+        return this.http.get('https://api.parse.com/1/classes/appDetailsInLanguage?where={"$relatedTo":{"object":{"__type":"Pointer","className":"appSpecification","objectId":"'+id+'"},"key":"details"}}', { headers: AppProducerHeaders })
+            .map((response: Response) => response.json());
+    }
     // saveApp(app: AppInfo, username: string) {
     //     if (app.id === undefined) {
     //         app.id = APPINFOS[APPINFOS.length-1].id + 1;
@@ -56,6 +47,11 @@ export class AppProducerService {
     //     }
     //     return Promise.resolve("404");
     // }
+
+    getBookById(id: string) {
+        return this.http.get('https://api.parse.com/1/classes/books/'+id,{ headers: AppProducerHeaders })
+            .map((response: Response) => response.json());
+    }
 
     getBooksByLanguage(languageId: string) {
         return this.http.get('https://api.parse.com/1/classes/books?limit%3D9999&&where={"langPointers": {"__type":"Pointer","className":"language","objectId":"'+languageId+'"}}',{ headers: AppProducerHeaders })
@@ -181,7 +177,7 @@ export class AppProducerService {
             .map((response: Response) => response.json());
     }
 
-    addBooksInApp(bookId, appSpecificId, index) {
+    addBookInApp(bookId, appSpecificId, index) {
         return this.http.post('https://api.parse.com/1/classes/booksInApp',
             {
                 "app": {
@@ -201,8 +197,15 @@ export class AppProducerService {
             .map((response: Response) => response.json());
     }
 
-    deleteBooksInApp(appSpecificId) {
-        return this.http.post('https://api.parse.com/1/classes/booksInApp'+'?where={"__type":"Pointer","className":"appSpecification","objectId":'+appSpecificId+'}',
+    getBooksIdInApp(appSpecificId) {
+        return this.http.get('https://api.parse.com/1/classes/booksInApp?where={"app": {"__type":"Pointer","className":"appSpecification","objectId":"'+appSpecificId+'"}}',
+            { headers: AppProducerHeaders })
+
+            .map((response: Response) => response.json());
+    }
+    
+    deleteBookInApp(bookInAppId) {
+        return this.http.delete('https://api.parse.com/1/classes/booksInApp/'+bookInAppId,
             { headers: AppProducerHeaders })
 
             .map((response: Response) => response.json());

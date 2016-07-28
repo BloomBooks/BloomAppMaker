@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AppInfo } from '../mock/appInfo';
-import { BloomBook } from '../mock/bloomBook';
+import { AppInfo } from '../customClass/appInfo';
+import { BloomBook } from '../customClass/bloomBook';
 import { AppProducerService } from './appProducer.service';
 declare var $:JQueryStatic;
 
@@ -51,27 +51,65 @@ export class AppProducer implements OnInit{
     constructor(private appProducerService: AppProducerService) {}
     
     // user app info
-    getUserAppInfo(username: string) {
-        // this.appProducerService.getAppsByUsername(username).then( (appInfos) => {
-        //     this.userApps = JSON.parse(JSON.stringify(appInfos));
-        // });
+    getUserAppInfo() {
+        this.appProducerService.getAppsByUserId(this.currentUser.id)
+            .subscribe(
+                (response) => {
+                    this.userApps = [];
+                    for (var i=0;i<response.results.length;i++){
+                        var a = new AppInfo();
+                        this.userApps.push(a);
+                        var result = response.results[i];
+                        this.userApps[i].appSpecificationId = result.objectId;
+                        this.userApps[i].language = result.defaultStoreLanguageIso;
+                        this.userApps[i].color = [];
+                        this.userApps[i].color[0] = result.colorScheme;
+                        this.userApps[i].icon = result.icon1024x1024;
+                        this.userApps[i].feature = result.featureGraphic1024x500;
+                        this.getAppDetailInfo(i);
+                        this.getBooksInApp(result.objectId, i);
+                    }
+                },
+                error => console.log(error)
+            )
     }
+
+    getAppDetailInfo(idx: number) {
+        this.appProducerService.getAppsIdByRelation(this.userApps[idx].appSpecificationId)
+            .subscribe(
+                (response) => {
+                    this.userApps[idx].appDetailsId = response.results[0].objectId;
+                    this.userApps[idx].title = response.results[0].title;
+                    this.userApps[idx].shortDescription = response.results[0].shortDescription;
+                    this.userApps[idx].fullDescription = response.results[0].fullDescription;
+                }
+            )
+    }
+
+    getBooksInApp(id: string, idx:number) {
+        this.appProducerService.getBooksIdInApp(id)
+            .subscribe(
+                (response) => {
+                    this.userApps[idx].books = [];
+                    for(var i=0;i<response.results.length;i++) {
+                        this.userApps[idx].books.push(response.results[i].book.objectId);
+                    }
+                },
+                error => console.log(error)
+            )
+    }
+
     onAppNameChange(name: string) {
         if (name == "Create New App") {
             this.onInit();
         } else {
             for (var app of this.userApps) {
                 if (app.title == name) {
+                    console.log(app);
                     this.data = app;
                     this.data.title = name;
-                    this.getBooks("english");
+                    this.getBooksById();
                     // this.writeTable();
-                    if (this.data.phase[1]==0) {
-                        this.setServerResponse(this.data.phase[0],"fail");
-                    } else {
-                        this.setServerResponse(this.data.phase[0],"success");
-                    }
-
                 }
             }
         }
@@ -160,6 +198,31 @@ export class AppProducer implements OnInit{
         this.appProducerService.getAllLanguages()
             .subscribe(
                 (languages) => this.allLanguages = languages.results,
+                error => console.log(error)
+            );
+    }
+    getBooksById() {
+        this.bloomBooks = [];
+        if (this.data.books.length > 0) {
+            for (var i=0;i<this.data.books.length;i++) {
+                var trash:BloomBook = new BloomBook();
+                this.bloomBooks.push(trash);
+                this.pushBook(i);
+            }
+        }
+    }
+    pushBook(idx) {
+        this.appProducerService.getBookById(this.data.books[idx])
+            .subscribe(
+                (response) => {
+                    var a:BloomBook = new BloomBook();
+                    a.id = response.objectId;
+                    a.title = response.title;
+                    a.copyright = response.copyright;
+                    a.note = response.librarianNote;
+                    a["state"] = true;
+                    this.bloomBooks[idx] = a;
+                },
                 error => console.log(error)
             );
     }
@@ -371,7 +434,7 @@ export class AppProducer implements OnInit{
                                 this.appProducerService.createRelation(this.appDetailId, this.appSpecificId)
                                     .subscribe(
                                         (response3) => {
-                                            console.log(response3);
+                                            // console.log(response3);
                                         },
                                         error => console.log(error)
                                     );
@@ -385,18 +448,30 @@ export class AppProducer implements OnInit{
     
     putApp(field) {
         switch (field) {
-            /////// worry about books later, there must be someway to do it more effective
             case "books":
-                this.appProducerService.deleteBooksInApp(this.appSpecificId);
-                this.data.books=[];
-                this.readTable();
-                for (var i=0;i<this.data.books.length;i++) {
-                    this.appProducerService.addBooksInApp(this.data.books[i], this.appSpecificId,i)
-                        .subscribe(
-                            (response) => console.log(response),
-                            error => console.log(error)
-                        );
-                }
+                this.appProducerService.getBooksIdInApp(this.appSpecificId)
+                    .subscribe(
+                        (response) => {
+                            for (var j=0;j<response.results.length;j++) {
+                                this.appProducerService.deleteBookInApp(response.results[j].objectId)
+                                    .subscribe(
+                                        (response123) => console.log(response),
+                                        error => console.log(error)
+                                    );
+                            }
+                            this.data.books = [];
+                            this.readTable();
+                            for (var i = 0; i < this.data.books.length; i++) {
+                                this.appProducerService.addBookInApp(this.data.books[i], this.appSpecificId, i)
+                                    .subscribe(
+                                        (response) => console.log(response),
+                                        error => console.log(error)
+                                    );
+                            }
+                        },
+                        error => console.log(error)
+                    );
+
                 break;
             case "language":
                 this.appProducerService.putApp(this.data, field, this.appDetailId)
@@ -466,7 +541,7 @@ export class AppProducer implements OnInit{
     }
 
     onInit() {
-        this.getUserAppInfo(this.currentUser.id);
+        this.getUserAppInfo();
         this.setServerResponse(0,"");
         this.result = [];
         this.bloomBooks = [];
@@ -485,6 +560,6 @@ export class AppProducer implements OnInit{
         this.currentStage = "Setting Up";
         this.totalPages = [1];
         this.currentPage = 1;
-        this.postEmptyApp();
+        // this.postEmptyApp();
     }
 }
