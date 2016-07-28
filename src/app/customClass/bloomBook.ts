@@ -4,4 +4,5 @@ export class BloomBook {
     copyright: string;
     note: string;
     language: Array<string>;
+    state: boolean;
 }
