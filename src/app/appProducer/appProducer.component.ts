@@ -230,7 +230,7 @@ export class AppProducer implements OnInit{
     onColorSelect(name: string) {
         if (name) {
             this.data.color[0] = name;
-            this.data.color[1] = this.colorTable.name;
+            this.data.color[1] = this.colorTable[name];
             this.putApp("color");
         }
     }
