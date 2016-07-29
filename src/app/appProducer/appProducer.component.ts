@@ -268,7 +268,7 @@ export class AppProducer implements OnInit{
         } else {
             this.noBookInLanguageAlert = "Sorry, the Bloom library does not have any '" + language + "' books.";
             for (var i=0;i<this.allLanguages.length;i++) {
-                if (this.allLanguages[i].name == language) {
+                if (this.allLanguages[i].name.toLowerCase() == language.toLowerCase()) {
                     this.noBookInLanguageAlert = "";
                     this.appProducerService.getBooksByLanguage(this.allLanguages[i].objectId)
                         .subscribe((bloomBooks) => this.Books = bloomBooks.results,
