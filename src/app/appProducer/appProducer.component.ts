@@ -120,7 +120,6 @@ export class AppProducer implements OnInit{
     setLanguageSelect() {
         var a = document.getElementById("languageSelect").children;
         if (this.data.language) {
-            console.log(1);
             for(var i=0;i<a.length;i++) {
                 if (a[i]["value"] == this.data.language) {
                     a[i]["selected"] = true;
@@ -129,7 +128,6 @@ export class AppProducer implements OnInit{
                 }
             }
         } else {
-            console.log(2);
             var lan = navigator.language;
             var idx = lan.indexOf("-");
             if (idx>-1) {
@@ -140,6 +138,7 @@ export class AppProducer implements OnInit{
                 if (a[i]["value"].includes(lan)) {
                     a[i]["selected"] = true;
                     success = true;
+                    this.data.language = a[i]["value"];
                 } else {
                     a[i]["selected"] = false;
                 }
