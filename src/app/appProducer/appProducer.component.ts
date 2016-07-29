@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { AppInfo } from '../custom/appInfoClass';
 import { BloomBook } from '../custom/bloomBookClass';
+import { COLORTABLE } from '../custom/colorTable';
 import { AppProducerService } from './appProducer.service';
 declare var $:JQueryStatic;
 
@@ -39,6 +40,7 @@ export class AppProducer implements OnInit{
     data: AppInfo;
     bloomBooks: BloomBook[];
     serverResponse = [{}];
+    colorTable;
 
     // saveResponse = "";
 
@@ -64,6 +66,7 @@ export class AppProducer implements OnInit{
                         this.userApps[i].language = result.defaultStoreLanguageIso;
                         this.userApps[i].color = [];
                         this.userApps[i].color[0] = result.colorScheme;
+                        this.userApps[i].color[1] = this.colorTable[result.colorScheme];
                         this.userApps[i].icon = result.icon1024x1024;
                         this.userApps[i].feature = result.featureGraphic1024x500;
                         this.getAppDetailInfo(i);
@@ -140,10 +143,10 @@ export class AppProducer implements OnInit{
             this.putApp("language");
         }
     }
-    onColorSelect(style: string, name: string) {
-        if (style && name) {
+    onColorSelect(name: string) {
+        if (name) {
             this.data.color[0] = name;
-            this.data.color[1] = style;
+            this.data.color[1] = this.colorTable.name;
             this.putApp("color");
         }
     }
@@ -536,8 +539,8 @@ export class AppProducer implements OnInit{
         this.currentUser = {};
         this.currentUser["name"] = "Jacob";
         this.currentUser["id"] = "vUGQP4mbby";
+        this.colorTable = COLORTABLE;
         this.onInit();
-
     }
 
     onInit() {
