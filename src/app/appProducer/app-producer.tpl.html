@@ -7,7 +7,29 @@
                 <li style="border-top: 1px solid black;"><a (click)="onAppNameChange($event.target.text)">Create New App</a></li>
             </ul>
             <h2 [innerHTML]="data.title" style="margin-top: 0px;"></h2>
-            <button (click)="deleteApp()">delete this app</button>
+            <button type="button" (click)="showModal()">delete this app</button>
+            <div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" aria-label="Close" (click)="hideModal()">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">Delete App Specification</h4>
+                        </div>
+                        <div class="modal-body" [innerHTML]="modalContent"></div>
+                        <div class="modal-footer">
+                            <div *ngIf="appOnStore">
+                                <button type="button" aria-label="Close" (click)="hideModal()">OK</button>
+                            </div>
+                            <div *ngIf="!appOnStore">
+                                <button type="button" aria-label="Delete" (click)="deleteApp()">Delete</button>
+                                <button type="button" aria-label="Cancel" (click)="hideModal()">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-sm-3 col-xs-4" style="float: right" align="right">
             <span class="notes">Stage in Progress</span>
