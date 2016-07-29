@@ -101,6 +101,13 @@ export class AppProducerService {
         }
     }
 
+    deleteApp(id) {
+        return this.http.delete('https://api.parse.com/1/classes/appDetailsInLanguage/'+id,
+            { headers: AppProducerHeaders })
+
+            .map((response: Response) => response.json());
+    }
+
     postAppSpecific(app, userId) {
         var language = "";
         var idx = app.language.indexOf("-");
@@ -158,6 +165,13 @@ export class AppProducerService {
                     { headers: AppProducerHeaders })
                     .map((response: Response) => response.json());
         }
+    }
+
+    deleteAppSpecific(id) {
+        return this.http.delete('https://api.parse.com/1/classes/appSpecification/'+id,
+            { headers: AppProducerHeaders })
+
+            .map((response: Response) => response.json());
     }
 
     createRelation(appDetailId, appSpecificId) {

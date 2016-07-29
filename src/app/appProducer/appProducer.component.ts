@@ -156,6 +156,30 @@ export class AppProducer implements OnInit{
         }
     }
 
+    deleteApp() {
+        this.appProducerService.getBooksIdInApp(this.appSpecificId)
+            .subscribe(
+                (response) => {
+                    for (var j=0;j<response.results.length;j++) {
+                        this.appProducerService.deleteBookInApp(response.results[j].objectId)
+                            .subscribe(
+                                error => console.log(error)
+                            );
+                    }
+                    this.appProducerService.deleteApp(this.appDetailId)
+                        .subscribe(
+                            () => {
+                                this.appProducerService.deleteAppSpecific(this.appSpecificId)
+                                    .subscribe(
+                                        () => this.onInit()
+                                    )
+                            }
+                        );
+                },
+                error => console.log(error)
+            );
+    }
+
     // detail page
     onNavSelect(item: string) {
         switch(item) {
@@ -517,7 +541,6 @@ export class AppProducer implements OnInit{
                         },
                         error => console.log(error)
                     );
-
                 break;
             case "language":
                 this.appProducerService.putApp(this.data, field, this.appDetailId)
@@ -606,7 +629,7 @@ export class AppProducer implements OnInit{
         this.currentStage = "Setting Up";
         this.totalPages = [1];
         this.currentPage = 1;
-        // this.postEmptyApp();
+        this.postEmptyApp();
     }
 
     
