@@ -199,6 +199,7 @@ export class AppProducer implements OnInit{
                 },
                 error => console.log(error)
             );
+        this.childModal.hide();
     }
 
     // detail page
@@ -458,7 +459,7 @@ export class AppProducer implements OnInit{
         }
     }
     onBuild(data: AppInfo) {
-        return
+        this.setServerResponse(1,"success");
     }
 
     setServerResponse(id: number, response: string) {
@@ -650,7 +651,7 @@ export class AppProducer implements OnInit{
         this.currentStage = "Setting Up";
         this.totalPages = [1];
         this.currentPage = 1;
-        this.postEmptyApp();
+        // this.postEmptyApp();
         this.appOnStore = false;
         this.setDeleteMessage();
     }
