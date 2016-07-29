@@ -75,3 +75,7 @@ ul {
 .pageNumberActive {
     background-color: #cccccc;
 }
+.ILookLikeText {
+    background: transparent;
+    border: none;
+}

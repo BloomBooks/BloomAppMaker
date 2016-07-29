@@ -34,9 +34,9 @@
                 <div class="row" style="margin-bottom: 15px;">
                     <h4 style="margin-left: 15px;"><b>Books To Include In App</b></h4>
                     <p *ngIf="noBookInLanguageAlert" class="alert" [innerHTML]="noBookInLanguageAlert" style="padding-left: 15px;margin-bottom: 5px;"></p>
-                    <span style="margin-left: 15px;margin-right: 15px;">Language</span>
-                    <input #language type="text" (keyup.enter)="getBooks(language.value)" [disabled]="checkTable()" [class]="checkTable() ? 'content-disabled' : pass">
-                    <a (click)="checkTable() ? pass : getBooks(language.value)"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>
+                    <span style="margin-left: 15px;margin-right: 15px;">Language of Books:</span>
+                    <input #language type="text" (keyup.enter)="getBooks(language.value)" [disabled]="checkTable()" [class]="checkTable() ? 'ILookLikeText' : pass">
+                    <a *ngIf="!checkTable()" (click)="checkTable() ? pass : getBooks(language.value)"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>
                 </div>
                 <div class="row">
                     <div class="col-sm-7">
