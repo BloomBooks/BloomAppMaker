@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import {CORE_DIRECTIVES} from '@angular/common';
 
-import {TYPEAHEAD_DIRECTIVES} from 'ng2-bootstrap';
+import {TYPEAHEAD_DIRECTIVES, MODAL_DIRECTIVES, BS_VIEW_PROVIDERS} from 'ng2-bootstrap';
 
 import { AppInfo } from '../custom/appInfoClass';
 import { BloomBook } from '../custom/bloomBookClass';
@@ -13,7 +13,8 @@ declare var $:JQueryStatic;
     selector: 'app-producer',
     templateUrl: './app-producer.tpl.html',
     styleUrls: ['./app-producer.tpl.css'],
-    directives: [TYPEAHEAD_DIRECTIVES],
+    directives: [TYPEAHEAD_DIRECTIVES, MODAL_DIRECTIVES, CORE_DIRECTIVES],
+    viewProviders: [BS_VIEW_PROVIDERS],
     providers: [AppProducerService]
 })
 
@@ -45,6 +46,8 @@ export class AppProducer implements OnInit{
     bloomBooks: BloomBook[];
     serverResponse = [{}];
     colorTable;
+    appOnStore: boolean;
+    modalContent: string;
 
     // saveResponse = "";
 
@@ -57,7 +60,7 @@ export class AppProducer implements OnInit{
     currentPage: number;
 
     constructor(private appProducerService: AppProducerService) {}
-    
+
     // user app info
     getUserAppInfo() {
         this.appProducerService.getAppsByUserId(this.currentUser.id)
@@ -154,6 +157,24 @@ export class AppProducer implements OnInit{
                 this.setLanguageSelect();
             }
         }
+    }
+
+    @ViewChild('childModal') childModal;
+
+    setDeleteMessage() {
+        if (this.appOnStore) {
+            this.modalContent = "Sorry, we can't remove this app specification because the app is currently available on the Bloom Store. For further help, please write to issues@bloomlibrary.org.";
+        } else {
+            this.modalContent = "You are about to remove this app specification from BloomLibrary.org.";
+        }
+    }
+
+    showModal() {
+        this.childModal.show();
+    }
+
+    hideModal() {
+        this.childModal.hide();
     }
 
     deleteApp() {
@@ -630,6 +651,8 @@ export class AppProducer implements OnInit{
         this.totalPages = [1];
         this.currentPage = 1;
         this.postEmptyApp();
+        this.appOnStore = false;
+        this.setDeleteMessage();
     }
 
     
