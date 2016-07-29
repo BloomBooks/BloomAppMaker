@@ -108,11 +108,31 @@ export class AppProducer implements OnInit{
         } else {
             for (var app of this.userApps) {
                 if (app.title == name) {
-                    console.log(app);
                     this.data = app;
                     this.data.title = name;
+                    this.setLanguageSelect();
                     this.getBooksById();
-                    // this.writeTable();
+                }
+            }
+        }
+    }
+
+    setLanguageSelect() {
+        if (this.data.language) {
+            var a = document.getElementById("languageSelect").children;
+            for(var i=0;i<a.length;i++) {
+                if (a[i]["value"] == this.data.language) {
+                    a[i]["selected"] = true;
+                } else {
+                    a[i]["selected"] = false;
+                }
+            }
+        } else {
+            for(var i=0;i<a.length;i++) {
+                if (a[i]["value"] == "en-GB") {
+                    a[i]["selected"] = true;
+                } else {
+                    a[i]["selected"] = false;
                 }
             }
         }
@@ -543,6 +563,7 @@ export class AppProducer implements OnInit{
         this.onInit();
     }
 
+    // on new app
     onInit() {
         this.getUserAppInfo();
         this.setServerResponse(0,"");
@@ -556,9 +577,8 @@ export class AppProducer implements OnInit{
         this.data.icon = "../../assets/ab-001-black.png";
         this.data.feature = "../../assets/bloom-feature-graphic.png";
         this.data.books=[];
-        this.data.language = "ar";
-
-        this.appProducerService.postApp(this.data)
+        this.data.language = "en-GB";
+        this.setLanguageSelect();
 
         this.currentStage = "Setting Up";
         this.totalPages = [1];
