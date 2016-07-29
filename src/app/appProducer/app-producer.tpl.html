@@ -35,7 +35,7 @@
                     <h4 style="margin-left: 15px;"><b>Books To Include In App</b></h4>
                     <p *ngIf="noBookInLanguageAlert" class="alert" [innerHTML]="noBookInLanguageAlert" style="padding-left: 15px;margin-bottom: 5px;"></p>
                     <span style="margin-left: 15px;margin-right: 15px;">Language of Books:</span>
-                    <input #language type="text" (keyup.enter)="getBooks(language.value)" [disabled]="checkTable()" [class]="checkTable() ? 'ILookLikeText' : pass">
+                    <input #language type="text" [(ngModel)]="inputLanguage" [typeahead]="languageArray" (typeaheadOnSelect)="getBooks(language.value)" (keyup.enter)="getBooks(language.value)" [disabled]="checkTable()" id="languageSearch" [class]="checkTable() ? 'ILookLikeText' : pass" placeholder="Please input a language">
                     <a *ngIf="!checkTable()" (click)="checkTable() ? pass : getBooks(language.value)"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>
                 </div>
                 <div class="row">
@@ -64,7 +64,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="pagination" *ngIf="totalPages.length!=1">
+                        <div class="pagination" *ngIf="totalPages.length!=1&&bloomBooks.length!=0">
                             <ul>
                                 <li><a (click)="previousPage()" [class]="currentPage==1 ? 'content-disabled' : pass">Previous</a></li>
                                 <li *ngFor="let index of totalPages"><a *ngIf="displayNumber(index)" (click)="toPage(index)" [class]="currentPage==index ? 'pageNumberActive' : pass">{{index}}</a><span *ngIf="showDot(index)" style="background-color: #ffffff; color: #333333;">...</span></li>
