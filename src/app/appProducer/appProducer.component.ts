@@ -266,7 +266,7 @@ export class AppProducer implements OnInit{
         if (language == "") {
             this.noBookInLanguageAlert = "Please insert a language."
         } else {
-            this.noBookInLanguageAlert = "There is no book available in '" + language + "'";
+            this.noBookInLanguageAlert = "Sorry, the Bloom library does not have any '" + language + "' books.";
             for (var i=0;i<this.allLanguages.length;i++) {
                 if (this.allLanguages[i].name == language) {
                     this.noBookInLanguageAlert = "";
