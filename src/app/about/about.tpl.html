@@ -1,7 +1,7 @@
 <div class="container">
     <h3>Paper, PDFs EBooks, and now Apps!</h3>
     <p>The Bloom Editor (Windows and Linux) makes it easy to create books in your mother tongue.  In Bloom's "Publish" tab, you can print your book, make a PDF to send to a print shop, or save your book as an EPUB ebook. The "Publish" tab also allows you to upload you book here, to the Bloom Library. Once here, you can easily make an Android app that contains one or more books.  We'll even put your book on the Google Play Store!</p>
-    <p>To start making an app for your books, you must be logged in (look in upper-right corner).</p>
+    <p *ngIf="currentUser == undefined">To start making an app for your books, you must be logged in (look in upper-right corner).</p>
     <a [routerLink]="['/']">Go to the Bloom App Maker</a>
     <h3>Custom Organization Publishing</h3>
     <p>The Bloom App Maker publishes books under the name "BloomLibrary.org". If instead you'd like to publish under your organization's name and logo, we can do that too. Please contact our partners at SIL-LEAD.</p>

@@ -6,4 +6,9 @@ import { Component } from '@angular/core';
     styleUrls: ['./about.tpl.css']
 })
 
-export class About {}
+export class About {
+    currentUser = {
+        "name": "Jacob",
+        "id": "vUGQP4mbby"
+    }
+}
