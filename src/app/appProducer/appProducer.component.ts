@@ -118,8 +118,9 @@ export class AppProducer implements OnInit{
     }
 
     setLanguageSelect() {
+        var a = document.getElementById("languageSelect").children;
         if (this.data.language) {
-            var a = document.getElementById("languageSelect").children;
+            console.log(1);
             for(var i=0;i<a.length;i++) {
                 if (a[i]["value"] == this.data.language) {
                     a[i]["selected"] = true;
@@ -128,12 +129,24 @@ export class AppProducer implements OnInit{
                 }
             }
         } else {
+            console.log(2);
+            var lan = navigator.language;
+            var idx = lan.indexOf("-");
+            if (idx>-1) {
+                lan = lan.substring(0,idx);
+            }
+            var success = false;
             for(var i=0;i<a.length;i++) {
-                if (a[i]["value"] == "en-GB") {
+                if (a[i]["value"].includes(lan)) {
                     a[i]["selected"] = true;
+                    success = true;
                 } else {
                     a[i]["selected"] = false;
                 }
+            }
+            if (success == false) {
+                this.data.language = "en-GB";
+                this.setLanguageSelect();
             }
         }
     }
@@ -577,12 +590,12 @@ export class AppProducer implements OnInit{
         this.data.icon = "../../assets/ab-001-black.png";
         this.data.feature = "../../assets/bloom-feature-graphic.png";
         this.data.books=[];
-        this.data.language = "en-GB";
         this.setLanguageSelect();
 
         this.currentStage = "Setting Up";
         this.totalPages = [1];
         this.currentPage = 1;
         // this.postEmptyApp();
+
     }
 }
