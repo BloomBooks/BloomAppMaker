@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {Observable} from 'rxjs/Observable';
+
+import {TYPEAHEAD_DIRECTIVES} from 'ng2-bootstrap';
 
 import { AppInfo } from '../custom/appInfoClass';
 import { BloomBook } from '../custom/bloomBookClass';
@@ -10,6 +13,7 @@ declare var $:JQueryStatic;
     selector: 'app-producer',
     templateUrl: './app-producer.tpl.html',
     styleUrls: ['./app-producer.tpl.css'],
+    directives: [TYPEAHEAD_DIRECTIVES],
     providers: [AppProducerService]
 })
 
@@ -47,6 +51,8 @@ export class AppProducer implements OnInit{
     bookPerPage: number = 15;
     Books;
     allLanguages;
+    languageArray: string[];
+    inputLanguage: string = "";
     totalPages: number[];
     currentPage: number;
 
@@ -232,7 +238,12 @@ export class AppProducer implements OnInit{
     getAllLanguages() {
         this.appProducerService.getAllLanguages()
             .subscribe(
-                (languages) => this.allLanguages = languages.results,
+                (languages) => {
+                    this.allLanguages = languages.results;
+                    for(var i=0;i<languages.results.length;i++) {
+                        this.languageArray.push(languages.results[i].name);
+                    }
+                },
                 error => console.log(error)
             );
     }
@@ -264,7 +275,7 @@ export class AppProducer implements OnInit{
     getBooks(language: string) {
         this.bloomBooks = [];
         if (language == "") {
-            this.noBookInLanguageAlert = "Please insert a language."
+            this.noBookInLanguageAlert = "Please insert a language.";
         } else {
             this.noBookInLanguageAlert = "Sorry, the Bloom library does not have any '" + language + "' books.";
             for (var i=0;i<this.allLanguages.length;i++) {
@@ -567,6 +578,7 @@ export class AppProducer implements OnInit{
     
     // on start
     ngOnInit() {
+        this.languageArray = [];
         this.getAllLanguages();
         this.currentUser = {};
         this.currentUser["name"] = "Jacob";
@@ -595,6 +607,7 @@ export class AppProducer implements OnInit{
         this.totalPages = [1];
         this.currentPage = 1;
         // this.postEmptyApp();
-
     }
+
+    
 }
