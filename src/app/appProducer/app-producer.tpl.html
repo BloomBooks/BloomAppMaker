@@ -232,7 +232,7 @@
             </div>
 
             <div #process [class]="'tab-pane ' + processClass" id="process">
-                <h4><b>process</b></h4>
+                <h4><b>Process</b></h4>
                 <div class="row">
                     <div class="col-sm-5">
                         <ol class="processList">
@@ -245,7 +245,7 @@
                                         <b>Setting Up</b>
                                         <div class="row">
                                             <p *ngIf="currentStage=='Setting Up'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
-                                            <p class="noMargin">Fill out all the App Details and select books. When you're ready, click this button;</p>
+                                            <p class="noMargin pWithButton">Fill out all the App Details and select books. When you're ready, click this button;</p>
                                             <button style="float: right;margin-right: 15px;" (click)="checkField()" [disabled]="currentStage!='Setting Up'" [class]="currentStage=='Setting Up' ? 'blackText' : 'content-disabled'">Make my App</button>
                                         </div>
                                     </li>
@@ -294,7 +294,7 @@
                                         <b>Private on Play Store</b>
                                         <div class="row">
                                             <p *ngIf="currentStage=='Private on Play Store'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
-                                            <p>Your app can now be installed <a><u [class]="currentStage=='Private on Play Store' ? 'link' : 'link-disabled'">from the Play Store</u></a>, but the public won't see it until you're ready</p>
+                                            <p class="pWithButton">Your app can now be installed <a><u [class]="currentStage=='Private on Play Store' ? 'link' : 'link-disabled'">from the Play Store</u></a>, but the public won't see it until you're ready</p>
                                             <button style="float: right;margin-right: 15px;" [disabled]="currentStage!='Private on Play Store'" [class]="currentStage=='Private on Play Store' ? 'blackText' : 'content-disabled'">Go Public</button>
                                         </div>
                                     </li>
@@ -309,10 +309,10 @@
                                         <b>Public on Play Store</b>
                                         <div class="row">
                                             <p *ngIf="currentStage=='Public on Play Store'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
-                                            <p>Your book is now <a><u [class]="currentStage=='Public on Play Store' ? 'link' : 'link-disabled'">on the store</u></a> andfreely available for anyone with a compatible device.
+                                            <p class="pWithButton">Your book is now <a><u [class]="currentStage=='Public on Play Store' ? 'link' : 'link-disabled'">on the store</u></a> andfreely available for anyone with a compatible device.
                                                 You can always publish new editions using new or updated books, and people with the app will get the new version automatically.</p>
-                                            <p>If you change your mind, you can <a><u [class]="currentStage=='Public on Play Store' ? 'link' : 'link-disabled'">Go Private</u></a> again.</p>
-                                            <p>If you want to make changes to the app, click this button:</p>
+                                            <p class="pWithButton">If you change your mind, you can <a><u [class]="currentStage=='Public on Play Store' ? 'link' : 'link-disabled'">Go Private</u></a> again.</p>
+                                            <p class="pWithButton">If you want to make changes to the app, click this button:</p>
                                             <button style="float: right;margin-right: 15px;" [disabled]="currentStage!='Public on Play Store'" [class]="currentStage=='Public on Play Store' ? 'blackText' : 'content-disabled'">Make a new version of this App</button>
                                         </div>
                                     </li>
