@@ -48,6 +48,7 @@ export class AppProducer implements OnInit{
     colorTable;
     appOnStore: boolean;
     modalContent: string;
+    bookNotUpdated: boolean = false;
 
     // saveResponse = "";
 
@@ -78,6 +79,7 @@ export class AppProducer implements OnInit{
                         this.userApps[i].color[1] = this.colorTable[result.colorScheme];
                         this.userApps[i].icon = result.icon1024x1024;
                         this.userApps[i].feature = result.featureGraphic1024x500;
+                        this.userApps[i].createAt = result.createAt;
                         this.getAppDetailInfo(i);
                         this.getBooksInApp(result.objectId, i);
                     }
@@ -299,11 +301,11 @@ export class AppProducer implements OnInit{
             for (var i=0;i<this.data.books.length;i++) {
                 var trash:BloomBook = new BloomBook();
                 this.bloomBooks.push(trash);
-                this.pushBook(i);
+                this.getBookByBookId(i);
             }
         }
     }
-    pushBook(idx) {
+    getBookByBookId(idx) {
         this.appProducerService.getBookById(this.data.books[idx])
             .subscribe(
                 (response) => {
@@ -314,6 +316,11 @@ export class AppProducer implements OnInit{
                     a.note = response.librarianNote;
                     a["state"] = true;
                     this.bloomBooks[idx] = a;
+                    if (this.data.createAt != undefined) {
+                        if (response.createAt!=response.updateAt && response.updateAt>this.data.createAt) {
+                            this.bookNotUpdated = true;
+                        }
+                    }
                 },
                 error => console.log(error)
             );

@@ -9,5 +9,6 @@ export class AppInfo {
     icon: string;
     feature: string;
     books: Array<string>;
-    phase: Array<number>
+    phase: Array<number>;
+    createAt: string;
 }
