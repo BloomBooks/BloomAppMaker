@@ -50,7 +50,11 @@ export class AppProducer implements OnInit{
     modalContent: string;
     bookNotUpdated: boolean = false;
 
-    // saveResponse = "";
+    stageOneMessage: string = "";
+    stageTwoMessage: string = "";
+    stageThreeMessage: string = "";
+    stageFourMessage: string = "";
+    stageFiveMessage: string = "";
 
     bookPerPage: number = 15;
     Books;
@@ -466,7 +470,45 @@ export class AppProducer implements OnInit{
         }
     }
     onBuild(data: AppInfo) {
-        this.setServerResponse(1,"success");
+        this.stageOneMessage = "Sending data to the server...";
+        setTimeout(
+            ()=>{
+                this.setServerResponse(1,"success");
+                this.stageOneMessage = "";
+                this.stageTwoMessage = "Request received, start making the app.";
+                setTimeout(
+                    ()=>{
+                        this.setServerResponse(2,"success");
+                        this.stageTwoMessage = "";
+                        this.stageThreeMessage = "App built, publishing on Play Store.";
+                        setTimeout(
+                            ()=>{
+                                this.setServerResponse(3,"success");
+                                this.stageThreeMessage = "";
+                            },10000
+                        );
+                    },10000
+                );
+            },3000
+        );
+    }
+    goToStageFive() {
+        this.stageFourMessage = "Request Received.";
+        setTimeout(
+            ()=>{
+                this.setServerResponse(4,"success");
+                this.stageFourMessage = "";
+            },2000
+        );
+    }
+    goToStageFour() {
+        this.stageFiveMessage = "Request Received.";
+        setTimeout(
+            ()=>{
+                this.setServerResponse(5,"success");
+                this.stageFiveMessage = "";
+            },2000
+        );
     }
 
     setServerResponse(id: number, response: string) {

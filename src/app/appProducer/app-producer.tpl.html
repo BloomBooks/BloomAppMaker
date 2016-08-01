@@ -246,7 +246,8 @@
                                     <li [class]="currentStage=='Setting Up' ? 'blackText' : 'content-disabled'">
                                         <b>Setting Up</b>
                                         <div class="row">
-                                            <p *ngIf="currentStage=='Setting Up'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
+                                            <p *ngIf="currentStage=='Setting Up'" [innerHTML]="stageOneMessage" class="success" style="padding-left: 15px;"></p>
+                                            <p *ngIf="currentStage=='Setting Up'&&requestFailedError" class="alert" [innerHTML]="requestFailedError" style="padding-left: 15px;"></p>
                                             <p class="noMargin pWithButton">Fill out all the App Details and select books. When you're ready, click this button;</p>
                                             <button style="float: right;margin-right: 15px;" (click)="checkField()" [disabled]="currentStage!='Setting Up'" [class]="currentStage=='Setting Up' ? 'blackText' : 'content-disabled'">Make my App</button>
                                         </div>
@@ -260,6 +261,7 @@
                                 <div class="col-md-10 col-xs-9">
                                     <li [class]="currentStage=='Making App' ? 'blackText' : 'content-disabled'">
                                         <b>Making App</b>
+                                        <p *ngIf="currentStage=='Making App'" [innerHTML]="stageTwoMessage" class="success"></p>
                                         <p *ngIf="currentStage=='Making App'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
                                         <p>Our server is making your Android app! This usually takes about 10 minutes.</p>
                                     </li>
@@ -272,6 +274,7 @@
                                 <div class="col-md-10 col-xs-9">
                                     <li [class]="currentStage=='Submitting to Play Store' ? 'blackText' : 'content-disabled'">
                                         <b>Submitting to Play Store</b>
+                                        <p *ngIf="currentStage=='Submitting to Play Store'" [innerHTML]="stageThreeMessage" class="success"></p>
                                         <p *ngIf="currentStage=='Submitting to Play Store'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
                                         <p>We are submitting your app to the Google Play Store. If this is the first edition, one of
                                             our staff will get things ready for Google, and this can take anywhere from an hour to several days.
@@ -295,9 +298,10 @@
                                     <li [class]="currentStage=='Private on Play Store' ? 'blackText' : 'content-disabled'">
                                         <b>Private on Play Store</b>
                                         <div class="row">
+                                            <p *ngIf="currentStage=='Private on Play Store'" [innerHTML]="stageFourMessage" class="success" style="padding-left: 15px;"></p>
                                             <p *ngIf="currentStage=='Private on Play Store'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
                                             <p class="pWithButton">Your app can now be installed <a><u [class]="currentStage=='Private on Play Store' ? 'link' : 'link-disabled'">from the Play Store</u></a>, but the public won't see it until you're ready</p>
-                                            <button style="float: right;margin-right: 15px;" [disabled]="currentStage!='Private on Play Store'" [class]="currentStage=='Private on Play Store' ? 'blackText' : 'content-disabled'">Go Public</button>
+                                            <button style="float: right;margin-right: 15px;" [disabled]="currentStage!='Private on Play Store'" [class]="currentStage=='Private on Play Store' ? 'blackText' : 'content-disabled'" (click)="goToStageFive()">Go Public</button>
                                         </div>
                                     </li>
                                 </div>
@@ -310,10 +314,11 @@
                                     <li [class]="currentStage=='Public on Play Store' ? 'blackText' : 'content-disabled'">
                                         <b>Public on Play Store</b>
                                         <div class="row">
+                                            <p *ngIf="currentStage=='Public on Play Store'" [innerHTML]="stageFiveMessage" class="success" style="padding-left: 15px;"></p>
                                             <p *ngIf="currentStage=='Public on Play Store'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
                                             <p class="pWithButton">Your book is now <a><u [class]="currentStage=='Public on Play Store' ? 'link' : 'link-disabled'">on the store</u></a> andfreely available for anyone with a compatible device.
                                                 You can always publish new editions using new or updated books, and people with the app will get the new version automatically.</p>
-                                            <p class="pWithButton">If you change your mind, you can <a><u [class]="currentStage=='Public on Play Store' ? 'link' : 'link-disabled'">Go Private</u></a> again.</p>
+                                            <p class="pWithButton">If you change your mind, you can <a><u [class]="currentStage=='Public on Play Store' ? 'link' : 'link-disabled'" (click)="goToStageFour()">Go Private</u></a> again.</p>
                                             <p class="pWithButton">If you want to make changes to the app, click this button:</p>
                                             <button style="float: right;margin-right: 15px;" [disabled]="currentStage!='Public on Play Store'" [class]="currentStage=='Public on Play Store' ? 'blackText' : 'content-disabled'">Make a new version of this App</button>
                                         </div>
@@ -321,25 +326,6 @@
                                 </div>
                             </div>
                         </ol>
-                    </div>
-                </div>
-                <div>
-                    <p *ngIf="currentStage!='Setting Up'">Use these buttons to control server response and see what should happen</p>
-                    <div *ngIf="currentStage=='Making App'">
-                        <input type="button" value="app build success" (click)="setServerResponse(2,'success')">
-                        <input type="button" value="app build failed" (click)="setServerResponse(2,'fail')">
-                    </div>
-                    <div *ngIf="currentStage=='Submitting to Play Store'">
-                        <input type="button" value="submitting success" (click)="setServerResponse(3,'success')">
-                        <input type="button" value="submitting failed" (click)="setServerResponse(3,'fail')">
-                    </div>
-                    <div *ngIf="currentStage=='Private on Play Store'">
-                        <input type="button" value="go public success" (click)="setServerResponse(4,'success')">
-                        <input type="button" value="go public failed" (click)="setServerResponse(4,'fail')">
-                    </div>
-                    <div *ngIf="currentStage=='Public on Play Store'">
-                        <input type="button" value="go private success" (click)="setServerResponse(5,'success')">
-                        <input type="button" value="go private failed" (click)="setServerResponse(5,'fail')">
                     </div>
                 </div>
             </div>
