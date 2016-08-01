@@ -18,6 +18,24 @@ export class AppProducerService {
         return this.http.get('https://api.parse.com/1/classes/appDetailsInLanguage?where={"$relatedTo":{"object":{"__type":"Pointer","className":"appSpecification","objectId":"'+id+'"},"key":"details"}}', { headers: AppProducerHeaders })
             .map((response: Response) => response.json());
     }
+    
+    getLastModifiedApp(userId) {
+        return this.http.get('https://api.parse.com/1/classes/_User/'+userId, { headers: AppProducerHeaders })
+            .map((response: Response) => response.json());
+    }
+
+    pushLastModifiedApp(userId, appId) {
+        return this.http.put('https://api.parse.com/1/classes/_User/'+userId,
+            {
+                "lastAppSpecification": {
+                    "__type": "Pointer",
+                    "className": "_User",
+                    "objectId": appId
+                }
+            },
+            { headers: AppProducerHeaders })
+            .map((response: Response) => response.json());
+    }
     // saveApp(app: AppInfo, username: string) {
     //     if (app.id === undefined) {
     //         app.id = APPINFOS[APPINFOS.length-1].id + 1;

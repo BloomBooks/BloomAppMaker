@@ -87,9 +87,10 @@ export class AppProducer implements OnInit{
                         this.getAppDetailInfo(i);
                         this.getBooksInApp(result.objectId, i);
                     }
+                    // this.onLoad();
                 },
                 error => console.log(error)
-            )
+            );
     }
 
     getAppDetailInfo(idx: number) {
@@ -118,15 +119,17 @@ export class AppProducer implements OnInit{
     }
 
     onAppNameChange(name: string) {
+        this.getUserAppInfo();
         if (name == "Create New App") {
             this.onInit();
         } else {
             for (var app of this.userApps) {
                 if (app.title == name) {
                     this.data = app;
-                    this.data.title = name;
+                    // this.data.title = name;
                     this.setLanguageSelect();
                     this.getBooksById();
+                    // this.appProducerService.pushLastModifiedApp(this.currentUser.id, this.appSpecificId).subscribe();
                 }
             }
         }
@@ -242,9 +245,11 @@ export class AppProducer implements OnInit{
     }
     selectFromDefault (src: string, name: string) {
         if (name == 'icon') {
+            this.iconError = "";
             this.data.icon = src;
             this.putApp("icon");
         } else if (name == 'feature') {
+            this.featureError = "";
             this.data.feature = src;
             this.putApp("feature");
         }
@@ -438,21 +443,21 @@ export class AppProducer implements OnInit{
             this.titleError = "Required title field.";
             this.hasError = true;
         } else if (this.data.title.length > 30) {
-            this.titleError = "title field cannot exceed 30 characters.";
+            this.titleError = "Title field cannot exceed 30 characters.";
             this.hasError = true;
         }
         if (!this.data.shortDescription) {
             this.shortDError = "Required short description field.";
             this.hasError = true;
         } else if (this.data.shortDescription.length > 80) {
-            this.shortDError = "short description field cannot exceed 80 characters.";
+            this.shortDError = "Short description field cannot exceed 80 characters.";
             this.hasError = true;
         }
         if (!this.data.fullDescription) {
             this.fullDError = "Required full description field.";
             this.hasError = true;
         } else if (this.data.fullDescription.length > 4000) {
-            this.fullDError = "full description field cannot exceed 4000 characters.";
+            this.fullDError = "Full description field cannot exceed 4000 characters.";
             this.hasError = true;
         }
         this.readTable();
@@ -462,7 +467,7 @@ export class AppProducer implements OnInit{
         }
         if (!this.hasError) {
             this.hasValue = true;
-            console.log(this.data);
+            this.requestFailedError = "";
             this.onBuild(this.data);
         } else {
             // tecnically, this should be called client side response
@@ -485,6 +490,8 @@ export class AppProducer implements OnInit{
                             ()=>{
                                 this.setServerResponse(3,"success");
                                 this.stageThreeMessage = "";
+                                this.appOnStore = true;
+                                this.setDeleteMessage();
                             },10000
                         );
                     },10000
@@ -572,11 +579,9 @@ export class AppProducer implements OnInit{
                         .subscribe(
                             (response2) => {
                                 this.appSpecificId = response2.objectId;
+                                // this.appProducerService.pushLastModifiedApp(this.currentUser.id, this.appSpecificId).subscribe();
                                 this.appProducerService.createRelation(this.appDetailId, this.appSpecificId)
                                     .subscribe(
-                                        (response3) => {
-                                            // console.log(response3);
-                                        },
                                         error => console.log(error)
                                     );
                             },
@@ -626,25 +631,47 @@ export class AppProducer implements OnInit{
                     );
                 break;
             case "title":
-                this.appProducerService.putApp(this.data, field, this.appDetailId)
-                    .subscribe(
-                        (response) => console.log(response),
-                        error => console.log(error)
-                    );
+                this.titleError = "";
+                if (!this.data.title) {
+                    this.titleError = "Required title field.";
+                } else if (this.data.title.length > 30) {
+                    this.titleError = "Title field cannot exceed 30 characters.";
+                    this.hasError = true;
+                } else {
+                    this.appProducerService.putApp(this.data, field, this.appDetailId)
+                        .subscribe(
+                            (response) => console.log(response),
+                            error => console.log(error)
+                        );
+                }
                 break;
             case "short":
-                this.appProducerService.putApp(this.data, field, this.appDetailId)
-                    .subscribe(
-                        (response) => console.log(response),
-                        error => console.log(error)
-                    );
+                this.shortDError = "";
+                if (!this.data.shortDescription) {
+                    this.shortDError = "Required short description field.";
+                } else if (this.data.shortDescription.length > 80) {
+                    this.shortDError = "Short description field cannot exceed 80 characters.";
+                } else {
+                    this.appProducerService.putApp(this.data, field, this.appDetailId)
+                        .subscribe(
+                            (response) => console.log(response),
+                            error => console.log(error)
+                        );
+                }
                 break;
             case "full":
-                this.appProducerService.putApp(this.data, field, this.appDetailId)
-                    .subscribe(
-                        (response) => console.log(response),
-                        error => console.log(error)
-                    );
+                this.fullDError = "";
+                if (!this.data.fullDescription) {
+                    this.fullDError = "Required full description field.";
+                } else if (this.data.fullDescription.length > 4000) {
+                    this.fullDError = "Full description field cannot exceed 4000 characters.";
+                } else {
+                    this.appProducerService.putApp(this.data, field, this.appDetailId)
+                        .subscribe(
+                            (response) => console.log(response),
+                            error => console.log(error)
+                        );
+                }
                 break;
             case "color":
                 this.appProducerService.putAppSpecific(this.data, field, this.appSpecificId)
@@ -669,7 +696,32 @@ export class AppProducer implements OnInit{
                 break;
         }
     }
-    
+
+    // onLoad() {
+    //     this.appProducerService.getLastModifiedApp(this.currentUser.id)
+    //         .subscribe(
+    //             (response) => {
+    //                 if (response.lastAppSpecification) {
+    //                     var success = false;
+    //                     for (var i=0;i<this.userApps.length;i++) {
+    //                         if (response.lastAppSpecification == this.userApps[i].appSpecificationId) {
+    //                             success = true;
+    //                             this.data = this.userApps[i];
+    //                             this.setLanguageSelect();
+    //                             this.getBooksById();
+    //                         }
+    //                     }
+    //                     if (!success) {
+    //                         this.onInit();
+    //                     }
+    //                 } else {
+    //                     this.onInit();
+    //                 }
+    //             },
+    //             error => console.log(error)
+    //         );
+    // }
+
     // on start
     ngOnInit() {
         this.languageArray = [];
@@ -678,12 +730,12 @@ export class AppProducer implements OnInit{
         this.currentUser["name"] = "Jacob";
         this.currentUser["id"] = "vUGQP4mbby";
         this.colorTable = COLORTABLE;
+        this.getUserAppInfo();
         this.onInit();
     }
 
     // on new app
     onInit() {
-        this.getUserAppInfo();
         this.setServerResponse(0,"");
         this.result = [];
         this.bloomBooks = [];
