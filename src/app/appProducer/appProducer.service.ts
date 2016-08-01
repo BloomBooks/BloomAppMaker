@@ -19,11 +19,13 @@ export class AppProducerService {
             .map((response: Response) => response.json());
     }
     
+    //not currently used
     getLastModifiedApp(userId) {
         return this.http.get('https://api.parse.com/1/classes/_User/'+userId, { headers: AppProducerHeaders })
             .map((response: Response) => response.json());
     }
 
+    //not currently used
     pushLastModifiedApp(userId, appId) {
         return this.http.put('https://api.parse.com/1/classes/_User/'+userId,
             {
@@ -36,35 +38,6 @@ export class AppProducerService {
             { headers: AppProducerHeaders })
             .map((response: Response) => response.json());
     }
-    // saveApp(app: AppInfo, username: string) {
-    //     if (app.id === undefined) {
-    //         app.id = APPINFOS[APPINFOS.length-1].id + 1;
-    //         var app_copy = JSON.parse(JSON.stringify(app));
-    //         APPINFOS.push(app_copy);
-    //         for (var user of USERINFOS) {
-    //             if (user.username == username) {
-    //                 user.apps.push(app.id);
-    //             }
-    //         }
-    //         return Promise.resolve("201");
-    //     } else {
-    //         for (var oldApp of APPINFOS) {
-    //             if (oldApp.id == app.id) {
-    //                 oldApp.title = app.title;
-    //                 oldApp.shortDescription = app.shortDescription;
-    //                 oldApp.fullDescription = app.fullDescription;
-    //                 oldApp.color = app.color;
-    //                 oldApp.icon = app.icon;
-    //                 oldApp.feature = app.feature;
-    //                 oldApp.books = app.books.slice();
-    //                 oldApp.phase = app.phase.slice();
-    //                 console.log(APPINFOS);
-    //                 return Promise.resolve("202");
-    //             }
-    //         }
-    //     }
-    //     return Promise.resolve("404");
-    // }
 
     getBookById(id: string) {
         return this.http.get('https://api.parse.com/1/classes/books/'+id,{ headers: AppProducerHeaders })
@@ -81,7 +54,7 @@ export class AppProducerService {
             .map((response: Response) => response.json());
     }
 
-    postApp(app) {
+    postAppDetails(app) {
         return this.http.post('https://api.parse.com/1/classes/appDetailsInLanguage',
             {
                 "androidStoreLanguageIso": app.language,
@@ -94,7 +67,7 @@ export class AppProducerService {
             .map((response: Response) => response.json());
     }
 
-    putApp(app, field, id) {
+    putAppDetails(app, field, id) {
         switch(field) {
             case "language":
                 return this.http.put('https://api.parse.com/1/classes/appDetailsInLanguage/'+id,
@@ -119,7 +92,7 @@ export class AppProducerService {
         }
     }
 
-    deleteApp(id) {
+    deleteAppDetails(id) {
         return this.http.delete('https://api.parse.com/1/classes/appDetailsInLanguage/'+id,
             { headers: AppProducerHeaders })
 
@@ -242,4 +215,11 @@ export class AppProducerService {
 
             .map((response: Response) => response.json());
     }
+
+    // use this function to get the server response, need to replace 'URL' and Headers with the real ones
+    // getServerProcess() {
+    //     return this.http.get('URL',{ headers: Headers})
+    //    
+    //         .map((response: Response) => response.json());
+    // }
 }

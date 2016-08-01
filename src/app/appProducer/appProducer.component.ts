@@ -66,6 +66,41 @@ export class AppProducer implements OnInit{
 
     constructor(private appProducerService: AppProducerService) {}
 
+    // on start
+    ngOnInit() {
+        this.languageArray = [];
+        this.getAllLanguages();
+        this.currentUser = {};
+        this.currentUser["name"] = "Jacob";
+        this.currentUser["id"] = "vUGQP4mbby";
+        this.colorTable = COLORTABLE;
+        this.getUserAppInfo();
+        this.onInit();
+    }
+
+    // on new app
+    onInit() {
+        this.setServerResponse(0,"");
+        this.result = [];
+        this.bloomBooks = [];
+        this.data = new AppInfo();
+        this.data.title = "Untitled"
+        this.data.color = [];
+        this.data.color[0] = "Dark Green";
+        this.data.color[1] = "#083F0E";
+        this.data.icon = "../../assets/ab-001-black.png";
+        this.data.feature = "../../assets/bloom-feature-graphic.png";
+        this.data.books=[];
+        this.setLanguageSelect();
+
+        this.currentStage = "Setting Up";
+        this.totalPages = [1];
+        this.currentPage = 1;
+        // this.postEmptyApp();
+        this.appOnStore = false;
+        this.setDeleteMessage();
+    }
+
     // user app info
     getUserAppInfo() {
         this.appProducerService.getAppsByUserId(this.currentUser.id)
@@ -102,7 +137,7 @@ export class AppProducer implements OnInit{
                     this.userApps[idx].shortDescription = response.results[0].shortDescription;
                     this.userApps[idx].fullDescription = response.results[0].fullDescription;
                 }
-            )
+            );
     }
 
     getBooksInApp(id: string, idx:number) {
@@ -115,9 +150,10 @@ export class AppProducer implements OnInit{
                     }
                 },
                 error => console.log(error)
-            )
+            );
     }
 
+    // title field and nav bar
     onAppNameChange(name: string) {
         this.getUserAppInfo();
         if (name == "Create New App") {
@@ -126,7 +162,6 @@ export class AppProducer implements OnInit{
             for (var app of this.userApps) {
                 if (app.title == name) {
                     this.data = app;
-                    // this.data.title = name;
                     this.setLanguageSelect();
                     this.getBooksById();
                     // this.appProducerService.pushLastModifiedApp(this.currentUser.id, this.appSpecificId).subscribe();
@@ -196,7 +231,7 @@ export class AppProducer implements OnInit{
                                 error => console.log(error)
                             );
                     }
-                    this.appProducerService.deleteApp(this.appDetailId)
+                    this.appProducerService.deleteAppDetails(this.appDetailId)
                         .subscribe(
                             () => {
                                 this.appProducerService.deleteAppSpecific(this.appSpecificId)
@@ -210,8 +245,7 @@ export class AppProducer implements OnInit{
             );
         this.childModal.hide();
     }
-
-    // detail page
+    
     onNavSelect(item: string) {
         switch(item) {
             case "detail":
@@ -230,28 +264,30 @@ export class AppProducer implements OnInit{
                 this.processClass = "active";
         }
     }
+
+    // detail page
     onLanguageSelect(language: string) {
         if (language) {
             this.data.language = language;
-            this.putApp("language");
+            this.putAppDetails("language");
         }
     }
     onColorSelect(name: string) {
         if (name) {
             this.data.color[0] = name;
             this.data.color[1] = this.colorTable[name];
-            this.putApp("color");
+            this.putAppDetails("color");
         }
     }
     selectFromDefault (src: string, name: string) {
         if (name == 'icon') {
             this.iconError = "";
             this.data.icon = src;
-            this.putApp("icon");
+            this.putAppDetails("icon");
         } else if (name == 'feature') {
             this.featureError = "";
             this.data.feature = src;
-            this.putApp("feature");
+            this.putAppDetails("feature");
         }
     }
     onFileSelect (file, name: string) {
@@ -269,7 +305,7 @@ export class AppProducer implements OnInit{
                             this.iconError = "icon has to be 512px x 512px, this image is "+img.height+"px x "+img.width+"px";
                         } else {
                             this.data.icon = reader.result;
-                            this.putApp("icon");
+                            this.putAppDetails("icon");
                         }
                     });
                     reader.readAsDataURL(file.files[0]);
@@ -282,7 +318,7 @@ export class AppProducer implements OnInit{
                             this.featureError = "feature graphic has to be 500px x 1024px, this image is "+img.height+"px x "+img.width+"px";
                         } else {
                             this.data.feature = reader.result;
-                            this.putApp("feature");
+                            this.putAppDetails("feature");
                         }
                     });
                     reader.readAsDataURL(file.files[0]);
@@ -365,6 +401,7 @@ export class AppProducer implements OnInit{
             }
         }
     }
+
     move($event) {
         var button = $event.target;
         var row = $(button).closest('tr');
@@ -376,6 +413,7 @@ export class AppProducer implements OnInit{
             row.next().after(row);
         }
     }
+
     readTable() {
         var row = <HTMLElement[]><any>document.getElementsByClassName("tableContent");
         for(var i=0;i<row.length;i++) {
@@ -385,6 +423,8 @@ export class AppProducer implements OnInit{
             }
         }
     }
+
+    // used for paging on book table
     previousPage() {
         if (this.currentPage > 1) {
             this.currentPage -= 1;
@@ -421,6 +461,7 @@ export class AppProducer implements OnInit{
         }
         return false
     }
+
     checkTable() {
         for (var i=0;i<this.bloomBooks.length;i++) {
             if (this.bloomBooks[i]["state"] === true) {
@@ -474,6 +515,8 @@ export class AppProducer implements OnInit{
             this.setServerResponse(1,"fail");
         }
     }
+
+    // mocking service response
     onBuild(data: AppInfo) {
         this.stageOneMessage = "Sending data to the server...";
         setTimeout(
@@ -571,7 +614,7 @@ export class AppProducer implements OnInit{
     }
     
     postEmptyApp() {
-        this.appProducerService.postApp(this.data)
+        this.appProducerService.postAppDetails(this.data)
             .subscribe(
                 (response1) => {
                     this.appDetailId = response1.objectId;
@@ -592,7 +635,7 @@ export class AppProducer implements OnInit{
             );
     }
     
-    putApp(field) {
+    putAppDetails(field) {
         switch (field) {
             case "books":
                 this.appProducerService.getBooksIdInApp(this.appSpecificId)
@@ -619,7 +662,7 @@ export class AppProducer implements OnInit{
                     );
                 break;
             case "language":
-                this.appProducerService.putApp(this.data, field, this.appDetailId)
+                this.appProducerService.putAppDetails(this.data, field, this.appDetailId)
                     .subscribe(
                         (response) => console.log(response),
                         error => console.log(error)
@@ -638,7 +681,7 @@ export class AppProducer implements OnInit{
                     this.titleError = "Title field cannot exceed 30 characters.";
                     this.hasError = true;
                 } else {
-                    this.appProducerService.putApp(this.data, field, this.appDetailId)
+                    this.appProducerService.putAppDetails(this.data, field, this.appDetailId)
                         .subscribe(
                             (response) => console.log(response),
                             error => console.log(error)
@@ -652,7 +695,7 @@ export class AppProducer implements OnInit{
                 } else if (this.data.shortDescription.length > 80) {
                     this.shortDError = "Short description field cannot exceed 80 characters.";
                 } else {
-                    this.appProducerService.putApp(this.data, field, this.appDetailId)
+                    this.appProducerService.putAppDetails(this.data, field, this.appDetailId)
                         .subscribe(
                             (response) => console.log(response),
                             error => console.log(error)
@@ -666,7 +709,7 @@ export class AppProducer implements OnInit{
                 } else if (this.data.fullDescription.length > 4000) {
                     this.fullDError = "Full description field cannot exceed 4000 characters.";
                 } else {
-                    this.appProducerService.putApp(this.data, field, this.appDetailId)
+                    this.appProducerService.putAppDetails(this.data, field, this.appDetailId)
                         .subscribe(
                             (response) => console.log(response),
                             error => console.log(error)
@@ -722,40 +765,6 @@ export class AppProducer implements OnInit{
     //         );
     // }
 
-    // on start
-    ngOnInit() {
-        this.languageArray = [];
-        this.getAllLanguages();
-        this.currentUser = {};
-        this.currentUser["name"] = "Jacob";
-        this.currentUser["id"] = "vUGQP4mbby";
-        this.colorTable = COLORTABLE;
-        this.getUserAppInfo();
-        this.onInit();
-    }
-
-    // on new app
-    onInit() {
-        this.setServerResponse(0,"");
-        this.result = [];
-        this.bloomBooks = [];
-        this.data = new AppInfo();
-        this.data.title = "Untitled"
-        this.data.color = [];
-        this.data.color[0] = "Dark Green";
-        this.data.color[1] = "#083F0E";
-        this.data.icon = "../../assets/ab-001-black.png";
-        this.data.feature = "../../assets/bloom-feature-graphic.png";
-        this.data.books=[];
-        this.setLanguageSelect();
-
-        this.currentStage = "Setting Up";
-        this.totalPages = [1];
-        this.currentPage = 1;
-        // this.postEmptyApp();
-        this.appOnStore = false;
-        this.setDeleteMessage();
-    }
 
     
 }
