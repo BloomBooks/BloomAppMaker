@@ -423,14 +423,14 @@ export class AppProducer implements OnInit{
     onLanguageSelect(language: string) {
         if (language) {
             this.data.language = language;
-            this.putAppDetails("language");
+            this.putAppInfo("language");
         }
     }
     onColorSelect(name: string) {
         if (name) {
             this.data.color[0] = name;
             this.data.color[1] = this.colorTable[name];
-            this.putAppDetails("color");
+            this.putAppInfo("color");
         }
     }
     // select image from default, no validation required, because they should all be valid from the first place
@@ -438,11 +438,11 @@ export class AppProducer implements OnInit{
         if (name == 'icon') {
             this.iconError = "";
             this.data.icon = src;
-            this.putAppDetails("icon");
+            this.putAppInfo("icon");
         } else if (name == 'feature') {
             this.featureError = "";
             this.data.feature = src;
-            this.putAppDetails("feature");
+            this.putAppInfo("feature");
         }
     }
     // select image from local files. go through validation first and see if the image meets requirements
@@ -461,7 +461,7 @@ export class AppProducer implements OnInit{
                             this.iconError = "icon has to be 512px x 512px, this image is "+img.height+"px x "+img.width+"px";
                         } else {
                             this.data.icon = reader.result;
-                            this.putAppDetails("icon");
+                            this.putAppInfo("icon");
                         }
                     });
                     reader.readAsDataURL(file.files[0]);
@@ -474,7 +474,7 @@ export class AppProducer implements OnInit{
                             this.featureError = "feature graphic has to be 500px x 1024px, this image is "+img.height+"px x "+img.width+"px";
                         } else {
                             this.data.feature = reader.result;
-                            this.putAppDetails("feature");
+                            this.putAppInfo("feature");
                         }
                     });
                     reader.readAsDataURL(file.files[0]);
@@ -647,7 +647,7 @@ export class AppProducer implements OnInit{
     }
     // validate the field before update
     // update the detailed info about the new app onto Parse (appSpecific, appDetail and books)
-    putAppDetails(field) {
+    putAppInfo(field) {
         switch (field) {
             case "books":
                 this.appProducerService.getBooksIdInApp(this.appSpecificId)
