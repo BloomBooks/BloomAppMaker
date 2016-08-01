@@ -67,6 +67,8 @@ export class AppProducer implements OnInit{
     constructor(private appProducerService: AppProducerService) {}
 
     // on start
+    // eventually, we need to use a real login for currentUser
+    // we also want to load from the last editted app, instead of creating a new one
     ngOnInit() {
         this.languageArray = [];
         this.getAllLanguages();
@@ -78,13 +80,13 @@ export class AppProducer implements OnInit{
         this.onInit();
     }
 
-    // on new app
+    // initialize new app
     onInit() {
         this.setServerResponse(0,"");
         this.result = [];
         this.bloomBooks = [];
         this.data = new AppInfo();
-        this.data.title = "Untitled"
+        this.data.title = "Untitled";
         this.data.color = [];
         this.data.color[0] = "Dark Green";
         this.data.color[1] = "#083F0E";
@@ -102,6 +104,7 @@ export class AppProducer implements OnInit{
     }
 
     // user app info
+    // get all apps currentUser made and store it in this.userApps
     getUserAppInfo() {
         this.appProducerService.getAppsByUserId(this.currentUser.id)
             .subscribe(
@@ -128,6 +131,7 @@ export class AppProducer implements OnInit{
             );
     }
 
+    // get app details using the index of the appSpecification in userApps, and store it in the object of the same index (which is the same app)
     getAppDetailInfo(idx: number) {
         this.appProducerService.getAppsIdByRelation(this.userApps[idx].appSpecificationId)
             .subscribe(
@@ -140,6 +144,7 @@ export class AppProducer implements OnInit{
             );
     }
 
+    // get books id in an app using appSpecificId and the index, and store book ids
     getBooksInApp(id: string, idx:number) {
         this.appProducerService.getBooksIdInApp(id)
             .subscribe(
@@ -170,6 +175,7 @@ export class AppProducer implements OnInit{
         }
     }
 
+    // make language select auto select the brower language or English unless it is defined
     setLanguageSelect() {
         var a = document.getElementById("languageSelect").children;
         if (this.data.language) {
@@ -203,8 +209,8 @@ export class AppProducer implements OnInit{
         }
     }
 
+    // the delete Modal
     @ViewChild('childModal') childModal;
-
     setDeleteMessage() {
         if (this.appOnStore) {
             this.modalContent = "Sorry, we can't remove this app specification because the app is currently available on the Bloom Store. For further help, please write to issues@bloomlibrary.org.";
@@ -212,15 +218,15 @@ export class AppProducer implements OnInit{
             this.modalContent = "You are about to remove this app specification from BloomLibrary.org.";
         }
     }
-
     showModal() {
         this.childModal.show();
     }
-
     hideModal() {
         this.childModal.hide();
     }
 
+    // deleting app, delete books, appDetails, then appSpecific in the end
+    // after delete, hide modal
     deleteApp() {
         this.appProducerService.getBooksIdInApp(this.appSpecificId)
             .subscribe(
@@ -245,7 +251,8 @@ export class AppProducer implements OnInit{
             );
         this.childModal.hide();
     }
-    
+
+    // set the navbar active tab
     onNavSelect(item: string) {
         switch(item) {
             case "detail":
@@ -265,69 +272,8 @@ export class AppProducer implements OnInit{
         }
     }
 
-    // detail page
-    onLanguageSelect(language: string) {
-        if (language) {
-            this.data.language = language;
-            this.putAppDetails("language");
-        }
-    }
-    onColorSelect(name: string) {
-        if (name) {
-            this.data.color[0] = name;
-            this.data.color[1] = this.colorTable[name];
-            this.putAppDetails("color");
-        }
-    }
-    selectFromDefault (src: string, name: string) {
-        if (name == 'icon') {
-            this.iconError = "";
-            this.data.icon = src;
-            this.putAppDetails("icon");
-        } else if (name == 'feature') {
-            this.featureError = "";
-            this.data.feature = src;
-            this.putAppDetails("feature");
-        }
-    }
-    onFileSelect (file, name: string) {
-        if (file.files && file.files[0]) {
-            this.iconError = "";
-            if (name == 'icon' && file.files[0].size > 1048576) {
-                this.iconError = "icon file size has to be smaller than 1MB";
-            } else {
-                var reader = new FileReader();
-                if (name == "icon") {
-                    reader.addEventListener("load", () => {
-                        var img = new Image();
-                        img.src = reader.result;
-                        if (img.width != 512 && img.height != 512) {
-                            this.iconError = "icon has to be 512px x 512px, this image is "+img.height+"px x "+img.width+"px";
-                        } else {
-                            this.data.icon = reader.result;
-                            this.putAppDetails("icon");
-                        }
-                    });
-                    reader.readAsDataURL(file.files[0]);
-                } else if (name == "feature") {
-                    reader.addEventListener("load", () => {
-                        this.featureError = "";
-                        var img = new Image();
-                        img.src = reader.result;
-                        if (img.width != 1024 && img.height != 500) {
-                            this.featureError = "feature graphic has to be 500px x 1024px, this image is "+img.height+"px x "+img.width+"px";
-                        } else {
-                            this.data.feature = reader.result;
-                            this.putAppDetails("feature");
-                        }
-                    });
-                    reader.readAsDataURL(file.files[0]);
-                }
-            }
-        }
-    }
-
     // BooksPage
+    // get all languages available for books, and use it for type predictor
     getAllLanguages() {
         this.appProducerService.getAllLanguages()
             .subscribe(
@@ -340,6 +286,7 @@ export class AppProducer implements OnInit{
                 error => console.log(error)
             );
     }
+    // used for loading an existing app with already selected books
     getBooksById() {
         this.bloomBooks = [];
         if (this.data.books.length > 0) {
@@ -370,6 +317,7 @@ export class AppProducer implements OnInit{
                 error => console.log(error)
             );
     }
+    // used for searching books in a specific language
     getBooks(language: string) {
         this.bloomBooks = [];
         if (language == "") {
@@ -401,7 +349,7 @@ export class AppProducer implements OnInit{
             }
         }
     }
-
+    // allow user to reorder the selected books
     move($event) {
         var button = $event.target;
         var row = $(button).closest('tr');
@@ -413,7 +361,7 @@ export class AppProducer implements OnInit{
             row.next().after(row);
         }
     }
-
+    // find all the selected books in the book table
     readTable() {
         var row = <HTMLElement[]><any>document.getElementsByClassName("tableContent");
         for(var i=0;i<row.length;i++) {
@@ -461,7 +409,7 @@ export class AppProducer implements OnInit{
         }
         return false
     }
-
+    // check if there is at least one book selected
     checkTable() {
         for (var i=0;i<this.bloomBooks.length;i++) {
             if (this.bloomBooks[i]["state"] === true) {
@@ -469,6 +417,70 @@ export class AppProducer implements OnInit{
             }
         }
         return false
+    }
+
+    // detail page
+    onLanguageSelect(language: string) {
+        if (language) {
+            this.data.language = language;
+            this.putAppDetails("language");
+        }
+    }
+    onColorSelect(name: string) {
+        if (name) {
+            this.data.color[0] = name;
+            this.data.color[1] = this.colorTable[name];
+            this.putAppDetails("color");
+        }
+    }
+    // select image from default, no validation required, because they should all be valid from the first place
+    selectFromDefault (src: string, name: string) {
+        if (name == 'icon') {
+            this.iconError = "";
+            this.data.icon = src;
+            this.putAppDetails("icon");
+        } else if (name == 'feature') {
+            this.featureError = "";
+            this.data.feature = src;
+            this.putAppDetails("feature");
+        }
+    }
+    // select image from local files. go through validation first and see if the image meets requirements
+    onFileSelect (file, name: string) {
+        if (file.files && file.files[0]) {
+            this.iconError = "";
+            if (name == 'icon' && file.files[0].size > 1048576) {
+                this.iconError = "icon file size has to be smaller than 1MB";
+            } else {
+                var reader = new FileReader();
+                if (name == "icon") {
+                    reader.addEventListener("load", () => {
+                        var img = new Image();
+                        img.src = reader.result;
+                        if (img.width != 512 && img.height != 512) {
+                            this.iconError = "icon has to be 512px x 512px, this image is "+img.height+"px x "+img.width+"px";
+                        } else {
+                            this.data.icon = reader.result;
+                            this.putAppDetails("icon");
+                        }
+                    });
+                    reader.readAsDataURL(file.files[0]);
+                } else if (name == "feature") {
+                    reader.addEventListener("load", () => {
+                        this.featureError = "";
+                        var img = new Image();
+                        img.src = reader.result;
+                        if (img.width != 1024 && img.height != 500) {
+                            this.featureError = "feature graphic has to be 500px x 1024px, this image is "+img.height+"px x "+img.width+"px";
+                        } else {
+                            this.data.feature = reader.result;
+                            this.putAppDetails("feature");
+                        }
+                    });
+                    reader.readAsDataURL(file.files[0]);
+                }
+            }
+        }
     }
 
     // process page
@@ -560,7 +572,6 @@ export class AppProducer implements OnInit{
             },2000
         );
     }
-
     setServerResponse(id: number, response: string) {
         this.serverResponse[0]["requestId"] = id;
         this.serverResponse[0]["response"] = response;
@@ -612,7 +623,7 @@ export class AppProducer implements OnInit{
             }
         }
     }
-    
+    // post the new app onto Parse.com when user create a new app so that we can update it when user makes a change
     postEmptyApp() {
         this.appProducerService.postAppDetails(this.data)
             .subscribe(
@@ -634,7 +645,8 @@ export class AppProducer implements OnInit{
                 error => console.log(error)
             );
     }
-    
+    // validate the field before update
+    // update the detailed info about the new app onto Parse (appSpecific, appDetail and books)
     putAppDetails(field) {
         switch (field) {
             case "books":
@@ -740,6 +752,7 @@ export class AppProducer implements OnInit{
         }
     }
 
+    // this section should be working(the hope) after we implement login, because we cannot make a change to the _User table because of not logged in
     // onLoad() {
     //     this.appProducerService.getLastModifiedApp(this.currentUser.id)
     //         .subscribe(
