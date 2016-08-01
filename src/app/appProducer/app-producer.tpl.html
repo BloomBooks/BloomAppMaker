@@ -318,7 +318,7 @@
                                             <p *ngIf="currentStage=='Public on Play Store'&&requestFailedError" class="alert" [innerHTML]="requestFailedError"></p>
                                             <p class="pWithButton">Your book is now <a><u [class]="currentStage=='Public on Play Store' ? 'link' : 'link-disabled'">on the store</u></a> andfreely available for anyone with a compatible device.
                                                 You can always publish new editions using new or updated books, and people with the app will get the new version automatically.</p>
-                                            <p class="pWithButton">If you change your mind, you can <a><u [class]="currentStage=='Public on Play Store' ? 'link' : 'link-disabled'" (click)="goToStageFour()">Go Private</u></a> again.</p>
+                                            <p class="pWithButton">If you change your mind, you can <a><u [class]="currentStage=='Public on Play Store' ? 'link' : 'link-disabled'" (click)="currentStage=='Public on Play Store' ? goToStageFour() : pass">Go Private</u></a> again.</p>
                                             <p class="pWithButton">If you want to make changes to the app, click this button:</p>
                                             <button style="float: right;margin-right: 15px;" [disabled]="currentStage!='Public on Play Store'" [class]="currentStage=='Public on Play Store' ? 'blackText' : 'content-disabled'">Make a new version of this App</button>
                                         </div>
