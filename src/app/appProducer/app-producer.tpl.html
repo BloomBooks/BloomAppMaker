@@ -76,7 +76,7 @@
                             </thead>
                             <tbody #booksTableContent id="booksTableContent">
                                 <tr *ngFor="let bloomBook of bloomBooks" [hidden]="displayPage(bloomBook)" class="tableContent" [id]="bloomBook.id">
-                                    <td><input [(ngModel)]="bloomBook.state" type="checkbox" class="checkbox" (click)="putApp('books')"></td>
+                                    <td><input [(ngModel)]="bloomBook.state" type="checkbox" class="checkbox" (click)="putAppInfo('books')"></td>
                                     <td>{{bloomBook.title}}</td>
                                     <td>{{bloomBook.copyright}}</td>
                                     <td>{{bloomBook.note}}</td>
@@ -131,18 +131,18 @@
                     <div class="row" style="margin-top:20px;">
                         <p class="noMargin"><b>Title</b></p>
                         <p *ngIf="titleError&&(!data.title||data.title.length>30)" class="alert">{{titleError}}</p>
-                        <input #title [(ngModel)]="data.title" style="width:90%;" (change)="title.value=='' ? data.title='Untitled' : pass" (keyup.enter)="putApp('title')" (blur)="putApp('title')">
+                        <input #title [(ngModel)]="data.title" style="width:90%;" (change)="title.value=='' ? data.title='Untitled' : pass" (keyup.enter)="putAppInfo('title')" (blur)="putAppInfo('title')">
                     </div>
                     <div class="row" style="margin-top:20px;">
                         <p class="noMargin"><b>Short Description</b></p>
                         <p *ngIf="shortDError&&(!data.shortDescription||data.shortDescription.length>80)" class="alert">{{shortDError}}</p>
                         <!--<p class="alert">{{shortDError}}</p>-->
-                        <input [(ngModel)]="data.shortDescription" style="width:90%;" (keyup.enter)="putApp('short')" (blur)="putApp('short')">
+                        <input [(ngModel)]="data.shortDescription" style="width:90%;" (keyup.enter)="putAppInfo('short')" (blur)="putAppInfo('short')">
                     </div>
                     <div class="row" style="margin-top:20px;">
                         <p class="noMargin"><b>Full Description</b></p>
                         <p *ngIf="fullDError&&(!data.fullDescription||data.fullDescription.length>4000)" class="alert">{{fullDError}}</p>
-                        <textarea [(ngModel)]="data.fullDescription" style="width:90%;height: 70px;" (keyup.enter)="putApp('full')" (blur)="putApp('full')"></textarea>
+                        <textarea [(ngModel)]="data.fullDescription" style="width:90%;height: 70px;" (keyup.enter)="putAppInfo('full')" (blur)="putAppInfo('full')"></textarea>
                         <p class="notes noMargin">The following will be appended to the description:</p>
                         <p class="notes noMargin">"These books and this app were created with <a class="link" href="http://www.bloomlibrary.org" target="_blank"><u>Bloom</u></a> from SIL International"</p>
                     </div>
