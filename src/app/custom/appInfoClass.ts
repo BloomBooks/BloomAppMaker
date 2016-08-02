@@ -1,6 +1,6 @@
 export class AppInfo {
     appDetailsId: string;
-    appSpecificationId: string;
+    appSpecificId: string;
     language: string;
     title: string;
     shortDescription: string;

@@ -67,25 +67,25 @@ export class AppProducerService {
             .map((response: Response) => response.json());
     }
 
-    putAppDetails(app, field, id) {
+    putAppDetails(app, field) {
         switch(field) {
             case "language":
-                return this.http.put('https://api.parse.com/1/classes/appDetailsInLanguage/'+id,
+                return this.http.put('https://api.parse.com/1/classes/appDetailsInLanguage/'+app.appDetailsId,
                     {"androidStoreLanguageIso": app.language},
                     { headers: AppProducerHeaders })
                     .map((response: Response) => response.json());
             case "title":
-                return this.http.put('https://api.parse.com/1/classes/appDetailsInLanguage/'+id,
+                return this.http.put('https://api.parse.com/1/classes/appDetailsInLanguage/'+app.appDetailsId,
                     {"title": app.title},
                     { headers: AppProducerHeaders })
                     .map((response: Response) => response.json());
             case "short":
-                return this.http.put('https://api.parse.com/1/classes/appDetailsInLanguage/'+id,
+                return this.http.put('https://api.parse.com/1/classes/appDetailsInLanguage/'+app.appDetailsId,
                     {"shortDescription": app.shortDescription},
                     { headers: AppProducerHeaders })
                     .map((response: Response) => response.json());
             case "full":
-                return this.http.put('https://api.parse.com/1/classes/appDetailsInLanguage/'+id,
+                return this.http.put('https://api.parse.com/1/classes/appDetailsInLanguage/'+app.appDetailsId,
                     {"fullDescription": app.fullDescription},
                     { headers: AppProducerHeaders })
                     .map((response: Response) => response.json());
@@ -125,7 +125,7 @@ export class AppProducerService {
             .map((response: Response) => response.json());
     }
 
-    putAppSpecific(app, field, id) {
+    putAppSpecific(app, field) {
         switch(field) {
             case "language":
                 var language = "";
@@ -135,23 +135,23 @@ export class AppProducerService {
                 } else {
                     language = app.language;
                 }
-                return this.http.put('https://api.parse.com/1/classes/appSpecification/'+id,
+                return this.http.put('https://api.parse.com/1/classes/appSpecification/'+app.appSpecificId,
                     {"bookVernacularLanguageIso": language,
                     "defaultStoreLanguageIso": app.language},
                     { headers: AppProducerHeaders })
                     .map((response: Response) => response.json());
             case "color":
-                return this.http.put('https://api.parse.com/1/classes/appSpecification/'+id,
+                return this.http.put('https://api.parse.com/1/classes/appSpecification/'+app.appSpecificId,
                     {"colorScheme": app.color[0]},
                     { headers: AppProducerHeaders })
                     .map((response: Response) => response.json());
             case "icon":
-                return this.http.put('https://api.parse.com/1/classes/appSpecification/'+id,
+                return this.http.put('https://api.parse.com/1/classes/appSpecification/'+app.appSpecificId,
                     {"icon1024x1024": app.icon},
                     { headers: AppProducerHeaders })
                     .map((response: Response) => response.json());
             case "feature":
-                return this.http.put('https://api.parse.com/1/classes/appSpecification/'+id,
+                return this.http.put('https://api.parse.com/1/classes/appSpecification/'+app.appSpecificId,
                     {"featureGraphic1024x500": app.feature},
                     { headers: AppProducerHeaders })
                     .map((response: Response) => response.json());
