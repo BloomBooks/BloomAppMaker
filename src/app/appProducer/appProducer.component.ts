@@ -96,7 +96,7 @@ export class AppProducer implements OnInit{
         this.currentStage = "Setting Up";
         this.totalPages = [1];
         this.currentPage = 1;
-        this.postEmptyApp();
+        // this.postEmptyApp();
         this.appOnStore = false;
         this.setDeleteMessage();
     }
@@ -423,6 +423,7 @@ export class AppProducer implements OnInit{
         if (language) {
             this.data.language = language;
             this.putAppInfo("language");
+            this.getUserAppInfo();
         }
     }
     onColorSelect(name: string) {
