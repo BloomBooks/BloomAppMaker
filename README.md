@@ -16,7 +16,7 @@ npm install -g typings webpack-dev-server rimraf webpack
 npm install
 
 # install typings, which typescript uses to know the types of javascript libraries
-# (WINDOWS ONLY)  Review: why windows only?
+# (WINDOWS ONLY) (this command is included in npm install for Linux)
 npm run typings-install
 
 # build without running server
