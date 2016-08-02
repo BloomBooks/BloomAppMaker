@@ -21,9 +21,6 @@ declare var $:JQueryStatic;
 export class AppProducer implements OnInit{
     currentUser;
     currentStage: string;
-    appName: string;
-    appDetailId: string;
-    appSpecificId: string;
 
     hasValue: boolean = false;
     hasError: boolean = false;
@@ -60,6 +57,7 @@ export class AppProducer implements OnInit{
     Books;
     allLanguages;
     languageArray: string[];
+    // inputLanguage is used to bind with input value from language search
     inputLanguage: string = "";
     totalPages: number[];
     currentPage: number;
@@ -76,12 +74,12 @@ export class AppProducer implements OnInit{
         this.currentUser["name"] = "Jacob";
         this.currentUser["id"] = "vUGQP4mbby";
         this.colorTable = COLORTABLE;
-        this.getUserAppInfo();
         this.onInit();
     }
 
     // initialize new app
     onInit() {
+        this.getUserAppInfo();
         this.setServerResponse(0,"");
         this.result = [];
         this.bloomBooks = [];
@@ -98,7 +96,7 @@ export class AppProducer implements OnInit{
         this.currentStage = "Setting Up";
         this.totalPages = [1];
         this.currentPage = 1;
-        // this.postEmptyApp();
+        this.postEmptyApp();
         this.appOnStore = false;
         this.setDeleteMessage();
     }
@@ -114,7 +112,7 @@ export class AppProducer implements OnInit{
                         var a = new AppInfo();
                         this.userApps.push(a);
                         var result = response.results[i];
-                        this.userApps[i].appSpecificationId = result.objectId;
+                        this.userApps[i].appSpecificId = result.objectId;
                         this.userApps[i].language = result.defaultStoreLanguageIso;
                         this.userApps[i].color = [];
                         this.userApps[i].color[0] = result.colorScheme;
@@ -133,7 +131,7 @@ export class AppProducer implements OnInit{
 
     // get app details using the index of the appSpecification in userApps, and store it in the object of the same index (which is the same app)
     getAppDetailInfo(idx: number) {
-        this.appProducerService.getAppsIdByRelation(this.userApps[idx].appSpecificationId)
+        this.appProducerService.getAppsIdByRelation(this.userApps[idx].appSpecificId)
             .subscribe(
                 (response) => {
                     this.userApps[idx].appDetailsId = response.results[0].objectId;
@@ -169,7 +167,7 @@ export class AppProducer implements OnInit{
                     this.data = app;
                     this.setLanguageSelect();
                     this.getBooksById();
-                    // this.appProducerService.pushLastModifiedApp(this.currentUser.id, this.appSpecificId).subscribe();
+                    // this.appProducerService.pushLastModifiedApp(this.currentUser.id, this.data.appSpecificId).subscribe();
                 }
             }
         }
@@ -228,7 +226,7 @@ export class AppProducer implements OnInit{
     // deleting app, delete books, appDetails, then appSpecific in the end
     // after delete, hide modal
     deleteApp() {
-        this.appProducerService.getBooksIdInApp(this.appSpecificId)
+        this.appProducerService.getBooksIdInApp(this.data.appSpecificId)
             .subscribe(
                 (response) => {
                     for (var j=0;j<response.results.length;j++) {
@@ -237,10 +235,11 @@ export class AppProducer implements OnInit{
                                 error => console.log(error)
                             );
                     }
-                    this.appProducerService.deleteAppDetails(this.appDetailId)
+                    this.appProducerService.deleteAppDetails(this.data.appDetailsId)
                         .subscribe(
                             () => {
-                                this.appProducerService.deleteAppSpecific(this.appSpecificId)
+                                console.log(this.data.appDetailsId);
+                                this.appProducerService.deleteAppSpecific(this.data.appSpecificId)
                                     .subscribe(
                                         () => this.onInit()
                                     )
@@ -628,13 +627,13 @@ export class AppProducer implements OnInit{
         this.appProducerService.postAppDetails(this.data)
             .subscribe(
                 (response1) => {
-                    this.appDetailId = response1.objectId;
+                    this.data.appDetailsId = response1.objectId;
                     this.appProducerService.postAppSpecific(this.data, this.currentUser.id)
                         .subscribe(
                             (response2) => {
-                                this.appSpecificId = response2.objectId;
-                                // this.appProducerService.pushLastModifiedApp(this.currentUser.id, this.appSpecificId).subscribe();
-                                this.appProducerService.createRelation(this.appDetailId, this.appSpecificId)
+                                this.data.appSpecificId = response2.objectId;
+                                // this.appProducerService.pushLastModifiedApp(this.currentUser.id, this.data.appSpecificId).subscribe();
+                                this.appProducerService.createRelation(this.data.appDetailsId, this.data.appSpecificId)
                                     .subscribe(
                                         error => console.log(error)
                                     );
@@ -650,7 +649,7 @@ export class AppProducer implements OnInit{
     putAppInfo(field) {
         switch (field) {
             case "books":
-                this.appProducerService.getBooksIdInApp(this.appSpecificId)
+                this.appProducerService.getBooksIdInApp(this.data.appSpecificId)
                     .subscribe(
                         (response) => {
                             for (var j=0;j<response.results.length;j++) {
@@ -663,7 +662,7 @@ export class AppProducer implements OnInit{
                             this.data.books = [];
                             this.readTable();
                             for (var i = 0; i < this.data.books.length; i++) {
-                                this.appProducerService.addBookInApp(this.data.books[i], this.appSpecificId, i)
+                                this.appProducerService.addBookInApp(this.data.books[i], this.data.appSpecificId, i)
                                     .subscribe(
                                         (response) => console.log(response),
                                         error => console.log(error)
@@ -674,12 +673,12 @@ export class AppProducer implements OnInit{
                     );
                 break;
             case "language":
-                this.appProducerService.putAppDetails(this.data, field, this.appDetailId)
+                this.appProducerService.putAppDetails(this.data, field)
                     .subscribe(
                         (response) => console.log(response),
                         error => console.log(error)
                 );
-                this.appProducerService.putAppSpecific(this.data, field, this.appSpecificId)
+                this.appProducerService.putAppSpecific(this.data, field)
                     .subscribe(
                         (response) => console.log(response),
                         error => console.log(error)
@@ -693,7 +692,7 @@ export class AppProducer implements OnInit{
                     this.titleError = "Title field cannot exceed 30 characters.";
                     this.hasError = true;
                 } else {
-                    this.appProducerService.putAppDetails(this.data, field, this.appDetailId)
+                    this.appProducerService.putAppDetails(this.data, field)
                         .subscribe(
                             (response) => console.log(response),
                             error => console.log(error)
@@ -707,7 +706,7 @@ export class AppProducer implements OnInit{
                 } else if (this.data.shortDescription.length > 80) {
                     this.shortDError = "Short description field cannot exceed 80 characters.";
                 } else {
-                    this.appProducerService.putAppDetails(this.data, field, this.appDetailId)
+                    this.appProducerService.putAppDetails(this.data, field)
                         .subscribe(
                             (response) => console.log(response),
                             error => console.log(error)
@@ -721,7 +720,7 @@ export class AppProducer implements OnInit{
                 } else if (this.data.fullDescription.length > 4000) {
                     this.fullDError = "Full description field cannot exceed 4000 characters.";
                 } else {
-                    this.appProducerService.putAppDetails(this.data, field, this.appDetailId)
+                    this.appProducerService.putAppDetails(this.data, field)
                         .subscribe(
                             (response) => console.log(response),
                             error => console.log(error)
@@ -729,21 +728,21 @@ export class AppProducer implements OnInit{
                 }
                 break;
             case "color":
-                this.appProducerService.putAppSpecific(this.data, field, this.appSpecificId)
+                this.appProducerService.putAppSpecific(this.data, field)
                     .subscribe(
                         (response) => console.log(response),
                         error => console.log(error)
                     );
                 break;
             case "icon":
-                this.appProducerService.putAppSpecific(this.data, field, this.appSpecificId)
+                this.appProducerService.putAppSpecific(this.data, field)
                     .subscribe(
                         (response) => console.log(response),
                         error => console.log(error)
                     );
                 break;
             case "feature":
-                this.appProducerService.putAppSpecific(this.data, field, this.appSpecificId)
+                this.appProducerService.putAppSpecific(this.data, field)
                     .subscribe(
                         (response) => console.log(response),
                         error => console.log(error)
