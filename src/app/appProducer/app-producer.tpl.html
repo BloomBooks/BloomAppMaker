@@ -8,7 +8,7 @@
                 <li style="border-top: 1px solid black;"><a (click)="showModal()">Delete App: {{data.title}}</a></li>
                 <li style="border-top: 1px solid black;"><a (click)="onAppNameChange($event.target.text)">Create New App</a></li>
             </ul>
-            <div bsModal #childModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+            <div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-sm">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -17,7 +17,7 @@
                             </button>
                             <h4 class="modal-title">Delete App Specification</h4>
                         </div>
-                        <div class="modal-body" [innerHTML]="modalContent"></div>
+                        <div class="modal-body" [innerHTML]="deleteMessage"></div>
                         <div class="modal-footer">
                             <div *ngIf="appOnStore">
                                 <button type="button" aria-label="Close" (click)="hideModal()">OK</button>

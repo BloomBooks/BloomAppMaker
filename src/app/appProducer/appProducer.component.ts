@@ -44,7 +44,7 @@ export class AppProducer implements OnInit{
     serverResponse = [{}];
     colorTable;
     appOnStore: boolean;
-    modalContent: string;
+    deleteMessage: string;
     bookNotUpdated: boolean = false;
 
     stageOneMessage: string = "";
@@ -207,19 +207,21 @@ export class AppProducer implements OnInit{
     }
 
     // the delete Modal
-    @ViewChild('childModal') childModal;
+    @ViewChild('deleteModal') deleteModal;
     setDeleteMessage() {
         if (this.appOnStore) {
-            this.modalContent = "Sorry, we can't remove this app specification because the app is currently available on the Bloom Store. For further help, please write to issues@bloomlibrary.org.";
+            this.deleteMessage = "Sorry, we can't remove this app specification because the app is currently available on the Bloom Store. For further help, please write to issues@bloomlibrary.org.";
         } else {
-            this.modalContent = "You are about to remove this app specification from BloomLibrary.org.";
+            this.deleteMessage = "You are about to remove this app specification from BloomLibrary.org.";
         }
     }
     showModal() {
-        this.childModal.show();
+        // call setDeleteMessage over here when we can talk to a API to see the stage of a app
+        // then update appOnStore to either true or false depends on the response
+        this.deleteModal.show();
     }
     hideModal() {
-        this.childModal.hide();
+        this.deleteModal.hide();
     }
 
     // deleting app, delete books, appDetails, then appSpecific in the end
@@ -247,7 +249,7 @@ export class AppProducer implements OnInit{
                 },
                 error => console.log(error)
             );
-        this.childModal.hide();
+        this.deleteModal.hide();
     }
 
     // set the navbar active tab
@@ -690,7 +692,6 @@ export class AppProducer implements OnInit{
                     this.titleError = "Required title field.";
                 } else if (this.data.title.length > 30) {
                     this.titleError = "Title field cannot exceed 30 characters.";
-                    this.hasError = true;
                 } else {
                     this.appProducerService.putAppDetails(this.data, field)
                         .subscribe(
