@@ -63,7 +63,6 @@ export class AppProducer implements OnInit{
     currentPage: number;
 
     constructor(private appProducerService: AppProducerService) {}
-
     // on start
     // eventually, we need to use a real login for currentUser
     // we also want to load from the last editted app, instead of creating a new one
