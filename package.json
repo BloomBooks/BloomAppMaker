@@ -1,14 +1,13 @@
 {
-  "name": "angular2-webpack-starter",
-  "version": "5.0.5",
-  "description": "An Angular 2 Webpack Starter kit featuring Angular 2 (Router, Http, Forms, Services, Tests, E2E, Coverage), Karma, Protractor, Jasmine, Istanbul, TypeScript, and Webpack by AngularClass",
+  "name": "bloom-app-maker",
+  "description": "An Angular 2 - based web app that lets users order new custom apps composed of Bloom Books found on the Bloom Library and publish them to the Google Play Store.",
   "keywords": [
-    "angular2",
-    "webpack",
-    "typescript"
+    "bloom",
+    "appMaker",
+    "Angular 2"
   ],
-  "author": "Patrick Stapleton <patrick@angularclass.com>",
-  "homepage": "https://github.com/angularclass/angular2-webpack-starter",
+  "author": "hattonjohn@gmail.com",
+  "homepage": "https://github.com/BloomBooks/BloomAppMaker",
   "license": "MIT",
   "scripts": {
     "rimraf": "rimraf",
