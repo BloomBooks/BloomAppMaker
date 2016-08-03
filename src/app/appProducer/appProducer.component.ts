@@ -696,7 +696,10 @@ export class AppProducer implements OnInit{
                 } else {
                     this.appProducerService.putAppDetails(this.data, field)
                         .subscribe(
-                            (response) => console.log(response),
+                            (response) => {
+                                this.getUserAppInfo();
+                                console.log(response)
+                            },
                             error => console.log(error)
                         );
                 }

@@ -68,28 +68,25 @@ export class AppProducerService {
     }
 
     putAppDetails(app, field) {
+        var object;
         switch(field) {
             case "language":
-                return this.http.put('https://api.parse.com/1/classes/appDetailsInLanguage/'+app.appDetailsId,
-                    {"androidStoreLanguageIso": app.language},
-                    { headers: AppProducerHeaders })
-                    .map((response: Response) => response.json());
+                object = {"androidStoreLanguageIso": app.language};
+                break;
             case "title":
-                return this.http.put('https://api.parse.com/1/classes/appDetailsInLanguage/'+app.appDetailsId,
-                    {"title": app.title},
-                    { headers: AppProducerHeaders })
-                    .map((response: Response) => response.json());
+                object = {"title": app.title};
+                break;
             case "short":
-                return this.http.put('https://api.parse.com/1/classes/appDetailsInLanguage/'+app.appDetailsId,
-                    {"shortDescription": app.shortDescription},
-                    { headers: AppProducerHeaders })
-                    .map((response: Response) => response.json());
+                object = {"shortDescription": app.shortDescription};
+                break;
             case "full":
-                return this.http.put('https://api.parse.com/1/classes/appDetailsInLanguage/'+app.appDetailsId,
-                    {"fullDescription": app.fullDescription},
-                    { headers: AppProducerHeaders })
-                    .map((response: Response) => response.json());
+                object = {"fullDescription": app.fullDescription};
+                break;
         }
+        return this.http.put('https://api.parse.com/1/classes/appDetailsInLanguage/'+app.appDetailsId,
+            object,
+            { headers: AppProducerHeaders })
+            .map((response: Response) => response.json());
     }
 
     deleteAppDetails(id) {
@@ -126,6 +123,7 @@ export class AppProducerService {
     }
 
     putAppSpecific(app, field) {
+        var object;
         switch(field) {
             case "language":
                 var language = "";
@@ -135,27 +133,22 @@ export class AppProducerService {
                 } else {
                     language = app.language;
                 }
-                return this.http.put('https://api.parse.com/1/classes/appSpecification/'+app.appSpecificId,
-                    {"bookVernacularLanguageIso": language,
-                    "defaultStoreLanguageIso": app.language},
-                    { headers: AppProducerHeaders })
-                    .map((response: Response) => response.json());
+                object = {"bookVernacularLanguageIso": language, "defaultStoreLanguageIso": app.language};
+                break;
             case "color":
-                return this.http.put('https://api.parse.com/1/classes/appSpecification/'+app.appSpecificId,
-                    {"colorScheme": app.color[0]},
-                    { headers: AppProducerHeaders })
-                    .map((response: Response) => response.json());
+                object = {"colorScheme": app.color[0]};
+                break;
             case "icon":
-                return this.http.put('https://api.parse.com/1/classes/appSpecification/'+app.appSpecificId,
-                    {"icon1024x1024": app.icon},
-                    { headers: AppProducerHeaders })
-                    .map((response: Response) => response.json());
+                object = {"icon1024x1024": app.icon};
+                break;
             case "feature":
-                return this.http.put('https://api.parse.com/1/classes/appSpecification/'+app.appSpecificId,
-                    {"featureGraphic1024x500": app.feature},
-                    { headers: AppProducerHeaders })
-                    .map((response: Response) => response.json());
+                object = {"featureGraphic1024x500": app.feature};
+                break;
         }
+        return this.http.put('https://api.parse.com/1/classes/appSpecification/'+app.appSpecificId,
+            object,
+            { headers: AppProducerHeaders })
+            .map((response: Response) => response.json());
     }
 
     deleteAppSpecific(id) {
