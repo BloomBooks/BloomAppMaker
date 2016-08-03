@@ -173,7 +173,7 @@ export class AppProducer implements OnInit{
         }
     }
 
-    // make language select auto select the brower language or English unless it is defined
+    // make language select auto select the browser language or English unless it is defined
     setLanguageSelect() {
         var a = document.getElementById("languageSelect").children;
         if (this.data.language) {
@@ -729,21 +729,7 @@ export class AppProducer implements OnInit{
                         );
                 }
                 break;
-            case "color":
-                this.appProducerService.putAppSpecific(this.data, field)
-                    .subscribe(
-                        (response) => console.log(response),
-                        error => console.log(error)
-                    );
-                break;
-            case "icon":
-                this.appProducerService.putAppSpecific(this.data, field)
-                    .subscribe(
-                        (response) => console.log(response),
-                        error => console.log(error)
-                    );
-                break;
-            case "feature":
+            default:
                 this.appProducerService.putAppSpecific(this.data, field)
                     .subscribe(
                         (response) => console.log(response),

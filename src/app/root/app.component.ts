@@ -12,6 +12,7 @@ import { NavBar } from '../navBar/nav.component';
 })
 
 export class RootComponent {
+    // viewContainerRef is required for using Modal according to ng2-bootstrap
     viewContainerRef;
 
     public constructor(viewContainerRef: ViewContainerRef) {

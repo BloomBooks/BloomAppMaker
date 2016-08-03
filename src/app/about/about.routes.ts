@@ -1,6 +1,6 @@
 import { About } from './about.component';
 
-export  const AboutRoutes = [
+export const AboutRoutes = [
     {
         path: 'about',
         component: About,
