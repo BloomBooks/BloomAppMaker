@@ -2,6 +2,10 @@
 
 An Angular 2 - based web app that lets users order new custom apps composed of Bloom Books found on the [Bloom Library](http://bloomlibrary.org) and publish them to the Google Play Store.
 
+## Development Process
+We use trello.com to keep tracking the process of developing:
+https://trello.com/b/ajwqG1OM/bloom-app-maker
+
 ## Dependencies
 Node version >= 5.0 and NPM >= 3**.
 
@@ -16,7 +20,7 @@ npm install -g typings webpack-dev-server rimraf webpack
 npm install
 
 # install typings, which typescript uses to know the types of javascript libraries
-# (WINDOWS ONLY)  Review: why windows only?
+# (WINDOWS ONLY) (this command is included in npm install for Linux)
 npm run typings-install
 
 # build without running server
