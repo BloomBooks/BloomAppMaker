@@ -675,63 +675,47 @@ export class AppProducer implements OnInit{
                         error => console.log(error)
                     );
                 break;
-            case "language":
-                this.appProducerService.putAppDetails(this.data, field)
-                    .subscribe(
-                        (response) => console.log(response),
-                        error => console.log(error)
-                );
-                this.appProducerService.putAppSpecific(this.data, field)
-                    .subscribe(
-                        (response) => console.log(response),
-                        error => console.log(error)
-                    );
-                break;
             case "title":
                 this.titleError = "";
                 if (!this.data.title) {
                     this.titleError = "Required title field.";
+                    break;
                 } else if (this.data.title.length > 30) {
                     this.titleError = "Title field cannot exceed 30 characters.";
-                } else {
-                    this.appProducerService.putAppDetails(this.data, field)
-                        .subscribe(
-                            (response) => {
-                                this.getUserAppInfo();
-                                console.log(response)
-                            },
-                            error => console.log(error)
-                        );
+                    break;
                 }
-                break;
             case "short":
                 this.shortDError = "";
                 if (!this.data.shortDescription) {
                     this.shortDError = "Required short description field.";
+                    break;
                 } else if (this.data.shortDescription.length > 80) {
                     this.shortDError = "Short description field cannot exceed 80 characters.";
-                } else {
-                    this.appProducerService.putAppDetails(this.data, field)
-                        .subscribe(
-                            (response) => console.log(response),
-                            error => console.log(error)
-                        );
+                    break;
                 }
-                break;
             case "full":
                 this.fullDError = "";
                 if (!this.data.fullDescription) {
                     this.fullDError = "Required full description field.";
+                    break;
                 } else if (this.data.fullDescription.length > 4000) {
                     this.fullDError = "Full description field cannot exceed 4000 characters.";
-                } else {
-                    this.appProducerService.putAppDetails(this.data, field)
-                        .subscribe(
-                            (response) => console.log(response),
-                            error => console.log(error)
-                        );
+                    break;
                 }
-                break;
+            case "language":
+                this.appProducerService.putAppDetails(this.data, field)
+                    .subscribe(
+                        (response) => {
+                            if (field == "title") {
+                                this.getUserAppInfo();
+                            }
+                            console.log(response)
+                        },
+                        error => console.log(error)
+                    );
+                if (field != "language") {
+                    break;
+                }
             default:
                 this.appProducerService.putAppSpecific(this.data, field)
                     .subscribe(
