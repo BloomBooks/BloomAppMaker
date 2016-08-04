@@ -61,4 +61,4 @@ I recomand to user npm install ** --save to store the dependencies in package.js
 
 code refactoring:
 Code within /appProducer is the least clean and please feel free to do any refactoring on it.
-We may also want to remove the unnessesary css under /src/assets/BloomLibrary-0.1.0.css. Currently, there are way to much things in this file and we do not need most of them. 
+/src/assets/BloomLibrary-0.1.0.css is the .css file we grabbed from BloomLibrary. We may want to remove the unnecessary css (not used in both BloomLibrary and BloomAppMaker). In the future, we will share this .css file with BloomLibrary so we should keep them the same after we do the refactoring.
