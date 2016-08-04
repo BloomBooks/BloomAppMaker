@@ -12,7 +12,7 @@ export class AppProducerService {
     constructor(private http: Http) {}
     
     getAppsByUserId(userId: string) {
-        return this.http.get(this.baseUrl + '?where={"owner": {"__type":"Pointer","className":"_User","objectId":"'+userId+'"}}',{ headers: AppProducerHeaders })
+        return this.http.get(this.baseUrl + 'appSpecification?where={"owner": {"__type":"Pointer","className":"_User","objectId":"'+userId+'"}}',{ headers: AppProducerHeaders })
             .map((response: Response) => response.json());
     }
 
