@@ -205,7 +205,7 @@ export class AppProducerService {
     }
     
     deleteBookInApp(bookInAppId) {
-        return this.http.delete(this.baseurl + 'booksInApp/'+bookInAppId,
+        return this.http.delete(this.baseUrl + 'booksInApp/'+bookInAppId,
             { headers: AppProducerHeaders })
 
             .map((response: Response) => response.json());
