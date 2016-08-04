@@ -1,0 +1,63 @@
+About Angular2 and Typescript
+
+Using this guide may help you with getting familiar with Angular2 and help you solve most of the problems you encounter: https://angular.io/docs/ts/latest/guide/
+
+
+About Webpack
+
+We use webpack to build our Bloom App Maker. /config, /src/platform, /src/app/app.resolver.ts and /src/main,polyfills,vendor.browser.ts are provided by webpack. The built project is stored in /dist.
+https://github.com/AngularClass/angular2-webpack-starter
+
+About Dependencies
+
+All Dependencies are listed in package.json and typings.json, and they are installed using npm. We use the lastest version and run --save to write them into the .json files on the initial install.
+
+
+About Bloom App Maker
+
+pages:
+We only have two pages currently. One is about page under url "/about", the other is appProducer page under url "/". When a user first come to the page, we should direct them to "/about" and suggest them to login
+
+naming:
+Read the "middle name" of a file and you can easily find out what file it is.
+In the modules I created, names with all capital letters means it is a variable with data in it, such as "COLORTABLE" is an object that has name of a color as key and the #hex as value. Names with the first character of each word capitalized is either a class or a constant.
+
+file structure:
+src
+|__app
+|   |__about
+|   |__appProducer
+|   |__custom
+|   |__navBar
+|   |__root
+|__assets
+|__index.html
+
+how AppMaker loads:
+Onload, it will find index.html and bootstrap RootComponent with our router, root/app.routes (see code from main.browser.ts). Because <root> tag is defined in RootComponent as the selector of /root/app.tpl.html, which is the component that is being bootstrapped, Angular 2 will inject app.tpl.html into <root> tag in index.html.
+Because NavBar is imported in RootComponent, and app.tpl.html has a selector tag <nav-bar>, which is defined in NavBar, Angular 2 will inject nav.tpl.html within <nav-bar> tag. <router-outlet> is another selector that reacts with the current URL. We define our routes in about/appProducer.routes.ts and import them in app.routes.ts, which is the "main" router. At different URL, different component will be loaded, which results displaying different templete files. 
+
+parse API:
+We use Parse.com as our database, and use rest API to talk to it. appProducer.service.ts is a class contains all the API calls. Right now, we use appProducer.headers.ts to store the authentication header from Parse.com, but we want to hide it in the future so that the user cannot see it easily.
+
+custom class and table:
+We store our custom classes and table under /custom. AppInfo class and BloomBook class defines fields needed for these two classes. ColorTable is where we store the color options.
+
+
+How to make changes:
+
+If you are interested in making changes to this project, these process may help you.
+
+add another page:
+To begin with, you may want to create a new directory under /app and create files: *.component.ts, *.routes.ts and *.tpl.html. It is not nessesary to name the files with "component/routes/tpl", but it can make it easier to tell which file is what.
+In your *.component.ts, you need to import Component from @angular/core and define what is in the component. Fields includes, but not limite to selector, template/templateUrl, styleUrls, directives, providers. Then you want to export the component class with global variable (something you can bind to in your .html) or functions. You do have the option of making them public/private by adding it in the front.
+Within *.routes.ts, you need to import *.component.ts and define the route. Path and componnet are nessesary and you do not need to start path with a slash ("/"). Then in /root/app.routes.ts, you want to import the router you just created and add it to constant routes. 
+
+add more files under /root:
+If you want to add more files under /root, you want to keep in mind that this directory is designed to store all the top level files that is loaded on start when the user visit our site. You may also want to import these top level files in main.browser.ts. 
+
+add more dependencies:
+I recomand to user npm install ** --save to store the dependencies in package.json. You may also manually add some through editting the .json file.
+
+code refactoring:
+Code within /appProducer is the least clean and please feel free to do any refactoring on it.
