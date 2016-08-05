@@ -11,4 +11,6 @@ export class AppInfo {
     books: Array<string>;
     phase: Array<number>;
     createAt: string;
+    workflowId: string;
+    nextStepId: number;
 }

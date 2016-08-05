@@ -96,6 +96,7 @@ export class AppProducer implements OnInit{
         this.currentStage = "Setting Up";
         this.totalPages = [1];
         this.currentPage = 1;
+        // this need to be fixed eventually, onInit, load the last modified app (get from _User table) instead of creating a new one
         // this.postEmptyApp();
         this.appOnStore = false;
         this.setDeleteMessage();
@@ -523,7 +524,25 @@ export class AppProducer implements OnInit{
         if (!this.hasError) {
             this.hasValue = true;
             this.requestFailedError = "";
-            this.onBuild(this.data);
+            if (this.data.workflowId == undefined) {
+                this.appProducerService.postWorkflow()
+                    .subscribe(
+                        (response) => {
+                            this.data.nextStepId = response.next_step.id;
+                            this.data.workflowId = response.id;
+                            this.onBuild(this.data);
+                        });
+            } else if (this.data.nextStepId == undefined) {
+                this.appProducerService.getWorkflow(this.data.workflowId)
+                    .subscribe(
+                        (response) => {
+                            this.data.nextStepId = response.next_step.id;
+                            this.onBuild(this.data);
+                        }
+                    )
+            } else {
+                this.onBuild(this.data);
+            }
         } else {
             // tecnically, this should be called client side response
             this.setServerResponse(1,"fail");
@@ -532,29 +551,50 @@ export class AppProducer implements OnInit{
 
     // mocking service response
     onBuild(data: AppInfo) {
-        this.stageOneMessage = "Sending data to the server...";
-        setTimeout(
-            ()=>{
-                this.setServerResponse(1,"success");
-                this.stageOneMessage = "";
-                this.stageTwoMessage = "Request received, start making the app.";
-                setTimeout(
-                    ()=>{
-                        this.setServerResponse(2,"success");
-                        this.stageTwoMessage = "";
-                        this.stageThreeMessage = "App built, publishing on Play Store.";
-                        setTimeout(
-                            ()=>{
-                                this.setServerResponse(3,"success");
-                                this.stageThreeMessage = "";
-                                this.appOnStore = true;
-                                this.setDeleteMessage();
-                            },10000
-                        );
-                    },10000
-                );
-            },3000
-        );
+        this.appProducerService.putWorkflow(this.data);
+        this.getStage();
+        setInterval(
+            () => {
+                this.getStage();
+            }, 60000);
+    }
+    getStage() {
+        this.appProducerService.getWorkflow(this.data.workflowId)
+            .subscribe(
+                (response) => {
+                    var nextStepName;
+                    console.log(response);
+                    nextStepName = response.next_step.display_name;
+                    if (nextStepName == "Project Definition" && response.next_step.status == "assigned") {
+                        this.currentStage = "Setting Up";
+                        this.stageOneMessage = "Request sent, please wait ...";
+                    } else if (nextStepName == "Approval") {
+                        this.currentStage = "Making App";
+                        this.stageTwoMessage = "Waiting for approval ...";
+                    } else if (nextStepName == "Build App") {
+                        this.currentStage = "Making App";
+                        this.stageTwoMessage = "Making App ...";
+                    } else if (nextStepName == "Check Build Status" && response.next_step.status == "done") {
+                        this.currentStage = "Submitting to Play Store";
+                        this.stageThreeMessage = "";
+                    } else if (nextStepName == "App Store Preview") {
+                        this.currentStage = "Submitting to Play Store";
+                        this.stageThreeMessage = "Previewing ...";
+                    } else if (nextStepName == "Create App Store Entry") {
+                        this.currentStage = "Submitting to Play Store";
+                        this.stageThreeMessage = "Creating app store entry ...";
+                    } else if (nextStepName == "Verify & Publish") {
+                        this.currentStage = "Submitting to Play Store";
+                        this.stageThreeMessage = "Verifying ...";
+                    } else if (nextStepName == "Publish App") {
+                        this.currentStage = "Submitting to Play Store";
+                        this.stageThreeMessage = "Publishing ...";
+                    } else if (nextStepName == "Check Publish Status" && response.next_step.status == "done") {
+                        this.currentStage = "Private on Play Store";
+                        this.stageFourMessage = "";
+                    }
+                }
+            )
     }
     goToStageFive() {
         this.stageFourMessage = "Request Received.";
@@ -640,6 +680,13 @@ export class AppProducer implements OnInit{
                                     .subscribe(
                                         error => console.log(error)
                                     );
+                                this.appProducerService.postWorkflow()
+                                    .subscribe(
+                                        (response) => {
+                                            this.data.workflowId = response.id.toString();
+                                            this.data.nextStepId = response.next_step.id;
+                                            this.appProducerService.putAppSpecific(this.data, "buildEngine").subscribe();
+                                        });
                             },
                             error => console.log(error)
                         )

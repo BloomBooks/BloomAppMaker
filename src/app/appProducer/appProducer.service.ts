@@ -7,29 +7,30 @@ import { AppProducerHeaders } from './appProducer.headers';
 
 @Injectable()
 export class AppProducerService {
-    baseUrl = "https://api.parse.com/1/classes/";
+    baseParseUrl = "https://api.parse.com/1/classes/";
+    baseWorkflowUrl = "http://private-66f5cc-bloomappmaker.apiary-mock.com/workflow";
 
     constructor(private http: Http) {}
     
     getAppsByUserId(userId: string) {
-        return this.http.get(this.baseUrl + 'appSpecification?where={"owner": {"__type":"Pointer","className":"_User","objectId":"'+userId+'"}}',{ headers: AppProducerHeaders })
+        return this.http.get(this.baseParseUrl + 'appSpecification?where={"owner": {"__type":"Pointer","className":"_User","objectId":"'+userId+'"}}',{ headers: AppProducerHeaders })
             .map((response: Response) => response.json());
     }
 
     getAppsIdByRelation(id) {
-        return this.http.get(this.baseUrl + 'appDetailsInLanguage?where={"$relatedTo":{"object":{"__type":"Pointer","className":"appSpecification","objectId":"'+id+'"},"key":"details"}}', { headers: AppProducerHeaders })
+        return this.http.get(this.baseParseUrl + 'appDetailsInLanguage?where={"$relatedTo":{"object":{"__type":"Pointer","className":"appSpecification","objectId":"'+id+'"},"key":"details"}}', { headers: AppProducerHeaders })
             .map((response: Response) => response.json());
     }
     
     //not currently used
     getLastModifiedApp(userId) {
-        return this.http.get(this.baseUrl + '_User/'+userId, { headers: AppProducerHeaders })
+        return this.http.get(this.baseParseUrl + '_User/'+userId, { headers: AppProducerHeaders })
             .map((response: Response) => response.json());
     }
 
     //not currently used
     pushLastModifiedApp(userId, appId) {
-        return this.http.put(this.baseUrl + '_User/'+userId,
+        return this.http.put(this.baseParseUrl + '_User/'+userId,
             {
                 "lastAppSpecification": {
                     "__type": "Pointer",
@@ -42,22 +43,22 @@ export class AppProducerService {
     }
 
     getBookById(id: string) {
-        return this.http.get(this.baseUrl + 'books/'+id,{ headers: AppProducerHeaders })
+        return this.http.get(this.baseParseUrl + 'books/'+id,{ headers: AppProducerHeaders })
             .map((response: Response) => response.json());
     }
 
     getBooksByLanguage(languageId: string) {
-        return this.http.get(this.baseUrl + 'books?limit%3D9999&&where={"langPointers": {"__type":"Pointer","className":"language","objectId":"'+languageId+'"}}',{ headers: AppProducerHeaders })
+        return this.http.get(this.baseParseUrl + 'books?limit%3D9999&&where={"langPointers": {"__type":"Pointer","className":"language","objectId":"'+languageId+'"}}',{ headers: AppProducerHeaders })
             .map((response: Response) => response.json());
     }
 
     getAllLanguages() {
-        return this.http.get(this.baseUrl + 'language',{ headers: AppProducerHeaders })
+        return this.http.get(this.baseParseUrl + 'language',{ headers: AppProducerHeaders })
             .map((response: Response) => response.json());
     }
 
     postAppDetails(app) {
-        return this.http.post(this.baseUrl + 'appDetailsInLanguage',
+        return this.http.post(this.baseParseUrl + 'appDetailsInLanguage',
             {
                 "androidStoreLanguageIso": app.language,
                 "title": app.title,
@@ -85,14 +86,14 @@ export class AppProducerService {
                 object = {"fullDescription": app.fullDescription};
                 break;
         }
-        return this.http.put(this.baseUrl + 'appDetailsInLanguage/'+app.appDetailsId,
+        return this.http.put(this.baseParseUrl + 'appDetailsInLanguage/'+app.appDetailsId,
             object,
             { headers: AppProducerHeaders })
             .map((response: Response) => response.json());
     }
 
     deleteAppDetails(id) {
-        return this.http.delete(this.baseUrl + 'appDetailsInLanguage/'+id,
+        return this.http.delete(this.baseParseUrl + 'appDetailsInLanguage/'+id,
             { headers: AppProducerHeaders })
 
             .map((response: Response) => response.json());
@@ -106,7 +107,7 @@ export class AppProducerService {
         } else {
             language = app.language;
         }
-        return this.http.post(this.baseUrl + 'appSpecification',
+        return this.http.post(this.baseParseUrl + 'appSpecification',
             {
                 "bookVernacularLanguageIso": language,
                 "defaultStoreLanguageIso": app.language,
@@ -146,22 +147,25 @@ export class AppProducerService {
             case "feature":
                 object = {"featureGraphic1024x500": app.feature};
                 break;
+            case "buildEngine":
+                object = {"buildEngineJobId": app.workflowId};
+                break;
         }
-        return this.http.put(this.baseUrl + 'appSpecification/'+app.appSpecificId,
+        return this.http.put(this.baseParseUrl + 'appSpecification/'+app.appSpecificId,
             object,
             { headers: AppProducerHeaders })
             .map((response: Response) => response.json());
     }
 
     deleteAppSpecific(id) {
-        return this.http.delete(this.baseUrl + 'appSpecification/'+id,
+        return this.http.delete(this.baseParseUrl + 'appSpecification/'+id,
             { headers: AppProducerHeaders })
 
             .map((response: Response) => response.json());
     }
 
     createRelation(appDetailId, appSpecificId) {
-        return this.http.put(this.baseUrl + 'appSpecification/'+appSpecificId,
+        return this.http.put(this.baseParseUrl + 'appSpecification/'+appSpecificId,
             {
                 "details": {
                     "__op": "AddRelation",
@@ -178,7 +182,7 @@ export class AppProducerService {
     }
 
     addBookInApp(bookId, appSpecificId, index) {
-        return this.http.post(this.baseUrl + 'booksInApp',
+        return this.http.post(this.baseParseUrl + 'booksInApp',
             {
                 "app": {
                     "__type":"Pointer",
@@ -198,23 +202,42 @@ export class AppProducerService {
     }
 
     getBooksIdInApp(appSpecificId) {
-        return this.http.get(this.baseUrl + 'booksInApp?where={"app": {"__type":"Pointer","className":"appSpecification","objectId":"'+appSpecificId+'"}}',
+        return this.http.get(this.baseParseUrl + 'booksInApp?where={"app": {"__type":"Pointer","className":"appSpecification","objectId":"'+appSpecificId+'"}}',
             { headers: AppProducerHeaders })
 
             .map((response: Response) => response.json());
     }
     
     deleteBookInApp(bookInAppId) {
-        return this.http.delete(this.baseUrl + 'booksInApp/'+bookInAppId,
+        return this.http.delete(this.baseParseUrl + 'booksInApp/'+bookInAppId,
             { headers: AppProducerHeaders })
 
             .map((response: Response) => response.json());
     }
+    
+    getWorkflow(id) {
+        return this.http.get(this.baseWorkflowUrl + '/' + id.toString()
+            // , {headers: {Prefer: 201}}
+        )
+        
+            .map((response: Response) => response.json());
+    }
 
-    // use this function to get the server response, need to replace 'URL' and Headers with the real ones
-    // getServerProcess() {
-    //     return this.http.get('URL',{ headers: Headers})
-    //    
-    //         .map((response: Response) => response.json());
-    // }
+    postWorkflow() {
+        return this.http.post(this.baseWorkflowUrl,
+            {"service_id": 8})
+    
+            .map((response: Response) => response.json());
+    }
+    
+    putWorkflow(app) {
+        this.http.put(this.baseWorkflowUrl + '/' + app.appSpecificId + '/step/' + app.nextStepId.toString(),
+            {
+                "id": app.nextStepId,
+                "data": {
+                    "project_name": app.title,
+                    "app_definition_id": app.appSpecificId
+                }
+            });
+    }
 }
